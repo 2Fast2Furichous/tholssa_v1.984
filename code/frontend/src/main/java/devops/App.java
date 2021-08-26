@@ -2,6 +2,7 @@ package devops;
 
 import java.io.IOException;
 
+import devops.utils.FXRouter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -17,7 +18,7 @@ import javafx.scene.Scene;
 public class App extends Application {
 
     private static final String WINDOW_TITLE = "THOLSSA v1.984";
-    private static final String GUI_RESOURCE = "/devops/view/LoginWindow.fxml";
+    private static final String LOGIN_RESOURCE = "/devops/view/LoginWindow.fxml";
 
     /**
      * JavaFX entry point.
@@ -29,11 +30,10 @@ public class App extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource(App.GUI_RESOURCE));
-        Scene scene = new Scene(parent);
-        primaryStage.setTitle(WINDOW_TITLE);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        FXRouter.initialize(this, primaryStage, App.WINDOW_TITLE);
+        FXRouter.register("login", App.LOGIN_RESOURCE);
+        FXRouter.setAnimationType("fade", 5);
+        FXRouter.show("login");
     }
 
     /**
