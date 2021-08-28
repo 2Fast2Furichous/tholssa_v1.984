@@ -10,6 +10,12 @@ import javafx.scene.Parent;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 
+/**
+ * The login window controller.
+ *
+ * @author Marco Trombino (Modified by Furichous Jones IV)
+ * @version Fall 2021
+ */
 public final class FXRouter {
 	private static final String WINDOW_TITLE = "";
 	private static final Double WINDOW_WIDTH = 800.0;
@@ -79,15 +85,36 @@ public final class FXRouter {
 	private FXRouter() {
 	}
 
+	/**
+	 * FXRouter binder with Application Stage and main package
+	 * 
+	 * @param ref:       Main Class reference
+	 * @param win:       Application Stage
+	 */
 	public static void initialize(Object ref, Stage win) {
 		checkInstances(ref, win);
 	}
 
+	/**
+	 * FXRouter binder with Application Stage, main package, and window title
+	 * 
+	 * @param ref:       Main Class reference
+	 * @param win:       Application Stage
+	 * @param winTitle:  Application Stage title
+	 */
 	public static void initialize(Object ref, Stage win, String winTitle) {
 		checkInstances(ref, win);
 		FXRouter.windowTitle = winTitle;
 	}
 
+	/**
+	 * FXRouter binder with Application Stage, main package, and window dimensions
+	 * 
+	 * @param ref:       Main Class reference
+	 * @param win:       Application Stage
+	 * @param winWidth:  Application Stage width
+	 * @param winHeight: Application Stage height
+	 */
 	public static void initialize(Object ref, Stage win, double winWidth, double winHeight) {
 		checkInstances(ref, win);
 		FXRouter.windowWidth = winWidth;
@@ -95,7 +122,8 @@ public final class FXRouter {
 	}
 
 	/**
-	 * FXRouter binder with Application Stage and main package
+	 * FXRouter binder with Application Stage, main package, window title, and window
+	 * dimensions
 	 * 
 	 * @param ref:       Main Class reference
 	 * @param win:       Application Stage
@@ -125,16 +153,37 @@ public final class FXRouter {
 		}
 	}
 
+	/**
+	 * Define a FXRouter route
+	 * 
+	 * @param routeLabel:  Route label identifier
+	 * @param scenePath:   .FXML scene file
+	 */
 	public static void register(String routeLabel, String scenePath) {
 		RouteScene routeScene = new RouteScene(scenePath);
 		routes.put(routeLabel, routeScene);
 	}
 
+	/**
+	 * Define a FXRouter route
+	 * 
+	 * @param routeLabel: Route label identifier
+	 * @param scenePath:  .FXML scene file
+	 * @param winTitle:   Application Stage title
+	 */
 	public static void register(String routeLabel, String scenePath, String winTitle) {
 		RouteScene routeScene = new RouteScene(scenePath, winTitle);
 		routes.put(routeLabel, routeScene);
 	}
 
+	/**
+	 * Define a FXRouter route
+	 * 
+	 * @param routeLabel:  Route label identifier
+	 * @param scenePath:   .FXML scene file
+	 * @param sceneWidth:  Scene Width
+	 * @param sceneHeight: Scene Height
+	 */
 	public static void register(String routeLabel, String scenePath, double sceneWidth, double sceneHeight) {
 		RouteScene routeScene = new RouteScene(scenePath, sceneWidth, sceneHeight);
 		routes.put(routeLabel, routeScene);
@@ -155,6 +204,12 @@ public final class FXRouter {
 		routes.put(routeLabel, routeScene);
 	}
 
+	/**
+	 * Switch between FXRouter route and show corresponding scenes
+	 * 
+	 * @param routeLabel: Route label identifier
+	 * @throws Exception: throw FXMLLoader exception if file is not loaded correctly
+	 */
 	public static void show(String routeLabel) throws IOException {
 		// get corresponding route
 		RouteScene route = routes.get(routeLabel);
@@ -198,7 +253,7 @@ public final class FXRouter {
 	}
 
 	/**
-	 * set FXRouter switching animation
+	 * set FXRouter switching animation and duration
 	 * 
 	 * @param anType:     Animation type
 	 * @param anDuration: Animation duration
