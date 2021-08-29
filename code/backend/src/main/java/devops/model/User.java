@@ -122,4 +122,8 @@ public class User {
     public Credentials getCredentials(){
         return this.credentials;
     }
+
+    public boolean equals(User user){
+        return user.getFirstName().equals(this.firstName) && this.lastName.equals(user.getLastName()) && this.dateOfBirth.equals(user.getDateOfBirth());
+    }
 }
