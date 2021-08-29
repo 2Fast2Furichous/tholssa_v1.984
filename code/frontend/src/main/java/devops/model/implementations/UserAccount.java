@@ -45,28 +45,28 @@ public class UserAccount implements Account {
 	public UserAccount(String firstName, String lastName, String username, Date dateOfBirth, String phoneNumber,
 			Image photo, ClientKey userKey) {
 		if (firstName == null) {
-			throw new IllegalArgumentException("firstName cannot be null");
+			throw new IllegalArgumentException("First name cannot be null.");
 		}
 		if (firstName.isBlank()) {
-			throw new IllegalArgumentException("firstName cannot be blank");
+			throw new IllegalArgumentException("First name cannot be blank.");
 		}
 
 		if (lastName == null) {
-			throw new IllegalArgumentException("lastName cannot be null");
+			throw new IllegalArgumentException("Last name cannot be null.");
 		}
 		if (lastName.isBlank()) {
-			throw new IllegalArgumentException("lastName cannot be blank");
+			throw new IllegalArgumentException("Last name cannot be blank.");
 		}
 
 		if (username == null) {
-			throw new IllegalArgumentException("username cannot be null");
+			throw new IllegalArgumentException("User name cannot be null.");
 		}
 		if (username.isBlank()) {
-			throw new IllegalArgumentException("username cannot be blank");
+			throw new IllegalArgumentException("User name cannot be blank.");
 		}
 
 		if (dateOfBirth == null) {
-			throw new IllegalArgumentException("dateOfBirth cannot be null");
+			throw new IllegalArgumentException("Date of birth cannot be null.");
 		}
 
 		this.firstName = firstName;

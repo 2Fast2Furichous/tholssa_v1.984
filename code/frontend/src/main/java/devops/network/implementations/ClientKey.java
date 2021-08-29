@@ -14,26 +14,31 @@ import devops.network.interfaces.Key;
  */
 public class ClientKey implements Key {
 
-	private String guid;
+	private String uniqueID;
 	
 	/**
-	 * Creates a new key given the guid.
+	 * Creates a new key given the uniqueID.
 	 * 
-	 * @param guid Generated unique identifier
+	 * @preconditions uniqueID != null AND !uniqueID.isBlank()
+	 * 
+	 * @postconditions getUniqueID() == uniqueID
+	 * 
+	 * 
+	 * @param uniqueID Generated unique identifier
 	 */
-	public ClientKey(String guid) {
-		if (guid == null) {
-			throw new IllegalArgumentException("guid cannot be null");
+	public ClientKey(String uniqueID) {
+		if (uniqueID == null) {
+			throw new IllegalArgumentException("Unique ID cannot be null");
 		}
-		if (guid.isBlank()) {
-			throw new IllegalArgumentException("guid cannot be blank");
+		if (uniqueID.isBlank()) {
+			throw new IllegalArgumentException("Unique ID cannot be blank");
 		}
-		this.guid = guid;
+		this.uniqueID = uniqueID;
 	}
 
 	@Override
-	public String getGUID() {
-		return this.guid;
+	public String getUniqueID() {
+		return this.uniqueID;
 	}
 
 }

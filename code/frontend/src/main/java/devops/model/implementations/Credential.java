@@ -24,16 +24,16 @@ public class Credential {
 	 */
 	public Credential(String username, String password) {
 		if (username == null) {
-			throw new IllegalArgumentException("username cannot be null");
+			throw new IllegalArgumentException("User name cannot be null.");
 		}
 		if (username.isBlank()) {
-			throw new IllegalArgumentException("username cannot be blank");
+			throw new IllegalArgumentException("User name cannot be blank.");
 		}
 		if (password == null) {
-			throw new IllegalArgumentException("password cannot be null");
+			throw new IllegalArgumentException("Password cannot be null.");
 		}
 		if (password.isBlank()) {
-			throw new IllegalArgumentException("password cannot be blank");
+			throw new IllegalArgumentException("Password cannot be blank.");
 		}
 
 		this.username = username;

@@ -8,9 +8,9 @@ package devops.network.interfaces;
  */
 public interface Key {
 	/**
-	 * Returns the key's guid
+	 * Returns the key's uniqueID
 	 * 
-	 * @return the key's guid
+	 * @return the key's uniqueID
 	 */
-	public String getGUID();
+	public String getUniqueID();
 }
