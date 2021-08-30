@@ -12,7 +12,7 @@ public class User {
 	private String lastName;
 	private Date dateOfBirth;
 	private String phoneNumber;
-    private Credentials credentials;
+    private String uniqueId;
     
 
     /**
@@ -35,9 +35,12 @@ public class User {
      * @param phoneNumber the phone number of the user.
      * @param credentials the credentials for the user.
      */
-    public User(String firstName, String lastName, Date dateOfBirth, String phoneNumber, Credentials credentials){
-    if(credentials.equals(null)) {
-            throw new IllegalArgumentException("The credentials cannot be null.");
+    public User(String firstName, String lastName, Date dateOfBirth, String phoneNumber, String uniqueId){
+    if(uniqueId.equals(null)) {
+            throw new IllegalArgumentException("The unique id cannot be null.");
+    }
+    if(uniqueId.isBlank()){
+        throw new IllegalArgumentException("The unique id cannot be blank.");
     }
     if (firstName.equals(null)) {
 			throw new IllegalArgumentException("First Name cannot be null");
@@ -65,7 +68,18 @@ public class User {
     this.lastName = lastName;
     this.dateOfBirth = dateOfBirth;
     this.phoneNumber = phoneNumber;
-    this.credentials = credentials;
+    this.uniqueId = uniqueId;
+    }
+
+    /**
+     * Gets the unique id.
+     * 
+     * @precondition none
+     * @postcondition none
+     * @return the unique id
+     */
+    public String getUniqueId() {
+        return uniqueId;
     }
 
     /**
@@ -111,19 +125,18 @@ public class User {
     public String getPhoneNumber(){
         return this.phoneNumber;
     }
-    
     /**
-     * Gets the credentials.
+     * Sees if a user is equal to this user.
      * 
      * @precondition none
      * @postcondition none
-     * @return the credentials
+     * @param user
+     * @return whether the users 
      */
-    public Credentials getCredentials(){
-        return this.credentials;
-    }
-
     public boolean equals(User user){
-        return user.getFirstName().equals(this.firstName) && this.lastName.equals(user.getLastName()) && this.dateOfBirth.equals(user.getDateOfBirth());
+        if (user == null){
+            throw new IllegalArgumentException("User cannot be null.");
+        }
+        return this.getUniqueId().equals(user.getUniqueId());
     }
 }
