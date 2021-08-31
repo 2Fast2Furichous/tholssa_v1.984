@@ -1,7 +1,13 @@
 package devops.data.interfaces;
 
-import devops.model.*;
+import devops.model.User;
 
+/**
+ * Interface for the storage of users.
+ * 
+ * @author Alexander Ayers
+ * @version Fall 2021
+ */
 public interface UserStorage {
     /**
     *  Adds the specified user to the storage. If the user is already in the system, the user is not added.

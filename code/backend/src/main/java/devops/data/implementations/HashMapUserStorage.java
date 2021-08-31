@@ -44,8 +44,8 @@ public class HashMapUserStorage implements UserStorage{
         }
     }
 
-@Override
-public User get(Object key) {
-    return this.accounts.get(key);
-}
+        @Override
+    public User get(Object key) {
+        return this.accounts.get(key);
+    }
 }

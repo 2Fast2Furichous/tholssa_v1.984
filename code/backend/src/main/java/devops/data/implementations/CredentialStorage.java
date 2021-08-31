@@ -4,6 +4,12 @@ import java.util.HashMap;
 
 import devops.model.Credentials;
 
+/**
+ * Stores credentials and unique IDs for system access.
+ * 
+ * @author Alexander Ayers
+ * @version Fall 2021
+ */
 public class CredentialStorage {
     private HashMap<Credentials, String> accessKeys;
 
@@ -29,10 +35,13 @@ public class CredentialStorage {
     }
 
     /**
+     * Adds a specified unique ID to the access keys and binds it to the specified credentials.
      * 
+     * @precondition none
+     * @postcondition none
      * @param key
      * @param uniqueId
-     * @return
+     * @return if the access key was successfully added or not.
      */
     public boolean add(Credentials key, String uniqueId){
         if (this.accessKeys.putIfAbsent(key, uniqueId) == null) {
@@ -42,6 +51,14 @@ public class CredentialStorage {
         }
     }
 
+/**
+  * Gets the unique ID associated with the key provided.
+  * 
+  * @precondition none
+  * @postcondition none
+  * @param key the specified key
+  * @return the unique ID from the key provided.
+  */
 public String get(Credentials key) {
     return this.accessKeys.get(key);
 }

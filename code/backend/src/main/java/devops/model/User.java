@@ -22,18 +22,18 @@ public class User {
      * 
      * @precondition firstName != null AND !firstName.isBlank() AND lastName !=
 	 *                null AND !lastName.isBlank()  AND
-	 *                !username.isBlank() AND dateOfBirth != null AND credentials != null 
-     *                AND phoneNumber != null AND !phoneNumber.isBlank()
+	 *               !username.isBlank() AND dateOfBirth != null AND uniqueId != null AND
+     *               uniqueId.isBlank() AND phoneNumber != null AND !phoneNumber.isBlank()
 	 * 
 	 * @postcondition getFirstName() == firstName AND getLastName() == lastName AND
 	 *                 getUserName() == username AND getDateOfBirth() == dateOfBirth
-	 *                 AND getPhoneNumber() == phoneNumber AND getCredentials() == credentials
+	 *                 AND getPhoneNumber() == phoneNumber AND getUniqueId() == uniqueId
 	 *          
      * @param firstName the first name of the account.
      * @param lastName the last name of the user.
      * @param dateOfBirth the date of birth of the user.
      * @param phoneNumber the phone number of the user.
-     * @param credentials the credentials for the user.
+     * @param uniqueId the uniqueId for the user.
      */
     public User(String firstName, String lastName, Date dateOfBirth, String phoneNumber, String uniqueId){
     if(uniqueId.equals(null)) {
