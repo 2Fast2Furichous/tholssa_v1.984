@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="704.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+   <children>
+      <AnchorPane fx:id="tholssaGraph" layoutX="115.0" layoutY="20.0" prefHeight="382.0" prefWidth="571.0" style="-fx-background-color: white;" />
+      <JFXButton fx:id="familyButton" buttonType="RAISED" layoutX="24.0" layoutY="31.0" onAction="#addFamilyNode" style="-fx-background-color: lime;" text="Family" />
+      <JFXButton fx:id="friendButton" buttonType="RAISED" layoutX="24.0" layoutY="88.0" onAction="#addFriendFamily" style="-fx-background-color: lime;" text="Friend" />
+      <JFXButton fx:id="buisnessButton" buttonType="RAISED" layoutX="24.0" layoutY="153.0" onAction="#addBuisnessNode" style="-fx-background-color: lime;" text="Buisness" />
+      <JFXButton fx:id="spouseButton" buttonType="RAISED" layoutX="24.0" layoutY="227.0" onAction="#addSpouseNode" style="-fx-background-color: lime;" text="Spouse" />
+      <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="29.0" layoutY="452.0" style="-fx-background-color: lime;" text="Save" />
+      <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="112.0" layoutY="452.0" style="-fx-background-color: lime;" text="Cancel" />
+      <JFXButton fx:id="removeButton" buttonType="RAISED" layoutX="352.0" layoutY="452.0" style="-fx-background-color: lime;" text="Remove" />
+      <JFXButton fx:id="addButton" buttonType="RAISED" layoutX="523.0" layoutY="452.0" style="-fx-background-color: lime;" text="Add" />
+   </children>
+</AnchorPane>
