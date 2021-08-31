@@ -18,18 +18,20 @@ public class Credentials {
      * @param userName the username for this account
      */
     public Credentials(String password, String username){
+        if(password == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
+
         if (password.isBlank()){
             throw new IllegalArgumentException("Password cannot be blank.");
         }
-
-        if(password.equals(null)){
-            throw new IllegalArgumentException("Password cannot be null");
+        
+        if(username == null){
+            throw new IllegalArgumentException("Username cannot be null");
         }
+
         if(username.isBlank()){
             throw new IllegalArgumentException("Username cannot be blank");
-        }
-        if(username.equals(null)){
-            throw new IllegalArgumentException("Username cannot be null");
         }
         this.password = password;
         this.username = username;

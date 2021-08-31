@@ -1,10 +1,8 @@
 package devops.model.user;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
 
 import devops.model.User;
 
