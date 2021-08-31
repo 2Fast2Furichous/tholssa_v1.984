@@ -4,11 +4,7 @@ import java.io.IOException;
 
 import devops.utils.FXRouter;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-
 /**
  * Entry point for the program
  *

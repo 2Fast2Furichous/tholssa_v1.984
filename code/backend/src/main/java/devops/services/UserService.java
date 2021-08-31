@@ -3,7 +3,9 @@ package devops.services;
 import devops.data.implementations.HashMapUserStorage;
 import devops.data.interfaces.UserStorage;
 import devops.model.User;
-import java.util.Date;
+import devops.resources.ErrorMessages;
+
+import java.time.LocalDate;
 
 /**
  * Services for creating a user and accessing a user account.
@@ -45,8 +47,8 @@ public class UserService {
      * @return the user that was added.
      */
     public User createAccount(User newUser){
-        if (newUser.equals(null)){
-            throw new IllegalArgumentException("The user cannot be null");
+        if (newUser == null) {
+            throw new IllegalArgumentException(ErrorMessages.THE_USER_CANNOT_BE_NULL);
         }
         this.users.add(newUser);
         return newUser;
@@ -64,7 +66,7 @@ public class UserService {
      * @param uniqueId
      * @return the user that was added.
      */
-    public User createAccount(String firstName, String lastName, Date dateOfBirth, String phoneNumber, String uniqueId){
+    public User createAccount(String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber, String uniqueId){
         User newUser = new User(firstName, lastName, dateOfBirth, phoneNumber, uniqueId);
         return this.createAccount(newUser);
     }

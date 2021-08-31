@@ -1,16 +1,18 @@
 package devops.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import devops.resources.ErrorMessages;
 /**
  * Models a User of the System.
  * 
  * @author Alexander Ayers
  * @version Fall 2021
  */
-public class User {
+public class User {      
     private String firstName;
 	private String lastName;
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 	private String phoneNumber;
     private String uniqueId;
     
@@ -21,8 +23,8 @@ public class User {
      * 
      * 
      * @precondition firstName != null AND !firstName.isBlank() AND lastName !=
-	 *                null AND !lastName.isBlank()  AND
-	 *               !username.isBlank() AND dateOfBirth != null AND uniqueId != null AND
+	 *                null AND !lastName.isBlank()
+	 *               AND dateOfBirth != null AND uniqueId != null AND
      *               uniqueId.isBlank() AND phoneNumber != null AND !phoneNumber.isBlank()
 	 * 
 	 * @postcondition getFirstName() == firstName AND getLastName() == lastName AND
@@ -35,35 +37,34 @@ public class User {
      * @param phoneNumber the phone number of the user.
      * @param uniqueId the uniqueId for the user.
      */
-    public User(String firstName, String lastName, Date dateOfBirth, String phoneNumber, String uniqueId){
-    if(uniqueId.equals(null)) {
-            throw new IllegalArgumentException("The unique id cannot be null.");
+    public User(String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber, String uniqueId){
+    if(uniqueId == null) {
+            throw new IllegalArgumentException(ErrorMessages.UNIQUE_ID_CANNOT_BE_NULL);
     }
-    if(uniqueId.isBlank()){
-        throw new IllegalArgumentException("The unique id cannot be blank.");
+    if(uniqueId.isBlank()) {
+        throw new IllegalArgumentException(ErrorMessages.THE_UNIQUE_ID_CANNOT_BE_BLANK);
     }
-    if (firstName.equals(null)) {
-			throw new IllegalArgumentException("First Name cannot be null");
+    if (phoneNumber == null) {
+        throw new IllegalArgumentException(ErrorMessages.PHONE_NUMBER_CANNOT_BE_NULL);
+    }
+    if (firstName == null) {
+			throw new IllegalArgumentException(ErrorMessages.FIRST_NAME_CANNOT_BE_NULL);
      }
     if (firstName.isBlank()) {
-        throw new IllegalArgumentException("First Name cannot be blank");
+        throw new IllegalArgumentException(ErrorMessages.FIRST_NAME_CANNOT_BE_BLANK);
     }
-    if (lastName.equals(null)) {
-        throw new IllegalArgumentException("Last Name cannot be null");
+    if (lastName == null) {
+        throw new IllegalArgumentException(ErrorMessages.LAST_NAME_CANNOT_BE_NULL);
     }
     if (lastName.isBlank()) {
-        throw new IllegalArgumentException("Last Name cannot be blank");
+        throw new IllegalArgumentException(ErrorMessages.LAST_NAME_CANNOT_BE_BLANK);
     }
     if (dateOfBirth == null) {
-        throw new IllegalArgumentException("Date of Birth cannot be null");
+        throw new IllegalArgumentException(ErrorMessages.DATE_OF_BIRTH_CANNOT_BE_NULL);
     }
-    if (phoneNumber.isBlank()){
-        throw new IllegalArgumentException("Phone Number cannot be blank");
+    if (phoneNumber.isBlank()) {
+        throw new IllegalArgumentException(ErrorMessages.PHONE_NUMBER_CANNOT_BE_BLANK);
     }
-    if (phoneNumber.equals(null)) {
-        throw new IllegalArgumentException("Phone Number cannot be null");
-    }
-
     this.firstName = firstName;
     this.lastName = lastName;
     this.dateOfBirth = dateOfBirth;
@@ -111,7 +112,7 @@ public class User {
      * @postcondition none
      * @return the date of birth
      */
-    public Date getDateOfBirth(){
+    public LocalDate getDateOfBirth(){
         return this.dateOfBirth;
     }
 
@@ -135,7 +136,7 @@ public class User {
      */
     public boolean equals(User user){
         if (user == null){
-            throw new IllegalArgumentException("User cannot be null.");
+            throw new IllegalArgumentException(ErrorMessages.THE_USER_CANNOT_BE_NULL);
         }
         return this.getUniqueId().equals(user.getUniqueId());
     }
