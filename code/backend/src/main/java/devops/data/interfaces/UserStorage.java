@@ -25,9 +25,9 @@ public interface UserStorage {
      * @precondition none
      * @postcondition none
      * @param key the specified key
-     * @return the user from the key provided.
+     * @return the user from the key provided. Null if the value is not found.
      */
-    public User get(Object key);
+    public User get(String key);
 
     
 }

@@ -1,11 +1,14 @@
 package devops.model;
+
+import devops.resources.ErrorMessages;
+
 /**
  * Holds a set of credentials for an account in the system.
  * 
  * @author Alexander Ayers
  * @version Fall 2021
  */
-public class Credentials {
+public class Credentials {     
     private String password;
     private String username;
 
@@ -19,19 +22,19 @@ public class Credentials {
      */
     public Credentials(String password, String username){
         if(password == null) {
-            throw new IllegalArgumentException("Password cannot be null");
+            throw new IllegalArgumentException(ErrorMessages.PASSWORD_CANNOT_BE_NULL);
         }
 
         if (password.isBlank()){
-            throw new IllegalArgumentException("Password cannot be blank.");
+            throw new IllegalArgumentException(ErrorMessages.PASSWORD_CANNOT_BE_BLANK);
         }
         
         if(username == null){
-            throw new IllegalArgumentException("Username cannot be null");
+            throw new IllegalArgumentException(ErrorMessages.USERNAME_CANNOT_BE_NULL);
         }
 
         if(username.isBlank()){
-            throw new IllegalArgumentException("Username cannot be blank");
+            throw new IllegalArgumentException(ErrorMessages.USERNAME_CANNOT_BE_BLANK);
         }
         this.password = password;
         this.username = username;
@@ -57,5 +60,19 @@ public class Credentials {
      */
     public String getPassword(){
         return this.password;
+    }
+
+    @Override
+    public int hashCode(){
+        return this.username.hashCode() ^ this.password.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object credentials){
+        if (credentials == null){
+            throw new IllegalArgumentException();
+        }
+
+        return ((Credentials) credentials).getPassword().equals(this.password) && ((Credentials) credentials).getUsername().equals(this.username);
     }
 }

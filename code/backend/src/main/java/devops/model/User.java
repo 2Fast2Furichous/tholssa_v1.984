@@ -126,18 +126,17 @@ public class User {
     public String getPhoneNumber(){
         return this.phoneNumber;
     }
-    /**
-     * Sees if a user is equal to this user.
-     * 
-     * @precondition none
-     * @postcondition none
-     * @param user
-     * @return whether the users 
-     */
-    public boolean equals(User user){
+
+    @Override
+    public boolean equals(Object user){
         if (user == null){
             throw new IllegalArgumentException(ErrorMessages.THE_USER_CANNOT_BE_NULL);
         }
-        return this.getUniqueId().equals(user.getUniqueId());
+        return this.getUniqueId().equals(((User) user).getUniqueId());
+    }
+    
+    @Override
+    public int hashCode(){
+        return this.uniqueId.hashCode();
     }
 }

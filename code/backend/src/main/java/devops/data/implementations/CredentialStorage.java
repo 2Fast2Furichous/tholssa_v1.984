@@ -30,7 +30,7 @@ public class CredentialStorage {
      * @postcondition none
      * @return the access keys stored in the system. stored in the system.
      */
-    public HashMap<Credentials, String> getAccounts(){
+    public HashMap<Credentials, String> getAccessKeys(){
         return this.accessKeys;
     }
 
@@ -44,12 +44,13 @@ public class CredentialStorage {
      * @return if the access key was successfully added or not.
      */
     public boolean add(Credentials key, String uniqueId){
-        if (this.accessKeys.putIfAbsent(key, uniqueId) == null) {
+        if(this.accessKeys.containsKey(key) || this.accessKeys.containsValue(uniqueId)){
             return false;
-        } else {
-            return true;
         }
-    }
+
+        this.accessKeys.put(key, uniqueId);
+        return true;
+        }
 
 /**
   * Gets the unique ID associated with the key provided.
@@ -57,7 +58,7 @@ public class CredentialStorage {
   * @precondition none
   * @postcondition none
   * @param key the specified key
-  * @return the unique ID from the key provided.
+  * @return the unique ID from the key provided. Null if the value is not found.
   */
 public String get(Credentials key) {
     return this.accessKeys.get(key);

@@ -37,15 +37,16 @@ public class HashMapUserStorage implements UserStorage{
 
     @Override
     public boolean add(User newUser){
-        if (this.accounts.putIfAbsent(newUser.getUniqueId(), newUser) == null) {
+        if (this.accounts.containsKey(newUser.getUniqueId())) {
             return false;
         } else {
+            this.accounts.put(newUser.getUniqueId(), newUser);
             return true;
         }
     }
 
     @Override
-    public User get(Object key) {
+    public User get(String key) {
         return this.accounts.get(key);
     }
 }
