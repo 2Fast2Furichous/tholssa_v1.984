@@ -2,9 +2,12 @@ package devops;
 
 import java.io.IOException;
 
+import devops.network.interfaces.UserService;
+import devops.network.implementations.JeroUserService;
 import devops.utils.FXRouter;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
 /**
  * Entry point for the program
  *
@@ -13,6 +16,7 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
+    private static UserService userService;
     private static final String WINDOW_TITLE = "THOLSSA v1.984";
     private static final String LOGIN_RESOURCE = "/devops/view/LoginWindow.fxml";
 
@@ -28,7 +32,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXRouter.initialize(this, primaryStage, App.WINDOW_TITLE);
         FXRouter.register("login", App.LOGIN_RESOURCE);
-        FXRouter.setAnimationType("fade", 5);
+        FXRouter.setAnimationType("fade", 300.0);
         FXRouter.show("login");
     }
 
@@ -41,7 +45,17 @@ public class App extends Application {
      * @param args command line arguments
      */
     public static void main(String[] args) {
+        App.userService = new JeroUserService();
         App.launch(args);
+    }
+
+    /**
+     * Returns the applications's user service
+     * 
+     * @return The applications's user service
+     */
+    public static UserService getUserService() {
+        return App.userService;
     }
 
 }

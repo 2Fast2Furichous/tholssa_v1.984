@@ -3,9 +3,22 @@ package devops.view;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 
+import devops.App;
+import devops.model.implementations.Credential;
+import devops.model.implementations.ServiceResponse;
+import devops.model.implementations.UserAccount;
+import devops.network.interfaces.UserService;
+import devops.utils.FXRouter;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+
+/**
+ * The login window controller.
+ *
+ * @author Furichous Jones IV
+ * @version Fall 2021
+ */
 public class LoginWindow {
 
 	@FXML
@@ -21,13 +34,28 @@ public class LoginWindow {
 	private JFXButton signUp;
 
 	@FXML
-	void handleLogin(ActionEvent event) {
+	public void handleLogin(ActionEvent event) {
+		UserService service = App.getUserService();
+		String usernameText = this.username.getText();
+		String passwordText = this.password.getText();
 
+		try {
+			Credential loginCredentials = new Credential(usernameText, passwordText);
+			ServiceResponse response = service.login(loginCredentials);
+			UserAccount userAccount = (UserAccount) response.getData();
+			FXRouter.show("mainUI", userAccount);
+		} catch (Exception e) {
+			// TODO Show error dialog
+		}
 	}
 
 	@FXML
-	void handleSignUp(ActionEvent event) {
-
+	public void handleSignUp(ActionEvent event) {
+		try {
+			FXRouter.show("createAccount");
+		} catch (Exception e) {
+			// swallow catch
+		}
 	}
 
 }
