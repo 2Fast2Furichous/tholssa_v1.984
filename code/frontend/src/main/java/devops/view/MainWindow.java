@@ -1,11 +1,15 @@
 package devops.view;
 
 import com.jfoenix.controls.JFXButton;
+
+import java.beans.Visibility;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -47,6 +51,7 @@ public class MainWindow {
     @FXML
     private JFXButton addButton;
 
+    
     @FXML
     void addBuisnessNode(ActionEvent event) {
         JFXButton buisnessNode = new JFXButton();
@@ -57,8 +62,14 @@ public class MainWindow {
         this.tholssaGraph.getChildren().add(buisnessNode);
         buisnessNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
-               buisnessNode.setTranslateX(mouseEvent.getX());
-               buisnessNode.setTranslateY(mouseEvent.getY());
+                if(mouseEvent.isSecondaryButtonDown()){
+                    tholssaGraph.getChildren().remove(buisnessNode);
+                }
+                else{
+                    buisnessNode.setTranslateX(mouseEvent.getSceneX());
+                    buisnessNode.setTranslateY(mouseEvent.getSceneY());
+                }
+               
             }
         });
 
@@ -82,8 +93,14 @@ public class MainWindow {
 
         familyNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
-               familyNode.setTranslateX(mouseEvent.getSceneX());
-               familyNode.setTranslateY(mouseEvent.getSceneY());
+                if(mouseEvent.isSecondaryButtonDown()){
+                    tholssaGraph.getChildren().remove(familyNode);
+                }
+                else{
+                    familyNode.setTranslateX(mouseEvent.getSceneX());
+                    familyNode.setTranslateY(mouseEvent.getSceneY());
+                }
+              
             }
         });
 
@@ -106,8 +123,14 @@ public class MainWindow {
 
         friendNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
-               friendNode.setTranslateX(mouseEvent.getSceneX());
-               friendNode.setTranslateY(mouseEvent.getSceneY());
+                if(mouseEvent.isSecondaryButtonDown()){
+                    tholssaGraph.getChildren().remove(friendNode);
+                }
+                else{
+                    friendNode.setTranslateX(mouseEvent.getSceneX());
+                    friendNode.setTranslateY(mouseEvent.getSceneY());
+                }
+               
             }
         });
 
@@ -121,6 +144,39 @@ public class MainWindow {
     }
 
     @FXML
+    void removeNode(ActionEvent event){
+        ArrayList<Node> nodesToRemove = new ArrayList<Node>();
+        for(Node currNode: this.tholssaGraph.getChildren()){
+            //JFXButton node = (JFXButton) currNode;
+            // currNode.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            //     public void handle(MouseEvent mouseEvent){
+            //         if(mouseEvent.getClickCount() == 1 && mouseEvent.isSecondaryButtonDown()){
+            //             nodesToRemove.add(currNode);
+            //         }
+            //     }
+            // });
+        
+        }
+        for(Node currNode: nodesToRemove){
+            this.tholssaGraph.getChildren().remove(currNode);
+            currNode.setTranslateX(-500);
+            currNode.setTranslateY(-500);
+            currNode.setDisable(true);
+        }
+        
+    }
+
+    @FXML
+    void saveGraph(ActionEvent event){
+        for(Node currNode: this.tholssaGraph.getChildren()){
+           JFXButton node = (JFXButton) currNode;
+           node.getText();
+           node.getTranslateX();
+           node.getTranslateY();
+        }
+    }
+
+    @FXML
     void addSpouseNode(ActionEvent event) {
         JFXButton spouseNode = new JFXButton();
         spouseNode.setText("spouse");
@@ -131,8 +187,14 @@ public class MainWindow {
 
         spouseNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
-               spouseNode.setTranslateX(mouseEvent.getSceneX());
-               spouseNode.setTranslateY(mouseEvent.getSceneY());
+                if(mouseEvent.isSecondaryButtonDown()){
+                    tholssaGraph.getChildren().remove(spouseNode);
+                }
+                else{
+                    spouseNode.setTranslateX(mouseEvent.getSceneX());
+                    spouseNode.setTranslateY(mouseEvent.getSceneY());
+                }
+               
             }
         });
 
