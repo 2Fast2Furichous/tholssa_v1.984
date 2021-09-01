@@ -65,6 +65,12 @@ public class MainWindow {
                 if(mouseEvent.isSecondaryButtonDown()){
                     tholssaGraph.getChildren().remove(buisnessNode);
                 }
+                if(mouseEvent.isPrimaryButtonDown()){
+                    //buisnessNode.setText("hello");
+                    //will create a new view that shows up here when it is just clicked
+                    //it will take in the user specified person name, startdate...etc
+
+                }
                 else{
                     buisnessNode.setTranslateX(mouseEvent.getSceneX());
                     buisnessNode.setTranslateY(mouseEvent.getSceneY());
