@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -63,7 +65,12 @@ public class MainWindow {
         buisnessNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
                 if(mouseEvent.isSecondaryButtonDown()){
-                    tholssaGraph.getChildren().remove(buisnessNode);
+                    ContextMenu contextMenu = new ContextMenu();
+                    contextMenu.getItems().add(new MenuItem("Remove Node"));
+                    contextMenu.getItems().add(new MenuItem("Add Edge"));
+                    contextMenu.getItems().add(new MenuItem("Add Information"));
+                    contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+550, mouseEvent.getSceneY()+100);
+                    //tholssaGraph.getChildren().remove(buisnessNode);
                 }
                 if(mouseEvent.isPrimaryButtonDown()){
                     //buisnessNode.setText("hello");
