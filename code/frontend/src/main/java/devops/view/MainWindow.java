@@ -10,11 +10,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -66,11 +68,45 @@ public class MainWindow {
             public void handle(MouseEvent mouseEvent){
                 if(mouseEvent.isSecondaryButtonDown()){
                     ContextMenu contextMenu = new ContextMenu();
-                    contextMenu.getItems().add(new MenuItem("Remove Node"));
-                    contextMenu.getItems().add(new MenuItem("Add Edge"));
-                    contextMenu.getItems().add(new MenuItem("Add Information"));
+                    MenuItem removeMenuItem = new MenuItem("Remove");
+                    MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
+                    MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+
+                    contextMenu.getItems().add(removeMenuItem);
+                    contextMenu.getItems().add(addEdgeMenuItem);
+                    contextMenu.getItems().add(addInformationMenuItem);
                     contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+550, mouseEvent.getSceneY()+100);
-                    //tholssaGraph.getChildren().remove(buisnessNode);
+
+                    removeMenuItem.setOnAction((event) ->{
+                        tholssaGraph.getChildren().remove(buisnessNode);
+                        contextMenu.hide();
+                    });
+
+                    addEdgeMenuItem.setOnAction((event) ->{
+                        Line line = new Line(mouseEvent.getSceneX(),mouseEvent.getSceneY(), mouseEvent.getSceneX()+100, mouseEvent.getSceneY()+100);
+                        line.setTranslateX(mouseEvent.getSceneX()+100);
+                        line.setTranslateY(mouseEvent.getSceneY()-50);
+                        JFXButton buisnessNode = new JFXButton();
+                        buisnessNode.setText("buisness");
+                        buisnessNode.setStyle("-fx-background-color: lime;");
+                        buisnessNode.setTranslateX(mouseEvent.getSceneX()+100);
+                        buisnessNode.setTranslateY(mouseEvent.getSceneY()-50);
+                        tholssaGraph.getChildren().add(buisnessNode);
+                        contextMenu.hide();
+
+                        buisnessNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                            public void handle(MouseEvent mouseEvent){
+                                buisnessNode.setTranslateX(mouseEvent.getScreenX()- 500);
+                                buisnessNode.setTranslateY(mouseEvent.getScreenY()- 120);
+                            }
+                        });
+                    
+                    });
+
+                    addInformationMenuItem.setOnAction((event) ->{
+
+                    });
+                    
                 }
                 if(mouseEvent.isPrimaryButtonDown()){
                     //buisnessNode.setText("hello");
@@ -107,7 +143,38 @@ public class MainWindow {
         familyNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
                 if(mouseEvent.isSecondaryButtonDown()){
-                    tholssaGraph.getChildren().remove(familyNode);
+                    ContextMenu contextMenu = new ContextMenu();
+                    MenuItem removeMenuItem = new MenuItem("Remove");
+                    MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
+                    MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+
+                    contextMenu.getItems().add(removeMenuItem);
+                    contextMenu.getItems().add(addEdgeMenuItem);
+                    contextMenu.getItems().add(addInformationMenuItem);
+                    contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+350, mouseEvent.getSceneY()+100);
+                   
+
+                    removeMenuItem.setOnAction((event) ->{
+                        tholssaGraph.getChildren().remove(familyNode);
+                        contextMenu.hide();
+                    });
+
+                    addEdgeMenuItem.setOnAction((event)->{
+                        JFXButton familyNode = new JFXButton();
+                        familyNode.setText("family");
+                        familyNode.setStyle("-fx-background-color: lime;");
+                        familyNode.setTranslateX(mouseEvent.getSceneX()+100);
+                        familyNode.setTranslateY(mouseEvent.getSceneY()-50);
+                        tholssaGraph.getChildren().add(familyNode);
+                        contextMenu.hide();
+
+                        familyNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                            public void handle(MouseEvent mouseEvent){
+                                familyNode.setTranslateX(mouseEvent.getScreenX()- 500);
+                                familyNode.setTranslateY(mouseEvent.getScreenY()- 120);
+                            }
+                        });
+                    });
                 }
                 else{
                     familyNode.setTranslateX(mouseEvent.getSceneX());
@@ -137,7 +204,38 @@ public class MainWindow {
         friendNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
                 if(mouseEvent.isSecondaryButtonDown()){
-                    tholssaGraph.getChildren().remove(friendNode);
+                    ContextMenu contextMenu = new ContextMenu();
+                    MenuItem removeMenuItem = new MenuItem("Remove");
+                    MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
+                    MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+
+                    contextMenu.getItems().add(removeMenuItem);
+                    contextMenu.getItems().add(addEdgeMenuItem);
+                    contextMenu.getItems().add(addInformationMenuItem);
+                    contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+350, mouseEvent.getSceneY()+100);
+                   
+
+                    removeMenuItem.setOnAction((event) ->{
+                        tholssaGraph.getChildren().remove(friendNode);
+                        contextMenu.hide();
+                    });
+
+                    addEdgeMenuItem.setOnAction((event)->{
+                        JFXButton friendNode = new JFXButton();
+                        friendNode.setText("friend");
+                        friendNode.setStyle("-fx-background-color: lime;");
+                        friendNode.setTranslateX(mouseEvent.getSceneX()+100);
+                        friendNode.setTranslateY(mouseEvent.getSceneY()-50);
+                        tholssaGraph.getChildren().add(friendNode);
+                        contextMenu.hide();
+
+                        friendNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                            public void handle(MouseEvent mouseEvent){
+                                friendNode.setTranslateX(mouseEvent.getScreenX()- 500);
+                                friendNode.setTranslateY(mouseEvent.getScreenY()- 120);
+                            }
+                        });
+                    });
                 }
                 else{
                     friendNode.setTranslateX(mouseEvent.getSceneX());
@@ -201,7 +299,36 @@ public class MainWindow {
         spouseNode.setOnMousePressed(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
                 if(mouseEvent.isSecondaryButtonDown()){
-                    tholssaGraph.getChildren().remove(spouseNode);
+                    ContextMenu contextMenu = new ContextMenu();
+                    MenuItem removeMenuItem = new MenuItem("Remove");
+                    MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
+                    MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+                    contextMenu.getItems().add(removeMenuItem);
+                    contextMenu.getItems().add(addEdgeMenuItem);
+                    contextMenu.getItems().add(addInformationMenuItem);
+                    contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+350, mouseEvent.getSceneY()+100);
+                   
+                    removeMenuItem.setOnAction((event) ->{
+                        tholssaGraph.getChildren().remove(spouseNode);
+                        contextMenu.hide();
+                    });
+
+                    addEdgeMenuItem.setOnAction((event)->{
+                        JFXButton spouseNode = new JFXButton();
+                        spouseNode.setText("spouse");
+                        spouseNode.setStyle("-fx-background-color: lime;");
+                        spouseNode.setTranslateX(mouseEvent.getSceneX()+100);
+                        spouseNode.setTranslateY(mouseEvent.getSceneY()-50);
+                        tholssaGraph.getChildren().add(spouseNode);
+                        contextMenu.hide();
+
+                        spouseNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                            public void handle(MouseEvent mouseEvent){
+                                spouseNode.setTranslateX(mouseEvent.getScreenX()- 500);
+                                spouseNode.setTranslateY(mouseEvent.getScreenY()- 120);
+                            }
+                        });
+                    });
                 }
                 else{
                     spouseNode.setTranslateX(mouseEvent.getSceneX());

@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="704.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <children>
-      <AnchorPane fx:id="tholssaGraph" layoutX="115.0" layoutY="20.0" prefHeight="382.0" prefWidth="571.0" style="-fx-background-color: gray;" />
+      <AnchorPane fx:id="tholssaGraph" layoutX="102.0" layoutY="20.0" prefHeight="413.0" prefWidth="584.0" style="-fx-background-color: gray;" />
       <JFXButton fx:id="familyButton" buttonType="RAISED" layoutX="25.0" layoutY="48.0" onAction="#addFamilyNode" prefHeight="26.0" prefWidth="59.0" style="-fx-background-color: lime;" text="Family" />
       <JFXButton fx:id="friendButton" buttonType="RAISED" layoutX="24.0" layoutY="100.0" onAction="#addFriendFamily" prefHeight="26.0" prefWidth="59.0" style="-fx-background-color: lime;" text="Friend" />
       <JFXButton fx:id="buisnessButton" buttonType="RAISED" layoutX="24.0" layoutY="153.0" onAction="#addBuisnessNode" style="-fx-background-color: lime;" text="Buisness" />
       <JFXButton fx:id="spouseButton" buttonType="RAISED" layoutX="23.0" layoutY="211.0" onAction="#addSpouseNode" prefHeight="26.0" prefWidth="62.0" style="-fx-background-color: lime;" text="Spouse" />
-      <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="29.0" layoutY="452.0" onAction="#saveGraph" style="-fx-background-color: lime;" text="Save" />
-      <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="112.0" layoutY="452.0" style="-fx-background-color: lime;" text="Cancel" />
-      <JFXButton fx:id="removeButton" buttonType="RAISED" layoutX="352.0" layoutY="452.0" onAction="#removeNode" style="-fx-background-color: lime;" text="Remove" />
-      <JFXButton fx:id="addButton" buttonType="RAISED" layoutX="523.0" layoutY="452.0" style="-fx-background-color: lime;" text="Add" />
-      <Label layoutX="260.0" layoutY="414.0" style="-fx-background-color: white;" text="Right clicking the button removes from graph" />
+      <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="279.0" layoutY="452.0" onAction="#saveGraph" style="-fx-background-color: lime;" text="Save" />
+      <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="450.0" layoutY="452.0" style="-fx-background-color: lime;" text="Cancel" />
    </children>
 </AnchorPane>
