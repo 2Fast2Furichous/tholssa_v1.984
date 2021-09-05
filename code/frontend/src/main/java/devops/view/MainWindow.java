@@ -83,36 +83,15 @@ public class MainWindow {
                     });
 
                     addEdgeMenuItem.setOnAction((event) ->{
-                        Line line = new Line(mouseEvent.getSceneX(),mouseEvent.getSceneY(), mouseEvent.getSceneX()+100, mouseEvent.getSceneY()+100);
-                        line.setTranslateX(mouseEvent.getSceneX()+100);
-                        line.setTranslateY(mouseEvent.getSceneY()-50);
-                        JFXButton buisnessNode = new JFXButton();
-                        buisnessNode.setText("buisness");
-                        buisnessNode.setStyle("-fx-background-color: lime;");
-                        buisnessNode.setTranslateX(mouseEvent.getSceneX()+100);
-                        buisnessNode.setTranslateY(mouseEvent.getSceneY()-50);
-                        tholssaGraph.getChildren().add(buisnessNode);
-                        contextMenu.hide();
-
-                        buisnessNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
-                            public void handle(MouseEvent mouseEvent){
-                                buisnessNode.setTranslateX(mouseEvent.getScreenX()- 500);
-                                buisnessNode.setTranslateY(mouseEvent.getScreenY()- 120);
-                            }
-                        });
-                    
+                        addBuisnessNode(event);
                     });
 
                     addInformationMenuItem.setOnAction((event) ->{
 
                     });
-                    
                 }
                 if(mouseEvent.isPrimaryButtonDown()){
-                    //buisnessNode.setText("hello");
-                    //will create a new view that shows up here when it is just clicked
-                    //it will take in the user specified person name, startdate...etc
-
+                   
                 }
                 else{
                     buisnessNode.setTranslateX(mouseEvent.getSceneX());
@@ -160,20 +139,7 @@ public class MainWindow {
                     });
 
                     addEdgeMenuItem.setOnAction((event)->{
-                        JFXButton familyNode = new JFXButton();
-                        familyNode.setText("family");
-                        familyNode.setStyle("-fx-background-color: lime;");
-                        familyNode.setTranslateX(mouseEvent.getSceneX()+100);
-                        familyNode.setTranslateY(mouseEvent.getSceneY()-50);
-                        tholssaGraph.getChildren().add(familyNode);
-                        contextMenu.hide();
-
-                        familyNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
-                            public void handle(MouseEvent mouseEvent){
-                                familyNode.setTranslateX(mouseEvent.getScreenX()- 500);
-                                familyNode.setTranslateY(mouseEvent.getScreenY()- 120);
-                            }
-                        });
+                        addFamilyNode(event);
                     });
                 }
                 else{
@@ -221,20 +187,7 @@ public class MainWindow {
                     });
 
                     addEdgeMenuItem.setOnAction((event)->{
-                        JFXButton friendNode = new JFXButton();
-                        friendNode.setText("friend");
-                        friendNode.setStyle("-fx-background-color: lime;");
-                        friendNode.setTranslateX(mouseEvent.getSceneX()+100);
-                        friendNode.setTranslateY(mouseEvent.getSceneY()-50);
-                        tholssaGraph.getChildren().add(friendNode);
-                        contextMenu.hide();
-
-                        friendNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
-                            public void handle(MouseEvent mouseEvent){
-                                friendNode.setTranslateX(mouseEvent.getScreenX()- 500);
-                                friendNode.setTranslateY(mouseEvent.getScreenY()- 120);
-                            }
-                        });
+                        addFriendFamily(event);
                     });
                 }
                 else{
@@ -256,25 +209,7 @@ public class MainWindow {
 
     @FXML
     void removeNode(ActionEvent event){
-        ArrayList<Node> nodesToRemove = new ArrayList<Node>();
-        for(Node currNode: this.tholssaGraph.getChildren()){
-            //JFXButton node = (JFXButton) currNode;
-            // currNode.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            //     public void handle(MouseEvent mouseEvent){
-            //         if(mouseEvent.getClickCount() == 1 && mouseEvent.isSecondaryButtonDown()){
-            //             nodesToRemove.add(currNode);
-            //         }
-            //     }
-            // });
-        
-        }
-        for(Node currNode: nodesToRemove){
-            this.tholssaGraph.getChildren().remove(currNode);
-            currNode.setTranslateX(-500);
-            currNode.setTranslateY(-500);
-            currNode.setDisable(true);
-        }
-        
+      
     }
 
     @FXML
@@ -303,6 +238,7 @@ public class MainWindow {
                     MenuItem removeMenuItem = new MenuItem("Remove");
                     MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
                     MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+                    
                     contextMenu.getItems().add(removeMenuItem);
                     contextMenu.getItems().add(addEdgeMenuItem);
                     contextMenu.getItems().add(addInformationMenuItem);
@@ -314,20 +250,7 @@ public class MainWindow {
                     });
 
                     addEdgeMenuItem.setOnAction((event)->{
-                        JFXButton spouseNode = new JFXButton();
-                        spouseNode.setText("spouse");
-                        spouseNode.setStyle("-fx-background-color: lime;");
-                        spouseNode.setTranslateX(mouseEvent.getSceneX()+100);
-                        spouseNode.setTranslateY(mouseEvent.getSceneY()-50);
-                        tholssaGraph.getChildren().add(spouseNode);
-                        contextMenu.hide();
-
-                        spouseNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
-                            public void handle(MouseEvent mouseEvent){
-                                spouseNode.setTranslateX(mouseEvent.getScreenX()- 500);
-                                spouseNode.setTranslateY(mouseEvent.getScreenY()- 120);
-                            }
-                        });
+                        addSpouseNode(event);
                     });
                 }
                 else{
