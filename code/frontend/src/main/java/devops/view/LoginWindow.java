@@ -21,6 +21,8 @@ import javafx.fxml.FXML;
  */
 public class LoginWindow {
 
+	private static final String CREATE_ACCOUNT_RESOURCE = "/devops/view/CreateAccountWindow.fxml";
+
 	@FXML
 	private JFXButton login;
 
@@ -52,7 +54,7 @@ public class LoginWindow {
 	@FXML
 	public void handleSignUp(ActionEvent event) {
 		try {
-			FXRouter.register("createAccount", "/devops/view/CreateAccountWindow.fxml");
+			FXRouter.register("createAccount", CREATE_ACCOUNT_RESOURCE);
 			FXRouter.setAnimationType("fade", 300);
 			FXRouter.show("createAccount");
 		} catch (Exception e) {
