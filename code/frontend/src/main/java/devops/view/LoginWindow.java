@@ -52,6 +52,8 @@ public class LoginWindow {
 	@FXML
 	public void handleSignUp(ActionEvent event) {
 		try {
+			FXRouter.register("createAccount", "/devops/view/CreateAccountWindow.fxml");
+			FXRouter.setAnimationType("fade", 300);
 			FXRouter.show("createAccount");
 		} catch (Exception e) {
 			// swallow catch

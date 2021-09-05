@@ -1,13 +1,16 @@
 package devops.view;
 
+import java.io.IOException;
+
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
+import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
-
 
 /**
  * Code Behind for the Create Account Window
@@ -16,7 +19,6 @@ import javafx.scene.layout.GridPane;
  * @version Fall 2021
  */
 public class CreateAccountWindow {
-    //TODO Add in Listeners for Input Validation with Error Dialog.
     @FXML
     private GridPane createAccountWindowPane;
 
@@ -24,8 +26,8 @@ public class CreateAccountWindow {
     private JFXTextField usernameTextField;
 
     @FXML
-    private JFXTextField passwordTextField;
-
+    private JFXPasswordField passwordTextField;
+    
     @FXML
     private JFXTextField firstNameTextField;
 
@@ -36,7 +38,7 @@ public class CreateAccountWindow {
     private JFXTextField phoneNumberTextField;
 
     @FXML
-    private JFXDatePicker dateOfBirthDatePicker;
+    private DatePicker dateOfBirthDatePicker;
 
     @FXML
     private JFXButton cancelButton;
@@ -45,14 +47,19 @@ public class CreateAccountWindow {
     private JFXButton createAccountButton;
 
     @FXML
-    void handleCancel(ActionEvent event) {
-            //TODO Transfer back to Login Screen and Clear Fields.
+    void handleCancel(ActionEvent event) throws IOException {
+        try {
+            FXRouter.setAnimationType("fade", 300);
+            FXRouter.show("login");
+        } catch(Exception e) {
+            //Swallow catch
+        }
+
     }
 
     @FXML
     void handleCreateAccount(ActionEvent event) {
-        //TODO Add User Service linking for Create Account.
+        // TODO Add User Service linking for Create Account. Add in Error Handling for Later when Implementation Occurs.
     }
 
 }
-

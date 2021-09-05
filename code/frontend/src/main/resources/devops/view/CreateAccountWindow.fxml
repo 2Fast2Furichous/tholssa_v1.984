@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -60,11 +60,11 @@
                      <font>
                         <Font size="13.0" />
                      </font></Label>
-                  <JFXTextField fx:id="passwordTextField" focusColor="WHITE" maxWidth="350.0" prefHeight="42.0" prefWidth="300.0" promptText="Password" style="-fx-prompt-text-fill: #16ae58; -fx-text-inner-color: WHITE;" unFocusColor="#16ae58" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <JFXPasswordField fx:id="passwordTextField" focusColor="WHITE" maxWidth="350.0" prefHeight="50.0" prefWidth="370.0" promptText="Password" style="-fx-prompt-text-fill: #16ae58; -fx-text-inner-color: WHITE;" unFocusColor="#16ae58" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="13.0" />
                      </font>
-                  </JFXTextField>
+                  </JFXPasswordField>
                   <Label alignment="CENTER" prefHeight="27.0" prefWidth="154.0" text="First Name" textAlignment="CENTER" textFill="#16ae58" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <font>
                         <Font size="13.0" />
@@ -100,11 +100,7 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <JFXDatePicker fx:id="dateOfBirthDatePicker" defaultColor="#16ae58" prefHeight="29.0" prefWidth="280.0" style="-fx-prompt-text-fill: #16ae58;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-                     <GridPane.margin>
-                        <Insets right="100.0" />
-                     </GridPane.margin>
-                  </JFXDatePicker>
+                  <DatePicker fx:id="dateOfBirthDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                </children>
             </GridPane>
             <GridPane GridPane.rowIndex="1">
