@@ -60,7 +60,7 @@ public class MainWindow {
     void addBuisnessNode(ActionEvent event) {
         JFXButton buisnessNode = new JFXButton();
         buisnessNode.setText("buisness");
-        buisnessNode.setStyle("-fx-background-color: lime;");
+        buisnessNode.setStyle("-fx-background-color: #16ae58;");
         buisnessNode.setTranslateX(100);
         buisnessNode.setTranslateY(100);
         this.tholssaGraph.getChildren().add(buisnessNode);
@@ -114,7 +114,7 @@ public class MainWindow {
     void addFamilyNode(ActionEvent event) {
         JFXButton familyNode = new JFXButton();
         familyNode.setText("family");
-        familyNode.setStyle("-fx-background-color: lime;");
+        familyNode.setStyle("-fx-background-color: #16ae58;");
         familyNode.setTranslateX(100);
         familyNode.setTranslateY(150);
         this.tholssaGraph.getChildren().add(familyNode);
@@ -162,7 +162,7 @@ public class MainWindow {
     void addFriendFamily(ActionEvent event) {
         JFXButton friendNode = new JFXButton();
         friendNode.setText("friend");
-        friendNode.setStyle("-fx-background-color: lime;");
+        friendNode.setStyle("-fx-background-color: #16ae58;");
         friendNode.setTranslateX(0);
         friendNode.setTranslateY(0);
         this.tholssaGraph.getChildren().add(friendNode);
@@ -226,7 +226,7 @@ public class MainWindow {
     void addSpouseNode(ActionEvent event) {
         JFXButton spouseNode = new JFXButton();
         spouseNode.setText("spouse");
-        spouseNode.setStyle("-fx-background-color: lime;");
+        spouseNode.setStyle("-fx-background-color: #16ae58;");
         spouseNode.setTranslateX(100);
         spouseNode.setTranslateY(180);
         this.tholssaGraph.getChildren().add(spouseNode);
@@ -272,15 +272,15 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        assert tholssaGraph != null : "fx:id=\"tholssaGraph\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert familyButton != null : "fx:id=\"familyButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert friendButton != null : "fx:id=\"friendButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert buisnessButton != null : "fx:id=\"buisnessButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert spouseButton != null : "fx:id=\"spouseButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert saveButton != null : "fx:id=\"saveButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert removeButton != null : "fx:id=\"removeButton\" was not injected: check your FXML file 'MainUI.fxml'.";
-        assert addButton != null : "fx:id=\"addButton\" was not injected: check your FXML file 'MainUI.fxml'.";
+        assert tholssaGraph != null : "fx:id=\"tholssaGraph\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert familyButton != null : "fx:id=\"familyButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert friendButton != null : "fx:id=\"friendButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert buisnessButton != null : "fx:id=\"buisnessButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert spouseButton != null : "fx:id=\"spouseButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert saveButton != null : "fx:id=\"saveButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert removeButton != null : "fx:id=\"removeButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert addButton != null : "fx:id=\"addButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
     }
 }

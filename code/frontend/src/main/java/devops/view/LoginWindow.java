@@ -2,12 +2,11 @@ package devops.view;
 
 import java.io.IOException;
 
-import javax.swing.plaf.RootPaneUI;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
+import devops.App;
 import devops.utils.FXRouter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +29,7 @@ public class LoginWindow {
 
 	@FXML
 	void handleLogin(ActionEvent event) throws IOException{
-        FXRouter.register("main", "/devops/view/MainUI.fxml");
+        FXRouter.register("main", App.MAIN_RESOURCE);
         FXRouter.setAnimationType("fade", 5);
         FXRouter.show("main");
 		
@@ -41,10 +40,5 @@ public class LoginWindow {
 
 	}
 
-	public void goToMainWindow() throws IOException{
-		AnchorPane rootPane = new AnchorPane();
-		AnchorPane pane = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
-		rootPane.getChildren().setAll(pane);
-	}
-
+	
 }
