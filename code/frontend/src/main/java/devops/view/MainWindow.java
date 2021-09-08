@@ -16,6 +16,9 @@ import javafx.scene.shape.Line;
 public class MainWindow {
 
     @FXML
+    private AnchorPane backgroundPane;
+
+    @FXML
     private ResourceBundle resources;
 
     @FXML
@@ -78,7 +81,14 @@ public class MainWindow {
                     contextMenu.getItems().add(removeMenuItem);
                     contextMenu.getItems().add(addEdgeMenuItem);
                     contextMenu.getItems().add(addInformationMenuItem);
-                    contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+320, mouseEvent.getSceneY()+100);
+                    
+                    
+                    if(backgroundPane.widthProperty().doubleValue() < 1000){
+                        contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+320, mouseEvent.getSceneY()+100);
+                    }
+                    else{
+                        contextMenu.show(tholssaGraph, mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                    }
 
                     removeMenuItem.setOnAction((event) ->{
                         tholssaGraph.getChildren().remove(currentNode);
@@ -120,14 +130,14 @@ public class MainWindow {
     private void mouseDragged(JFXButton currentNode) {
         currentNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
-                currentNode.setTranslateX(mouseEvent.getScreenX()- 500);
-                currentNode.setTranslateY(mouseEvent.getScreenY()- 120);
-                if(tholssaGraph.getHeight() > mouseEvent.getY()){
-                    mouseEvent.consume();
-                }
-                if(tholssaGraph.getWidth() < mouseEvent.getX()){
-                    mouseEvent.consume();
-                }
+                currentNode.setTranslateX(mouseEvent.getSceneX() -150);
+                currentNode.setTranslateY(mouseEvent.getSceneY() -30);
+                // if(tholssaGraph.getHeight() > mouseEvent.get){
+                //     mouseEvent.consume();
+                // }
+                // if(tholssaGraph.getWidth() < mouseEvent.getX()){
+                //     mouseEvent.consume();
+                // }
             }
         });
     }
@@ -191,6 +201,7 @@ public class MainWindow {
 
     @FXML
     void initialize() {
+        assert backgroundPane != null : "fx:id=\"backgroundPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert tholssaGraph != null : "fx:id=\"tholssaGraph\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert familyButton != null : "fx:id=\"familyButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert friendButton != null : "fx:id=\"friendButton\" was not injected: check your FXML file 'MainWindow.fxml'.";

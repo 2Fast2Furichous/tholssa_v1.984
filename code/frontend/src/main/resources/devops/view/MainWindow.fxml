@@ -3,7 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="704.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+<AnchorPane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="704.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <children>
       <AnchorPane fx:id="tholssaGraph" layoutX="102.0" layoutY="20.0" prefHeight="413.0" prefWidth="584.0" style="-fx-background-color: gray;" />
       <JFXButton fx:id="familyButton" buttonType="RAISED" layoutX="25.0" layoutY="48.0" onAction="#addFamilyNode" prefHeight="26.0" prefWidth="59.0" style="-fx-background-color: #16ae58;" text="Family" />
