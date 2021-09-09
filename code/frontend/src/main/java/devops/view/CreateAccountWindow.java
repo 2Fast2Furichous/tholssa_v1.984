@@ -1,12 +1,19 @@
 package devops.view;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
+import devops.App;
+import devops.model.implementations.Credential;
+import devops.model.implementations.ServiceResponse;
+import devops.model.implementations.UserAccount;
+import devops.network.interfaces.UserService;
 import devops.utils.FXRouter;
+import devops.utils.GuiCommands;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -27,7 +34,7 @@ public class CreateAccountWindow {
 
     @FXML
     private JFXPasswordField passwordTextField;
-    
+
     @FXML
     private JFXTextField firstNameTextField;
 
@@ -51,15 +58,37 @@ public class CreateAccountWindow {
         try {
             FXRouter.setAnimationType("fade", 300);
             FXRouter.show("login");
-        } catch(Exception e) {
-            //Swallow catch
+        } catch (Exception e) {
+            // Swallow catch
         }
 
     }
 
     @FXML
     void handleCreateAccount(ActionEvent event) {
-        // TODO Add User Service linking for Create Account. Add in Error Handling for Later when Implementation Occurs.
+        UserService service = App.getUserService();
+        String firstName = this.firstNameTextField.textProperty().getValue();
+        String lastName = this.lastNameTextField.textProperty().getValue();
+        LocalDate dateOfBirth = this.dateOfBirthDatePicker.getValue();
+        String phoneNumber = this.phoneNumberTextField.textProperty().getValue();
+        String username = this.usernameTextField.textProperty().getValue();
+        String password = this.passwordTextField.textProperty().getValue();
+
+        try {
+            Credential credential = new Credential(username, password);
+            UserAccount account = new UserAccount(firstName, lastName, dateOfBirth, phoneNumber);
+
+            ServiceResponse response =  service.createAccount(account, credential);
+            UserAccount newUser = (UserAccount) response.getData();
+
+			FXRouter.show("mainUI", newUser);
+           
+
+        } catch (Exception e) {
+            GuiCommands.showErrorDialog(e.getMessage());
+        }
     }
+
+
 
 }
