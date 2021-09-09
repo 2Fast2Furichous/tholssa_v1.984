@@ -19,7 +19,7 @@ public class App extends Application {
     private static UserService userService;
     private static final String WINDOW_TITLE = "THOLSSA v1.984";
     private static final String LOGIN_RESOURCE = "/devops/view/LoginWindow.fxml";
-
+    public static final String MAIN_RESOURCE = "/devops/view/MainWindow.fxml";
     /**
      * JavaFX entry point.
      *
