@@ -8,6 +8,7 @@ import devops.model.implementations.Credential;
 import devops.model.implementations.ServiceResponse;
 import devops.model.interfaces.Account;
 import devops.network.interfaces.UserService;
+import devops.network.utils.ServerCommunicator;
 
 /**
  * The UserService implementation using the JeroMQ library.
@@ -43,6 +44,7 @@ public class JeroUserService implements UserService {
 		this.addCreateAccountProperties(account, accountElement, credentialsElement);
 
 		String accountJson = this.gson.toJson(account);
+		String response = ServerCommunicator.sendRequest(accountJson);
 		
 		// TODO Add Network Request for Create Account
 
@@ -68,6 +70,7 @@ public class JeroUserService implements UserService {
 		credentials.add("credentials", credentialsElement);
 
 		String loginJson = this.gson.toJson(credentials);
+		ServerCommunicator.sendRequest(loginJson);
 
 		// TODO Add API request for login
 		return new ServiceResponse(null);
