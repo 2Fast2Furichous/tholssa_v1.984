@@ -1,7 +1,6 @@
 package devops;
 
 import java.io.IOException;
-
 import devops.network.interfaces.UserService;
 import devops.network.implementations.JeroUserService;
 import devops.utils.FXRouter;
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
  * @author Special Topics - DevOps
  * @version Fall 2021
  */
-public class App extends Application {
+public class App extends Application{
 
     private static UserService userService;
     private static final String WINDOW_TITLE = "THOLSSA v1.984";

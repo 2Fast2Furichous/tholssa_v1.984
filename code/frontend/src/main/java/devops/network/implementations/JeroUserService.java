@@ -38,10 +38,9 @@ public class JeroUserService implements UserService {
 			throw new IllegalArgumentException("Credentials cannot be null");
 		}
 		JsonObject account = new JsonObject();
-		JsonElement accountElement = this.gson.toJsonTree(newAccount, Account.class);
 		JsonElement credentialsElement = this.gson.toJsonTree(newCredentials, Credential.class);
 
-		this.addCreateAccountProperties(account, accountElement, credentialsElement);
+		this.addCreateAccountProperties(account, newAccount, credentialsElement);
 
 		String accountJson = this.gson.toJson(account);
 		String response = ServerCommunicator.sendRequest(accountJson);
@@ -51,9 +50,12 @@ public class JeroUserService implements UserService {
 		return new ServiceResponse(null);
 	}
 
-	private void addCreateAccountProperties(JsonObject account, JsonElement accountElement, JsonElement credentialsElement) {
+	private void addCreateAccountProperties(JsonObject account, Account accountElement, JsonElement credentialsElement) {
 		account.addProperty("type", "Create Account");
-		account.add("user", accountElement);
+		account.addProperty("userFirstName", accountElement.getFirstName());
+		account.addProperty("userLastName", accountElement.getLastName());
+		account.addProperty("userDateOfBirth", accountElement.getDateOfBirth().toString());
+		account.addProperty("userPhoneNumber", accountElement.getPhoneNumber());
 		account.add("credentials", credentialsElement);
 	}
 

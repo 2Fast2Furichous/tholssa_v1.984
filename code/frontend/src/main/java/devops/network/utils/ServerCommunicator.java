@@ -1,6 +1,7 @@
 package devops.network.utils;
 
-import org.zeromq.ZContext;
+import org.zeromq.ZMQ.Context;
+import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
@@ -24,9 +25,8 @@ public class ServerCommunicator {
      * @return the response from the server.
      */
     public static String sendRequest(String request) {
-        
-        ZContext context = new ZContext(10);
-        Socket socket = context.createSocket(ZMQ.REQ);
+        Context context = ZMQ.context(10);
+        Socket socket = context.socket(SocketType.REQ);
         socket.connect("tcp://127.0.0.1:" + ServerCommunicator.SOCKET_PORT);
 
         boolean isSent = socket.send(request.getBytes(ZMQ.CHARSET));
@@ -37,7 +37,7 @@ public class ServerCommunicator {
         } else {
             response = "";
         }
-        context.close();
+        context.term();
         socket.close();
 
         return response;
