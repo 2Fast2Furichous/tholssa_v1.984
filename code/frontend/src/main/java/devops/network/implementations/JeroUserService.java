@@ -1,11 +1,14 @@
 package devops.network.implementations;
 
+import java.time.LocalDate;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import devops.model.implementations.Credential;
 import devops.model.implementations.ServiceResponse;
+import devops.model.implementations.UserAccount;
 import devops.model.interfaces.Account;
 import devops.network.interfaces.UserService;
 import devops.network.utils.ServerCommunicator;
@@ -43,11 +46,20 @@ public class JeroUserService implements UserService {
 		this.addCreateAccountProperties(account, newAccount, credentialsElement);
 
 		String accountJson = this.gson.toJson(account);
-		String response = ServerCommunicator.sendRequest(accountJson);
-		
-		// TODO Add Network Request for Create Account
+		String responseJson = ServerCommunicator.sendRequest(accountJson);
+		JsonObject response = this.gson.fromJson(responseJson, JsonObject.class);
 
-		return new ServiceResponse(null);
+		if(response.get("type").toString().equals("error")){
+			return handleError(response);
+		} 
+
+		return new ServiceResponse(newAccount);
+	}
+
+	private ServiceResponse handleError(JsonObject response) {
+		String title = "error";
+		String errorMessage = this.gson.fromJson(response.get("content"), String.class);
+		return new ServiceResponse(title, errorMessage);
 	}
 
 	private void addCreateAccountProperties(JsonObject account, Account accountElement, JsonElement credentialsElement) {
@@ -72,10 +84,21 @@ public class JeroUserService implements UserService {
 		credentials.add("credentials", credentialsElement);
 
 		String loginJson = this.gson.toJson(credentials);
-		ServerCommunicator.sendRequest(loginJson);
+		String responseJson = ServerCommunicator.sendRequest(loginJson);
+		JsonObject response = this.gson.fromJson(responseJson, JsonObject.class);
 
-		// TODO Add API request for login
-		return new ServiceResponse(null);
+		if(response.get("type").toString().equals("error")){
+			return handleError(response);
+		} 
+
+		String firstName = this.gson.fromJson(response.get("userFirstName"), String.class);
+		String lastName = this.gson.fromJson(response.get("userLastName"), String.class);
+		LocalDate dateOfBirth = LocalDate.parse(this.gson.fromJson(response.get("userDateOfBirth"), String.class));
+		String phoneNumber = this.gson.fromJson(response.get("userPhoneNumber"), String.class);
+		
+
+
+		return new ServiceResponse(new UserAccount(firstName, lastName, dateOfBirth, phoneNumber));
 	}
 
 }

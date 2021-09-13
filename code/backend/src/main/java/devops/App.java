@@ -1,6 +1,6 @@
 package devops;
 
-import devops.network.Server;
+import devops.network.Gateway;
 
 /**
  * Hello world!
@@ -10,8 +10,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
-        Server server = new Server();
+        System.out.println( "Server is Running" );
+        Gateway server = new Gateway();
         server.run();
     }
 }

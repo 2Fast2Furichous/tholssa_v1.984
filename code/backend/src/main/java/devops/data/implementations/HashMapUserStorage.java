@@ -40,6 +40,7 @@ public class HashMapUserStorage implements UserStorage{
         if (this.accounts.containsKey(newUser.getUniqueId())) {
             return false;
         } else {
+
             this.accounts.put(newUser.getUniqueId(), newUser);
             return true;
         }

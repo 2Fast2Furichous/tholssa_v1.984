@@ -45,8 +45,13 @@ public class LoginWindow {
 		try {
 			Credential loginCredentials = new Credential(usernameText, passwordText);
 			ServiceResponse response = service.login(loginCredentials);
-			UserAccount userAccount = (UserAccount) response.getData();
-			FXRouter.show("mainUI", userAccount);
+			if (response.getMessage().equals("error")){
+				GuiCommands.showErrorDialog((String)response.getData());
+			} else {
+				UserAccount userAccount = (UserAccount) response.getData();
+				FXRouter.show("mainUI", userAccount);
+			}
+
 		} catch (Exception e) {
 			GuiCommands.showErrorDialog(e.getMessage());
 		}

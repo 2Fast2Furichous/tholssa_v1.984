@@ -79,9 +79,13 @@ public class CreateAccountWindow {
             UserAccount account = new UserAccount(firstName, lastName, dateOfBirth, phoneNumber);
 
             ServiceResponse response =  service.createAccount(account, credential);
-            UserAccount newUser = (UserAccount) response.getData();
+            if (response.getMessage().equals("error")){
+				GuiCommands.showErrorDialog((String)response.getData());
+			} else {
+                UserAccount newUser = (UserAccount) response.getData();
+                FXRouter.show("mainUI", newUser);
+            }
 
-			FXRouter.show("mainUI", newUser);
            
 
         } catch (Exception e) {
