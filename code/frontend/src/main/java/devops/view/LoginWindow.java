@@ -1,10 +1,16 @@
 package devops.view;
 
+import java.io.IOException;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import devops.App;
+import devops.utils.FXRouter;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 import devops.model.implementations.Credential;
 import devops.model.implementations.ServiceResponse;
 import devops.model.implementations.UserAccount;
@@ -36,7 +42,7 @@ public class LoginWindow {
 	@FXML
 	private JFXButton signUp;
 
-	@FXML
+
 	public void handleLogin(ActionEvent event) {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();
@@ -55,6 +61,7 @@ public class LoginWindow {
 		} catch (Exception e) {
 			GuiCommands.showErrorDialog(e.getMessage());
 		}
+    
 	}
 
 	@FXML
@@ -68,4 +75,5 @@ public class LoginWindow {
 		}
 	}
 
+	
 }
