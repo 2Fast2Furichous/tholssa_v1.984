@@ -15,6 +15,8 @@ import devops.model.implementations.Credential;
 import devops.model.implementations.ServiceResponse;
 import devops.model.implementations.UserAccount;
 import devops.network.interfaces.UserService;
+import devops.utils.FXRouter;
+import devops.utils.GuiCommands;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -49,10 +51,15 @@ public class LoginWindow {
 		try {
 			Credential loginCredentials = new Credential(usernameText, passwordText);
 			ServiceResponse response = service.login(loginCredentials);
-			UserAccount userAccount = (UserAccount) response.getData();
-			FXRouter.show("mainUI", userAccount);
+			if (response.getMessage().equals("error")){
+				GuiCommands.showErrorDialog((String)response.getData());
+			} else {
+				UserAccount userAccount = (UserAccount) response.getData();
+				FXRouter.show("mainUI", userAccount);
+			}
+
 		} catch (Exception e) {
-			// TODO Show error dialog
+			GuiCommands.showErrorDialog(e.getMessage());
 		}
     
 	}

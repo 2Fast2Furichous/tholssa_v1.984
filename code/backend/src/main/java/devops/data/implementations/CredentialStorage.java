@@ -47,7 +47,6 @@ public class CredentialStorage {
         if(this.accessKeys.containsKey(key) || this.accessKeys.containsValue(uniqueId)){
             return false;
         }
-
         this.accessKeys.put(key, uniqueId);
         return true;
         }
