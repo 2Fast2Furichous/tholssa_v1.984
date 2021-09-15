@@ -1,42 +1,60 @@
 package devops.GraphService;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import devops.GraphService.model.implementations.NodeFilter;
 import devops.GraphService.model.implementations.Person;
 import devops.GraphService.model.implementations.PersonEdge;
+import devops.GraphService.model.implementations.PersonNetwork;
 import devops.GraphService.model.implementations.PersonNode;
+import devops.GraphService.model.implementations.Relationship;
 import devops.GraphService.model.interfaces.GraphEdge;
+import devops.GraphService.model.interfaces.GraphNetwork;
 import devops.GraphService.model.interfaces.GraphNode;
-import devops.data.implementations.StorageHash;
-import devops.data.interfaces.Storage;
+import devops.Storage.implementations.StorageHash;
+import devops.Storage.interfaces.Storage;
 
 public class GraphService {
 
 	private Storage<GraphNode<Person>> nodeStorage;
-	private StorageHash<GraphEdge<Person>> edgeStorage;
+	private Storage<GraphEdge<Person>> edgeStorage;
 
 	public GraphService() {
 		this.nodeStorage = new StorageHash<GraphNode<Person>>();
 		this.edgeStorage = new StorageHash<GraphEdge<Person>>();
 	}
 
+
+	public Storage<GraphNode<Person>> getNodeStorage() {
+		return this.nodeStorage;
+	}
+
+	public Storage<GraphEdge<Person>> getEdgeStorage() {
+		return this.edgeStorage;
+	}
+
 	public String createNode(Person person) {
 		String uniqueID = UUID.randomUUID().toString();
+
 		PersonNode newNode = new PersonNode(uniqueID, person);
 		nodeStorage.add(newNode);
 		return uniqueID;
 	}
 
-	public String connectNodes(String sourceGuid, String destinationGuid) {
+	public String connectNodes(String sourceGuid, String destinationGuid, Relationship relation,
+			LocalDate dateOfConnection, LocalDate dateOfConnectionEnd) {
 		String uniqueID = UUID.randomUUID().toString();
 
 		GraphNode<Person> source = this.nodeStorage.get(sourceGuid);
 		GraphNode<Person> destination = this.nodeStorage.get(destinationGuid);
 
-		PersonEdge newEdge = new PersonEdge(uniqueID, source, destination);
+		PersonEdge newEdge = new PersonEdge(uniqueID, source, destination, relation, dateOfConnection,
+				dateOfConnectionEnd);
+
 		this.edgeStorage.add(newEdge);
 		return uniqueID;
 	}
@@ -55,48 +73,80 @@ public class GraphService {
 		return this.nodeStorage.update(updatedNode);
 	}
 
-	public GraphEdge<Person> updateEdge(String guid, String sourceGuid, String destinationGuid) {
+	public GraphEdge<Person> updateEdge(String guid, Relationship relation, LocalDate dateOfConnection,
+			LocalDate dateOfConnectionEnd) {
+		PersonEdge updatedEdge = (PersonEdge) this.edgeStorage.get(guid);
 
-		GraphEdge<Person> updatedEdge = this.edgeStorage.get(guid);
+		updatedEdge.setRelation(relation);
+		updatedEdge.setDateOfConnection(dateOfConnection);
+		updatedEdge.setDateOfConnectionEnd(dateOfConnectionEnd);
 
-		GraphNode<Person> source = this.nodeStorage.get(sourceGuid);
-		GraphNode<Person> destination = this.nodeStorage.get(destinationGuid);
-
-		updatedEdge.setSource(source);
-		updatedEdge.setDestination(destination);
 		return this.edgeStorage.update(updatedEdge);
 	}
 
 	public GraphNode<Person> removeNode(String guid) {
-		return this.nodeStorage.remove(guid);
+		GraphNode<Person> node = this.nodeStorage.remove(guid);
+
+		for (GraphEdge<Person> edge : node.getEdges()) {
+			this.edgeStorage.remove(edge.getUniqueID());
+			node.removeEdge(edge);
+		}
+
+		return node;
 	}
+
 	public GraphEdge<Person> removeEdge(String guid) {
-		return this.edgeStorage.remove(guid);
+		GraphEdge<Person> edge = this.edgeStorage.remove(guid);
+
+		edge.getSource().removeEdge(edge);
+
+		return edge;
 	}
 
-	public Collection<GraphNode<Person>> getFilteredNodes(String rootNodeGuid, ArrayList<NodeFilter> filters) {
-		Collection<GraphNode<Person>> filteredNodes = new  ArrayList<GraphNode<Person>>();
+	public GraphNetwork<Person> getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters) {
+		GraphNetwork<Person> filteredNetwork;
 
 		if (filters.isEmpty()) {
-			filteredNodes = this.nodeStorage.getAll();
+			filteredNetwork = new PersonNetwork(this.nodeStorage.getAll(), this.edgeStorage.getAll());
 		} else {
-			// TODO Replace with flood fill process that includes filter
 			GraphNode<Person> rootNode = this.nodeStorage.get(rootNodeGuid);
+			Predicate<GraphEdge<Person>> nodePredicate = new NodeFilterPredicate(filters);
+			filteredNetwork = this.floodFill(rootNode, nodePredicate);
 		}
 
-		return filteredNodes;
+		return filteredNetwork;
 	}
 
-	public Collection<GraphEdge<Person>> getFilteredEdges(String rootNodeGuid, ArrayList<NodeFilter> filters) {
-		Collection<GraphEdge<Person>> filteredEdges = new ArrayList<GraphEdge<Person>>();
+	private GraphNetwork<Person> floodFill(GraphNode<Person> rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
+		GraphNetwork<Person> newNetwork = new PersonNetwork();
+		LinkedList<GraphNode<Person>> queue = new LinkedList<GraphNode<Person>>();
 
-		if (filters.isEmpty()) {
-			filteredEdges = this.edgeStorage.getAll();
-		} else {
-			// TODO Replace with flood fill process that includes filter
-			GraphNode<Person> rootNode = this.nodeStorage.get(rootNodeGuid);
+		while (!queue.isEmpty()) {
+			GraphNode<Person> currentNode = queue.poll();
+			for (GraphEdge<Person> neighborEdge : currentNode.getEdges()) {
+				GraphNode<Person> neighborNode = neighborEdge.getDestination();
+				if (nodePredicate.test(neighborEdge)) {
+					newNetwork.addEdge(neighborEdge);
+					newNetwork.addNode(neighborNode);
+					queue.add(neighborNode);
+				}
+			}
 		}
 
-		return filteredEdges;
+		return newNetwork;
+	}
+
+	private class NodeFilterPredicate implements Predicate<GraphEdge<Person>> {
+
+		private Predicate<GraphEdge<Person>> compositePredicate;
+
+		public NodeFilterPredicate(Collection<NodeFilter> filters) {
+			this.compositePredicate = filters.stream().map(NodeFilter::getPredicate).reduce(x -> true, Predicate::and);
+		}
+
+		@Override
+		public boolean test(GraphEdge<Person> t) {
+			return compositePredicate.test(t);
+		}
 	}
 }

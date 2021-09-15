@@ -1,13 +1,14 @@
-package devops.data.implementations;
+package devops.Storage.implementations;
 
 import java.util.Collection;
 import java.util.HashMap;
-import devops.data.interfaces.Storage;
-import devops.data.interfaces.Unique;
+
+import devops.Storage.interfaces.Storage;
+import devops.Storage.interfaces.Unique;
 
 public class StorageHash<E extends Unique> implements Storage<E> {
 
-	private HashMap<String, E> map;
+	private final HashMap<String, E> map;
 
 	public StorageHash() {
 		this.map = new HashMap<String, E>();
@@ -15,16 +16,28 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 
 	@Override
 	public E add(E value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Value cannot be null");
+		}
+
 		return this.map.put(value.getUniqueID(), value);
 	}
 
 	@Override
 	public E get(String uniqueID) {
+		if (uniqueID == null || uniqueID.isBlank()) {
+			throw new IllegalArgumentException("Unique ID must not be null or blank");
+		}
+
 		return this.map.get(uniqueID);
 	}
 
 	@Override
 	public E remove(String uniqueID) {
+		if (uniqueID == null || uniqueID.isBlank()) {
+			throw new IllegalArgumentException("Unique ID must not be null or blank");
+		}
+
 		return this.map.remove(uniqueID);
 	}
 
@@ -35,6 +48,10 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 
 	@Override
 	public E update(E value) {
+		if (value == null) {
+			throw new IllegalArgumentException("Value cannot be null");
+		}
+
 		return this.map.put(value.getUniqueID(), value);
 	}
 	

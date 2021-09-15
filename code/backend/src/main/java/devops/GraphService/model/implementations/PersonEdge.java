@@ -1,28 +1,35 @@
 package devops.GraphService.model.implementations;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
 
 import devops.GraphService.model.interfaces.GraphEdge;
 import devops.GraphService.model.interfaces.GraphNode;
 
 public class PersonEdge implements GraphEdge<Person> {
 
-	private GraphNode<Person> source;
-	private GraphNode<Person> destination;
-	private Collection<GraphEdge<Person>> neighbors;
+	private final GraphNode<Person> source;
+	private final GraphNode<Person> destination;
 
-	private String uniqueID;
-	private String relation;
+	private final String uniqueID;
+	private Relationship relation;
 	private LocalDate dateOfConnection;
 	private LocalDate dateOfConnectionEnd;
 
-	public PersonEdge(String uniqueID, GraphNode<Person> source, GraphNode<Person> destination) {
+	public PersonEdge(String uniqueID, GraphNode<Person> source, GraphNode<Person> destination, Relationship relation, LocalDate dateOfConnection, 
+			LocalDate dateOfConnectionEnd) {
+		if (uniqueID == null || uniqueID.isBlank()) {
+			throw new IllegalArgumentException("Unique ID must not be null or blank");
+		}
+		if (source == null) {
+			throw new IllegalArgumentException("Source must not be null");
+		}
+		if (destination == null) {
+			throw new IllegalArgumentException("Destination must not be null");
+		}
 		this.uniqueID = uniqueID;
-		this.neighbors = new HashSet<GraphEdge<Person>>();
 		this.source = source;
 		this.destination = destination;
+		this.source.addEdge(this);
 	}
 	
 	@Override
@@ -46,42 +53,17 @@ public class PersonEdge implements GraphEdge<Person> {
 		this.dateOfConnection = dateOfConnection;
 	}
 
-	public String getRelation() {
+	public Relationship getRelation() {
 		return relation;
 	}
 
-	public void setRelation(String relation) {
+	public void setRelation(Relationship relation) {
 		this.relation = relation;
 	}
 
 	@Override
 	public GraphNode<Person> getDestination() {
 		return this.destination;
-	}
-
-	@Override
-	public void setSource(GraphNode<Person> node) {
-		this.source = node;
-	}
-
-	@Override
-	public void setDestination(GraphNode<Person> node) {
-		this.destination = node;
-	}
-
-	@Override
-	public boolean addNeighbor(GraphEdge<Person> edge) {
-		return neighbors.add(edge);
-	}
-
-	@Override
-	public boolean removeNeighbor(GraphEdge<Person> edge) {
-		return neighbors.remove(edge);
-	}
-
-	@Override
-	public Collection<GraphEdge<Person>> getNeighbors() {
-		return this.neighbors;
 	}
 
 	@Override
