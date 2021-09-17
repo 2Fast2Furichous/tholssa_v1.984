@@ -1,26 +1,20 @@
 package devops.model.implementations;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import devops.model.interfaces.Account;
-import devops.network.implementations.ClientKey;
-import javafx.scene.image.Image;
 
 /**
- * The read-only Account class that represents the detailed user account with username and
- * ClientKey included
+ * The read-only Account class that represents the detailed user account.
  *
- * @author Furichous Jones IV
+ * @author Furichous Jones IV and Alexander Ayers
  * @version Fall 2021
  */
 public class UserAccount implements Account {
 	private String firstName;
 	private String lastName;
-	private String username;
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 	private String phoneNumber;
-	private Image photo;
-	private ClientKey userKey;
 
 	/**
 	 * Instantiates a new UserAccount
@@ -36,14 +30,10 @@ public class UserAccount implements Account {
 	 * 
 	 * @param firstName   First name of user
 	 * @param lastName    Last name of user
-	 * @param username    Login name of user
 	 * @param dateOfBirth Date of birth of user
 	 * @param phoneNumber Phone number of user
-	 * @param photo       Photo of user
-	 * @param userKey     ClientKey of user
 	 */
-	public UserAccount(String firstName, String lastName, String username, Date dateOfBirth, String phoneNumber,
-			Image photo, ClientKey userKey) {
+	public UserAccount(String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber) {
 		if (firstName == null) {
 			throw new IllegalArgumentException("First name cannot be null.");
 		}
@@ -58,39 +48,24 @@ public class UserAccount implements Account {
 			throw new IllegalArgumentException("Last name cannot be blank.");
 		}
 
-		if (username == null) {
-			throw new IllegalArgumentException("User name cannot be null.");
-		}
-		if (username.isBlank()) {
-			throw new IllegalArgumentException("User name cannot be blank.");
-		}
-
 		if (dateOfBirth == null) {
 			throw new IllegalArgumentException("Date of birth cannot be null.");
 		}
 
+		if (phoneNumber == null){
+			throw new IllegalArgumentException("Phone Number cannot be null.");
+		}
+
+		if (phoneNumber.isBlank()){
+			throw new IllegalArgumentException("Phone Number cannot be blank.");
+		}
+
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.username = username;
 		this.dateOfBirth = dateOfBirth;
 		this.phoneNumber = phoneNumber;
-		this.photo = photo;
-		this.userKey = userKey;
 	}
 
-	/**
-	 * Returns the account's client key
-	 * 
-	 * @return the account's client key
-	 */
-	public ClientKey getUserKey() {
-		return this.userKey;
-	}
-
-	@Override
-	public Image getPhoto() {
-		return this.photo;
-	}
 
 	@Override
 	public String getPhoneNumber() {
@@ -98,17 +73,8 @@ public class UserAccount implements Account {
 	}
 
 	@Override
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return this.dateOfBirth;
-	}
-
-	/**
-	 * Returns the account's username
-	 * 
-	 * @return the account's username
-	 */
-	public String getUsername() {
-		return this.username;
 	}
 
 	@Override
