@@ -1,8 +1,6 @@
 package devops.model.interfaces;
 
-import java.util.Date;
-
-import javafx.scene.image.Image;
+import java.time.LocalDate;
 
 /**
  * The base interface for which all Accounts share and are publicly visible on
@@ -12,12 +10,6 @@ import javafx.scene.image.Image;
  * @version Fall 2021
  */
 public interface Account {
-	/**
-	 * Returns the account's photo
-	 * 
-	 * @return the account's photo
-	 */
-	public Image getPhoto();
 
 	/**
 	 * Returns the account's phone number
@@ -31,7 +23,7 @@ public interface Account {
 	 * 
 	 * @return the account's date of birth
 	 */
-	public Date getDateOfBirth();
+	public LocalDate getDateOfBirth();
 
 	/**
 	 * Returns the account's last name
