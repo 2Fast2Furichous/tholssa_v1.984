@@ -6,10 +6,23 @@ import java.util.HashMap;
 import devops.Storage.interfaces.Storage;
 import devops.Storage.interfaces.Unique;
 
+/**
+ * A hashmap implementation for object management
+ *
+ * @author Furichous Jones IV
+ * @version Fall 2021
+ */
 public class StorageHash<E extends Unique> implements Storage<E> {
 
 	private final HashMap<String, E> map;
 
+	/**
+	 * Creates a new storage with hashmap
+	 * 
+	 * @preconditions none
+	 * @postconditions getAll().isEmpty() == true
+	 * 
+	 */
 	public StorageHash() {
 		this.map = new HashMap<String, E>();
 	}
@@ -50,6 +63,9 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 	public E update(E value) {
 		if (value == null) {
 			throw new IllegalArgumentException("Value cannot be null");
+		}
+		if (!this.map.containsKey(value.getUniqueID())) {
+			throw new IllegalArgumentException("Value does not exist in storage");
 		}
 
 		return this.map.put(value.getUniqueID(), value);

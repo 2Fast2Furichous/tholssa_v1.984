@@ -7,21 +7,41 @@ import devops.GraphService.model.interfaces.GraphEdge;
 import devops.GraphService.model.interfaces.GraphNetwork;
 import devops.GraphService.model.interfaces.GraphNode;
 
+/**
+ * Network of person nodes and edges
+ *
+ * @author Furichous Jones IV
+ * @version Fall 2021
+ */
 public class PersonNetwork implements GraphNetwork<Person>{
 
 	Collection<GraphEdge<Person>> edges;
 	Collection<GraphNode<Person>> nodes;
 
+	/**
+	 * Zero parameter constructor
+	 * 
+	 * @preconditions none
+	 * @postconditions getEdges() != null && getNodes() != null
+	 * 
+	 */
 	public PersonNetwork() {
 		this.edges = new ArrayList<GraphEdge<Person>>();
 		this.nodes = new ArrayList<GraphNode<Person>>();
 	}
 
+	/**
+	 * Zero parameter constructor
+	 * 
+	 * @preconditions nodes != null && edges != null
+	 * @postconditions getEdges() == edges && getNodes() == nodes
+	 * 
+	 */
 	public PersonNetwork(Collection<GraphNode<Person>> nodes, Collection<GraphEdge<Person>> edges) {
-		if (nodes != null) {
+		if (nodes == null) {
 			throw new IllegalArgumentException("Nodes must not be null");
 		}
-		if (edges != null) {
+		if (edges == null) {
 			throw new IllegalArgumentException("Edges must not be null");
 		}
 		
@@ -31,7 +51,7 @@ public class PersonNetwork implements GraphNetwork<Person>{
 
 	@Override
 	public boolean addEdge(GraphEdge<Person> edge) {
-		if (edge != null) {
+		if (edge == null) {
 			throw new IllegalArgumentException("Edge must not be null");
 		}
 		return this.edges.add(edge);
@@ -39,7 +59,7 @@ public class PersonNetwork implements GraphNetwork<Person>{
 
 	@Override
 	public boolean addNode(GraphNode<Person> node) {
-		if (node != null) {
+		if (node == null) {
 			throw new IllegalArgumentException("Node must not be null");
 		}
 		return this.nodes.add(node);

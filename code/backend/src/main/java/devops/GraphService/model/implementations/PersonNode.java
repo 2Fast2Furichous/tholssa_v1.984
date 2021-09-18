@@ -6,12 +6,28 @@ import java.util.HashSet;
 import devops.GraphService.model.interfaces.GraphEdge;
 import devops.GraphService.model.interfaces.GraphNode;
 
+/**
+ * Node of a person
+ *
+ * @author Furichous Jones IV
+ * @version Fall 2021
+ */
 public class PersonNode implements GraphNode<Person> {
 
 	private final String uniqueID;
 	private Person person;
 	private final Collection<GraphEdge<Person>> edges;
 
+	/**
+	 * 
+	 * Creates a new person node given the uniqueID and person
+	 * 
+	 * @preconditions uniqueID != null && !uniqueID.isBlank() && person != null
+	 * @postconditions getUniqueID == uniqueID && getValue() == person && getEdges() != null
+	 * 
+	 * @param uniqueID
+	 * @param person
+	 */
 	public PersonNode(String uniqueID, Person person) {
 		if (uniqueID == null || uniqueID.isBlank()) {
 			throw new IllegalArgumentException("Unique ID must not be null or blank");
@@ -25,13 +41,13 @@ public class PersonNode implements GraphNode<Person> {
 	}
 
 	@Override
-	public boolean addEdge(GraphEdge<Person> node) {
-		return this.edges.add(node);
+	public boolean addEdge(GraphEdge<Person> edge) {
+		return this.edges.add(edge);
 	}
 
 	@Override
-	public boolean removeEdge(GraphEdge<Person> node) {
-		return this.edges.remove(node);
+	public boolean removeEdge(GraphEdge<Person> edge) {
+		return this.edges.remove(edge);
 	}
 
 	@Override
