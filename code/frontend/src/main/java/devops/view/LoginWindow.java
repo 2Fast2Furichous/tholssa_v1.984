@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 public class LoginWindow {
 
 	private static final String CREATE_ACCOUNT_RESOURCE = "/devops/view/CreateAccountWindow.fxml";
+	private static final String MAIN_WINDOW_RESOURCE = "/devops/view/MainWindow.fxml";
 
 	@FXML
 	private JFXButton login;
@@ -47,15 +48,23 @@ public class LoginWindow {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();
 		String passwordText = this.password.getText();
+		
 
 		try {
+			FXRouter.register("MainWindow", MAIN_WINDOW_RESOURCE);
+			FXRouter.setAnimationType("fade", 300);
+			FXRouter.show("MainWindow");
+			//above code is only neccessary to get straight to the MainWindow 
+			
+			
 			Credential loginCredentials = new Credential(usernameText, passwordText);
 			ServiceResponse response = service.login(loginCredentials);
 			if (response.getMessage().equals("error")){
 				GuiCommands.showErrorDialog((String)response.getData());
 			} else {
 				UserAccount userAccount = (UserAccount) response.getData();
-				FXRouter.show("mainUI", userAccount);
+				//FXRouter.show("MainWindow", userAccount);
+				
 			}
 
 		} catch (Exception e) {

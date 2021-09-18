@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
@@ -55,6 +57,7 @@ public class MainWindow {
      private static final String FAMILY_NODE = "family";
      private static final String FRIEND_NODE = "friend";
      private static final String SPOUSE_NODE = "spouse";
+     
     
     @FXML
     void addBuisnessNode(ActionEvent event) {
@@ -76,7 +79,8 @@ public class MainWindow {
                     ContextMenu contextMenu = new ContextMenu();
                     MenuItem removeMenuItem = new MenuItem("Remove");
                     MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
-                    MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+                    MenuItem addInformationMenuItem = new MenuItem("Add Information");
+                    
 
                     contextMenu.getItems().add(removeMenuItem);
                     contextMenu.getItems().add(addEdgeMenuItem);
@@ -112,7 +116,18 @@ public class MainWindow {
                     });
 
                     addInformationMenuItem.setOnAction((event) ->{
+                        currentNode.setOnKeyReleased(new EventHandler<KeyEvent>(){
+                            
+                            public void handle(KeyEvent event){
+                                if(event.getCode().equals(KeyCode.BACK_SPACE)){
+                                    
+                                    currentNode.setText(currentNode.getText().substring(0, currentNode.getText().length()-1));
+                                }
+                                currentNode.setText(currentNode.getText()+ event.getText());   
+                            }
+                        });
 
+        
                     });
                 }
                 if(mouseEvent.isPrimaryButtonDown()){
@@ -121,6 +136,8 @@ public class MainWindow {
                 else{
                   
                 }
+
+            
                
             }
         });
