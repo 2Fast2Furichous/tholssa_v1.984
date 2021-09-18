@@ -1,6 +1,6 @@
 package devops.view;
 
-import java.io.IOException;
+
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -9,16 +9,12 @@ import com.jfoenix.controls.JFXTextField;
 import devops.App;
 import devops.utils.FXRouter;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
 import devops.model.implementations.Credential;
 import devops.model.implementations.ServiceResponse;
 import devops.model.implementations.UserAccount;
 import devops.network.interfaces.UserService;
-import devops.utils.FXRouter;
 import devops.utils.GuiCommands;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 
 /**
  * The login window controller.
@@ -28,7 +24,6 @@ import javafx.fxml.FXML;
  */
 public class LoginWindow {
 
-	private static final String CREATE_ACCOUNT_RESOURCE = "/devops/view/CreateAccountWindow.fxml";
 
 	@FXML
 	private JFXButton login;
@@ -49,13 +44,13 @@ public class LoginWindow {
 		String passwordText = this.password.getText();
 
 		try {
-			Credential loginCredentials = new Credential(usernameText, passwordText);
+			Credential loginCredentials = new Credential(passwordText, usernameText);
 			ServiceResponse response = service.login(loginCredentials);
 			if (response.getMessage().equals("error")){
 				GuiCommands.showErrorDialog((String)response.getData());
 			} else {
 				UserAccount userAccount = (UserAccount) response.getData();
-				FXRouter.show("mainUI", userAccount);
+				FXRouter.show("main", userAccount);
 			}
 
 		} catch (Exception e) {
@@ -67,8 +62,6 @@ public class LoginWindow {
 	@FXML
 	public void handleSignUp(ActionEvent event) {
 		try {
-			FXRouter.register("createAccount", CREATE_ACCOUNT_RESOURCE);
-			FXRouter.setAnimationType("fade", 300);
 			FXRouter.show("createAccount");
 		} catch (Exception e) {
 			// swallow catch
