@@ -185,12 +185,29 @@ public class MainWindow {
     private void mouseDraggedLine(Line currentLine){
         currentLine.setOnMouseDragged(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent mouseEvent){
-                currentLine.setTranslateX(mouseEvent.getSceneX()-150);
-                currentLine.setTranslateY(mouseEvent.getSceneY()-30);
+                currentLine.setTranslateX(mouseEvent.getSceneX()-300);
+                currentLine.setTranslateY(mouseEvent.getSceneY()-170);
             }
         });
-    }
 
+        currentLine.setOnMouseDragOver(new EventHandler<MouseEvent>(){
+            public void handle(MouseEvent mouseEvent){
+                currentLine.setTranslateX(mouseEvent.getSceneX()-300);
+                currentLine.setTranslateY(mouseEvent.getSceneY()-170);
+            }
+        });
+
+        // currentLine.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        //     public void handle(MouseEvent mouseEvent){
+        //         currentLine.setStartX(currentLine.getStartX());
+        //         currentLine.setStartY(currentLine.getStartY());
+        //         currentLine.setEndX(mouseEvent.getSceneX()-300);
+        //         currentLine.setEndY(mouseEvent.getSceneY()-170);
+        //         // currentLine.setTranslateX(mouseEvent.getSceneX());
+        //         // currentLine.setTranslateY(mouseEvent.getSceneY());
+        //     }
+        // });
+    }
 
     @FXML
     void addFamilyNode(ActionEvent event) {
