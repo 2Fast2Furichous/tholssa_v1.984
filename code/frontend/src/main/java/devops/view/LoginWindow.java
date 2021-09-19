@@ -51,19 +51,14 @@ public class LoginWindow {
 		
 
 		try {
-			FXRouter.register("MainWindow", MAIN_WINDOW_RESOURCE);
-			FXRouter.setAnimationType("fade", 300);
-			FXRouter.show("MainWindow");
-			//above code is only neccessary to get straight to the MainWindow 
-			
-			
+		
 			Credential loginCredentials = new Credential(usernameText, passwordText);
 			ServiceResponse response = service.login(loginCredentials);
 			if (response.getMessage().equals("error")){
 				GuiCommands.showErrorDialog((String)response.getData());
 			} else {
 				UserAccount userAccount = (UserAccount) response.getData();
-				//FXRouter.show("MainWindow", userAccount);
+				FXRouter.show("MainWindow", userAccount);
 				
 			}
 
