@@ -11,8 +11,13 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
 
+/**
+ * The main window controller.
+ * 
+ * @author Javon Onuigbo
+ * @version Fall 2021
+ */
 public class MainWindow {
 
     @FXML
