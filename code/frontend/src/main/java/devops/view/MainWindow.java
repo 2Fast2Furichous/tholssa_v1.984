@@ -13,9 +13,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
 
-
+/**
+ * The main window controller.
+ * 
+ * @author Javon Onuigbo
+ * @version Fall 2021
+ */
 public class MainWindow {
 
     @FXML
