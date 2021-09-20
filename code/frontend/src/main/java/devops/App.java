@@ -36,8 +36,8 @@ public class App extends Application{
     public void start(Stage primaryStage) throws IOException {
         FXRouter.initialize(this, primaryStage, App.WINDOW_TITLE);
         FXRouter.register("login", App.LOGIN_RESOURCE);
-        FXRouter.register("createAccount", App.CREATE_ACCOUNT_RESOURCE);
-        FXRouter.register("main", App.MAIN_RESOURCE);
+        FXRouter.register("main",App.MAIN_RESOURCE);
+        FXRouter.register("createAccount", CREATE_ACCOUNT_RESOURCE);
         FXRouter.setAnimationType("fade", 300.0);
         FXRouter.show("login");
     }

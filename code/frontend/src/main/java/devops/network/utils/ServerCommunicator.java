@@ -42,10 +42,9 @@ public class ServerCommunicator {
         } else {
             response = "";
         }
-
         socket.close();
         context.close();
-
+        
         return response;
 
     }

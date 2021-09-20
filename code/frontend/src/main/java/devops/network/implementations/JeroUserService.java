@@ -70,15 +70,15 @@ public class JeroUserService implements UserService {
 		if(loginCredentials == null){
 			throw new IllegalArgumentException("Login Credentials cannot be null");
 		}
-
-		JsonObject credentials = new JsonObject();
+		JsonObject credentialsJson = new JsonObject();
 		JsonElement credentialsElement = this.gson.toJsonTree(loginCredentials, Credential.class);
 
-		credentials.addProperty("type", "Login");
-		credentials.add("credentials", credentialsElement);
+		credentialsJson.addProperty("type", "Login");
+		credentialsJson.add("credentials", credentialsElement);
 
-		String loginJson = this.gson.toJson(credentials);
-		String responseJson = ServerCommunicator.sendRequest(loginJson);
+		String credentialsRequest = this.gson.toJson(credentialsJson);
+
+		String responseJson = ServerCommunicator.sendRequest(credentialsRequest);
 		JsonObject response = this.gson.fromJson(responseJson, JsonObject.class);
 
 		if(response.get("type").toString().equals("error")){

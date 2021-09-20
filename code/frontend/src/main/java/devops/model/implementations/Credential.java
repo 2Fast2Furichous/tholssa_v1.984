@@ -22,7 +22,7 @@ public class Credential {
 	 * @param username the username of the credential
 	 * @param password the password of the credential
 	 */
-	public Credential(String username, String password) {
+	public Credential(String password, String username) {
 		if (username == null) {
 			throw new IllegalArgumentException("User name cannot be null.");
 		}
@@ -36,8 +36,8 @@ public class Credential {
 			throw new IllegalArgumentException("Password cannot be blank.");
 		}
 
-		this.username = username;
 		this.password = password;
+		this.username = username;
 	}
 
 	/**

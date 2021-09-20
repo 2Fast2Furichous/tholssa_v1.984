@@ -1,18 +1,19 @@
 package devops.view;
 
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import devops.App;
+import devops.utils.FXRouter;
+import javafx.fxml.FXML;
 import devops.model.implementations.Credential;
 import devops.model.implementations.ServiceResponse;
 import devops.model.implementations.UserAccount;
 import devops.network.interfaces.UserService;
-import devops.utils.FXRouter;
 import devops.utils.GuiCommands;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 
 /**
  * The login window controller.
@@ -21,8 +22,6 @@ import javafx.fxml.FXML;
  * @version Fall 2021
  */
 public class LoginWindow {
-
-
 
 	@FXML
 	private JFXButton login;
@@ -41,9 +40,10 @@ public class LoginWindow {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();
 		String passwordText = this.password.getText();
+		
 
 		try {
-			Credential loginCredentials = new Credential(usernameText, passwordText);
+			Credential loginCredentials = new Credential(passwordText, usernameText);
 			ServiceResponse response = service.login(loginCredentials);
 			if (response.getMessage().equals("error")){
 				GuiCommands.showErrorDialog((String)response.getData());
