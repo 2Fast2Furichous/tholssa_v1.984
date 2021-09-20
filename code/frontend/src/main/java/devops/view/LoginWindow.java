@@ -24,7 +24,6 @@ import javafx.event.ActionEvent;
  */
 public class LoginWindow {
 
-
 	@FXML
 	private JFXButton login;
 
@@ -42,6 +41,7 @@ public class LoginWindow {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();
 		String passwordText = this.password.getText();
+		
 
 		try {
 			Credential loginCredentials = new Credential(passwordText, usernameText);

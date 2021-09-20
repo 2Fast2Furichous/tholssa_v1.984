@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -60,6 +62,7 @@ public class MainWindow {
      private static final String FAMILY_NODE = "family";
      private static final String FRIEND_NODE = "friend";
      private static final String SPOUSE_NODE = "spouse";
+     
     
     @FXML
     void addBuisnessNode(ActionEvent event) {
@@ -81,7 +84,8 @@ public class MainWindow {
                     ContextMenu contextMenu = new ContextMenu();
                     MenuItem removeMenuItem = new MenuItem("Remove");
                     MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
-                    MenuItem  addInformationMenuItem = new MenuItem("Add Information");
+                    MenuItem addInformationMenuItem = new MenuItem("Add Information");
+                    
 
                     contextMenu.getItems().add(removeMenuItem);
                     contextMenu.getItems().add(addEdgeMenuItem);
@@ -103,6 +107,24 @@ public class MainWindow {
                     addEdgeMenuItem.setOnAction((event) ->{
                         if(type == BUISNESS_NODE){
                             addBuisnessNode(event);
+                            Line line = new Line();
+                            int index = 0;
+                            for(var theCurrentNode : tholssaGraph.getChildren()){
+                                index++;
+                                if(currentNode == theCurrentNode){
+                                    line.setStartX(tholssaGraph.getChildren().get(index-1).getTranslateX());
+                                    line.setStartY(tholssaGraph.getChildren().get(index-1).getTranslateY());
+                                    line.setEndX(tholssaGraph.getChildren().get(index).getTranslateX());
+                                    line.setEndY(tholssaGraph.getChildren().get(index).getTranslateY());
+
+                                }
+                            }
+
+                            line.setStyle("-fx-background-color: #16ae58;");
+                            tholssaGraph.getChildren().add(line);
+
+                            mouseDraggedLine(line);
+                            
                         }
                         if(type == FAMILY_NODE){
                             addFamilyNode(event);
@@ -117,7 +139,24 @@ public class MainWindow {
                     });
 
                     addInformationMenuItem.setOnAction((event) ->{
+                        currentNode.setOnKeyReleased(new EventHandler<KeyEvent>(){
+                            
+                            public void handle(KeyEvent event){
+                                if(event.getCode().equals(KeyCode.BACK_SPACE)){
+                                    
+                                    currentNode.setText(currentNode.getText().substring(0, currentNode.getText().length()-1));
+                                }
+                                currentNode.setText(currentNode.getText()+ event.getText());   
+                            }
+                        });
+                        //Maybe is not neccessary
+                        // if(!currentNode.is){
+                        //     event.consume();
 
+                        // }
+                        // System.out.println(event.isConsumed());
+
+        
                     });
                 }
                 if(mouseEvent.isPrimaryButtonDown()){
@@ -126,7 +165,6 @@ public class MainWindow {
                 else{
                   
                 }
-               
             }
         });
     }
@@ -137,6 +175,7 @@ public class MainWindow {
             public void handle(MouseEvent mouseEvent){
                 currentNode.setTranslateX(mouseEvent.getSceneX() -150);
                 currentNode.setTranslateY(mouseEvent.getSceneY() -30);
+                
                 // if(tholssaGraph.getHeight() > mouseEvent.get){
                 //     mouseEvent.consume();
                 // }
@@ -147,6 +186,32 @@ public class MainWindow {
         });
     }
 
+    private void mouseDraggedLine(Line currentLine){
+        currentLine.setOnMouseDragged(new EventHandler<MouseEvent>(){
+            public void handle(MouseEvent mouseEvent){
+                currentLine.setTranslateX(mouseEvent.getSceneX()-300);
+                currentLine.setTranslateY(mouseEvent.getSceneY()-170);
+            }
+        });
+
+        currentLine.setOnMouseDragOver(new EventHandler<MouseEvent>(){
+            public void handle(MouseEvent mouseEvent){
+                currentLine.setTranslateX(mouseEvent.getSceneX()-300);
+                currentLine.setTranslateY(mouseEvent.getSceneY()-170);
+            }
+        });
+
+        // currentLine.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        //     public void handle(MouseEvent mouseEvent){
+        //         currentLine.setStartX(currentLine.getStartX());
+        //         currentLine.setStartY(currentLine.getStartY());
+        //         currentLine.setEndX(mouseEvent.getSceneX()-300);
+        //         currentLine.setEndY(mouseEvent.getSceneY()-170);
+        //         // currentLine.setTranslateX(mouseEvent.getSceneX());
+        //         // currentLine.setTranslateY(mouseEvent.getSceneY());
+        //     }
+        // });
+    }
 
     @FXML
     void addFamilyNode(ActionEvent event) {
