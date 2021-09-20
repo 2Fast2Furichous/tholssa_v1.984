@@ -1,4 +1,4 @@
-package devops.GraphService.model.implementations;
+package devops.model.implementations;
 
 import java.time.LocalDate;
 

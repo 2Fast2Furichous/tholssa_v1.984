@@ -1,7 +1,6 @@
 package devops;
 
 import devops.network.Gateway;
-
 /**
  * Hello world!
  *

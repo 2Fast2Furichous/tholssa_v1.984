@@ -1,8 +1,18 @@
 package devops.view;
 
-import com.jfoenix.controls.JFXButton;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
+
+import com.jfoenix.controls.JFXButton;
+
+import devops.App;
+import devops.model.implementations.NodeFilter;
+import devops.model.implementations.Person;
+import devops.model.implementations.PersonNetwork;
+import devops.model.implementations.PersonNode;
+import devops.model.implementations.ServiceResponse;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,7 +21,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
 
 public class MainWindow {
 
@@ -90,9 +99,11 @@ public class MainWindow {
                         contextMenu.show(tholssaGraph, mouseEvent.getSceneX(), mouseEvent.getSceneY());
                     }
 
-                    removeMenuItem.setOnAction((event) ->{
+                    removeMenuItem.setOnAction((event) -> {
                         tholssaGraph.getChildren().remove(currentNode);
                         contextMenu.hide();
+                        PersonNode node = (PersonNode) currentNode.getUserData();
+                        ServiceResponse response = App.getGraphService().removeNode(node.getUniqueID());
                     });
 
                     addEdgeMenuItem.setOnAction((event) ->{
@@ -154,7 +165,9 @@ public class MainWindow {
 
         mousePressed(familyNode, "family");
         mouseDragged(familyNode);
-       
+
+        ServiceResponse response = App.getGraphService().createNode(null,null,null,null,null,null,null,null,null);
+        familyNode.setUserData(response.getData());
     }
 
     @FXML
@@ -172,7 +185,7 @@ public class MainWindow {
 
     @FXML
     void removeNode(ActionEvent event){
-      
+
     }
 
     @FXML
@@ -212,5 +225,8 @@ public class MainWindow {
         assert removeButton != null : "fx:id=\"removeButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert addButton != null : "fx:id=\"addButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
+        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+        ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
+        PersonNetwork network = (PersonNetwork) response.getData();
     }
 }

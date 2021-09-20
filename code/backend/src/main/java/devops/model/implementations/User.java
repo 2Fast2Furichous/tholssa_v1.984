@@ -1,4 +1,4 @@
-package devops.model;
+package devops.model.implementations;
 
 import java.time.LocalDate;
 

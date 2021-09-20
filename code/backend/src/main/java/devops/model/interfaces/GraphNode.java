@@ -1,8 +1,7 @@
-package devops.GraphService.model.interfaces;
+package devops.model.interfaces;
 
 import java.util.Collection;
 
-import devops.GraphService.model.implementations.Person;
 import devops.Storage.interfaces.Unique;
 
 /**
@@ -22,7 +21,7 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * @return whether the edge was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean addEdge(GraphEdge<E> edge);
+	public boolean addEdge(String edge);
 
 	/**
 	 * Remove the given edge
@@ -34,7 +33,7 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * @return whether the edge was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean removeEdge(GraphEdge<E> edge);
+	public boolean removeEdge(String edge);
 
 
 	/**
@@ -67,5 +66,5 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the collection of connected edges
 	 */
-	public Collection<GraphEdge<Person>> getEdges();
+	public Collection<String> getEdges();
 }

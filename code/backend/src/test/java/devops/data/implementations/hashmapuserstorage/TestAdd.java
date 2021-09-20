@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import devops.data.implementations.HashMapUserStorage;
 import devops.data.interfaces.UserStorage;
-import devops.model.User;
+import devops.model.implementations.User;
 
 public class TestAdd {
     

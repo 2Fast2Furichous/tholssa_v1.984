@@ -1,9 +1,11 @@
 package devops.model.user;
 
 import org.junit.jupiter.api.Test;
+
+import devops.model.implementations.User;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import devops.model.User;
 import java.time.LocalDate;
 
 public class TestEquals {

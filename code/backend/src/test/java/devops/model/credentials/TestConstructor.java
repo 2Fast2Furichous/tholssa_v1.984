@@ -3,7 +3,7 @@ package devops.model.credentials;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import devops.model.Credentials;
+import devops.model.implementations.Credentials;
 
 public class TestConstructor {
     @Test

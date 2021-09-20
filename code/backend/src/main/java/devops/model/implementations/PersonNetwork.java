@@ -1,11 +1,11 @@
-package devops.GraphService.model.implementations;
+package devops.model.implementations;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import devops.GraphService.model.interfaces.GraphEdge;
-import devops.GraphService.model.interfaces.GraphNetwork;
-import devops.GraphService.model.interfaces.GraphNode;
+import devops.model.interfaces.GraphEdge;
+import devops.model.interfaces.GraphNetwork;
+import devops.model.interfaces.GraphNode;
 
 /**
  * Network of person nodes and edges

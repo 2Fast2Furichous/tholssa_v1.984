@@ -1,4 +1,4 @@
-package devops.GraphService.model.interfaces;
+package devops.model.interfaces;
 
 import java.util.Collection;
 

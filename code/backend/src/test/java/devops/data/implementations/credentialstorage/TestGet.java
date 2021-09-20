@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import devops.data.implementations.CredentialStorage;
-import devops.model.Credentials;
+import devops.model.implementations.Credentials;
 
 public class TestGet {
     private Credentials cred = new Credentials("pass1", "user1");

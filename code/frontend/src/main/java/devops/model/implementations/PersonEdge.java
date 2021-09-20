@@ -1,9 +1,9 @@
-package devops.GraphService.model.implementations;
+package devops.model.implementations;
 
 import java.time.LocalDate;
 
-import devops.GraphService.model.interfaces.GraphEdge;
-import devops.GraphService.model.interfaces.GraphNode;
+import devops.model.interfaces.GraphEdge;
+import devops.model.interfaces.GraphNode;
 
 /**
  * Edge between person nodes
@@ -13,8 +13,8 @@ import devops.GraphService.model.interfaces.GraphNode;
  */
 public class PersonEdge implements GraphEdge<Person> {
 
-	private final GraphNode<Person> source;
-	private final GraphNode<Person> destination;
+	private final String source;
+	private final String destination;
 
 	private final String uniqueID;
 	private Relationship relation;
@@ -41,21 +41,13 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * @param dateOfConnection
 	 * @param dateOfConnectionEnd
 	 */
-	public PersonEdge(String uniqueID, GraphNode<Person> source, GraphNode<Person> destination, Relationship relation, LocalDate dateOfConnection, 
+	public PersonEdge(String uniqueID, 
+			String source, 
+			String destination, Relationship relation, LocalDate dateOfConnection, 
 			LocalDate dateOfConnectionEnd) {
-		if (uniqueID == null || uniqueID.isBlank()) {
-			throw new IllegalArgumentException("Unique ID must not be null or blank");
-		}
-		if (source == null) {
-			throw new IllegalArgumentException("Source must not be null");
-		}
-		if (destination == null) {
-			throw new IllegalArgumentException("Destination must not be null");
-		}
 		this.uniqueID = uniqueID;
 		this.source = source;
 		this.destination = destination;
-		this.source.addEdge(this);
 	}
 	
 
@@ -145,12 +137,12 @@ public class PersonEdge implements GraphEdge<Person> {
 	}
 
 	@Override
-	public GraphNode<Person> getSource() {
+	public String getSource() {
 		return this.source;
 	}
 
 	@Override
-	public GraphNode<Person> getDestination() {
+	public String getDestination() {
 		return this.destination;
 	}
 

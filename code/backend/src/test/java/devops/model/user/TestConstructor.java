@@ -2,9 +2,10 @@ package devops.model.user;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
 
-import devops.model.User;
+import devops.model.implementations.User;
+
+import java.time.LocalDate;
 
 public class TestConstructor {
     private LocalDate validDate = LocalDate.of(1970, 10, 17);

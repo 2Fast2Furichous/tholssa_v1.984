@@ -83,7 +83,7 @@ public class CreateAccountWindow {
 				GuiCommands.showErrorDialog((String)response.getData());
 			} else {
                 UserAccount newUser = (UserAccount) response.getData();
-                FXRouter.show("mainUI", newUser);
+                FXRouter.show("main", newUser);
             }
 
            

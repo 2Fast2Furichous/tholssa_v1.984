@@ -1,4 +1,4 @@
-package devops.GraphService.model.implementations;
+package devops.model.implementations;
 
 /**
  * Types of relationships

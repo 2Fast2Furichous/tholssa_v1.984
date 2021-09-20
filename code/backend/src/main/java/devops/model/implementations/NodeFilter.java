@@ -1,8 +1,8 @@
-package devops.GraphService.model.implementations;
+package devops.model.implementations;
 
 import java.util.function.Predicate;
 
-import devops.GraphService.model.interfaces.GraphEdge;
+import devops.model.interfaces.GraphEdge;
 
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges
