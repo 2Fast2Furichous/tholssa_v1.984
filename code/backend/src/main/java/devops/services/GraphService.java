@@ -27,8 +27,8 @@ import devops.model.interfaces.GraphNode;
  */
 public class GraphService {
 
-	private Storage<GraphNode<Person>> nodeStorage;
-	private Storage<GraphEdge<Person>> edgeStorage;
+	private Storage<PersonNode> nodeStorage;
+	private Storage<PersonEdge> edgeStorage;
 
 	/**
 	 * Creates a new graph service
@@ -38,8 +38,8 @@ public class GraphService {
 	 * 
 	 */
 	public GraphService() {
-		this.nodeStorage = new StorageHash<GraphNode<Person>>();
-		this.edgeStorage = new StorageHash<GraphEdge<Person>>();
+		this.nodeStorage = new StorageHash<PersonNode>();
+		this.edgeStorage = new StorageHash<PersonEdge>();
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class GraphService {
 	 * 
 	 * @return the node storage
 	 */
-	public Storage<GraphNode<Person>> getNodeStorage() {
+	public Storage<PersonNode> getNodeStorage() {
 		return this.nodeStorage;
 	}
 
@@ -62,7 +62,7 @@ public class GraphService {
 	 * 
 	 * @return the edge storage
 	 */
-	public Storage<GraphEdge<Person>> getEdgeStorage() {
+	public Storage<PersonEdge> getEdgeStorage() {
 		return this.edgeStorage;
 	}
 
@@ -159,7 +159,7 @@ public class GraphService {
 	 * @throws IllegalArgumentException
 	 */
 	public GraphNode<Person> updateNode(String guid, Person person) {
-		GraphNode<Person> updatedNode = this.nodeStorage.get(guid);
+		PersonNode updatedNode = this.nodeStorage.get(guid);
 		updatedNode.setValue(person);
 		return this.nodeStorage.update(updatedNode);
 	}
@@ -228,7 +228,10 @@ public class GraphService {
 	public GraphEdge<Person> removeEdge(String guid) {
 		GraphEdge<Person> edge = this.edgeStorage.remove(guid);
 		GraphNode<Person> sourceNode = this.nodeStorage.get(edge.getSource());
+		GraphNode<Person> destinationNode = this.nodeStorage.get(edge.getDestination());
 		sourceNode.removeEdge(guid);
+		destinationNode.removeEdge(guid);
+
 		return edge;
 	}
 
@@ -243,8 +246,8 @@ public class GraphService {
 	 * @return graph network given the filters and rootNode
 	 * @throws IllegalArgumentException
 	 */
-	public GraphNetwork<Person> getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters) {
-		GraphNetwork<Person> filteredNetwork;
+	public PersonNetwork getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters) {
+		PersonNetwork filteredNetwork;
 
 		if (filters.isEmpty()) {
 			filteredNetwork = new PersonNetwork(this.nodeStorage.getAll(), this.edgeStorage.getAll());
@@ -257,8 +260,8 @@ public class GraphService {
 		return filteredNetwork;
 	}
 
-	private GraphNetwork<Person> floodFill(GraphNode<Person> rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
-		GraphNetwork<Person> newNetwork = new PersonNetwork();
+	private PersonNetwork floodFill(GraphNode<Person> rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
+		PersonNetwork newNetwork = new PersonNetwork();
 		LinkedList<GraphNode<Person>> queue = new LinkedList<GraphNode<Person>>();
 		HashSet<GraphNode<Person>> visited = new HashSet<GraphNode<Person>>();
 
@@ -268,8 +271,8 @@ public class GraphService {
 		while (!queue.isEmpty()) {
 			GraphNode<Person> currentNode = queue.poll();
 			for (String neighborEdgeID : currentNode.getEdges()) {
-				GraphEdge<Person> neighborEdge = this.edgeStorage.get(neighborEdgeID);
-				GraphNode<Person> neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
+				PersonEdge neighborEdge = this.edgeStorage.get(neighborEdgeID);
+				PersonNode neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
 				if (!visited.contains(neighborNode) && nodePredicate.test(neighborEdge)) {
 					newNetwork.addEdge(neighborEdge);
 					newNetwork.addNode(neighborNode);

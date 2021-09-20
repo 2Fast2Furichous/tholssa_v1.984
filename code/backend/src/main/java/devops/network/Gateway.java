@@ -3,6 +3,7 @@ package devops.network;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.User;
+import devops.model.interfaces.GraphEdge;
 import devops.services.GraphService;
 import devops.services.UserService;
 
@@ -53,7 +55,7 @@ public class Gateway extends Thread {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.serializeNulls();
 
-		JsonSerializer<LocalDate> serializer = new JsonSerializer<LocalDate>() {
+		JsonSerializer<LocalDate> dateSerializer = new JsonSerializer<LocalDate>() {
 			@Override
 			public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
 				JsonObject jsonMerchant = new JsonObject();
@@ -64,7 +66,7 @@ public class Gateway extends Thread {
 			}
 		};
 
-		JsonDeserializer<LocalDate> deserializer = new JsonDeserializer<LocalDate>() {
+		JsonDeserializer<LocalDate> dateDeserializer = new JsonDeserializer<LocalDate>() {
 			@Override
 			public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 					throws JsonParseException {
@@ -74,8 +76,8 @@ public class Gateway extends Thread {
 			}
 		};
 
-		gsonBuilder.registerTypeAdapter(LocalDate.class, serializer);
-		gsonBuilder.registerTypeAdapter(LocalDate.class, deserializer);
+		gsonBuilder.registerTypeAdapter(LocalDate.class, dateSerializer);
+		gsonBuilder.registerTypeAdapter(LocalDate.class, dateDeserializer);
 		
 		this.gson = gsonBuilder.create();
 
@@ -225,7 +227,7 @@ public class Gateway extends Thread {
 
 		String edgeID = this.graphService.connectNodes(newEdge.getSource(), newEdge.getDestination(), newEdge.getRelation(), newEdge.getDateOfConnection(), newEdge.getDateOfConnectionEnd());
 
-		PersonNode edge = (PersonNode) this.graphService.getNode(edgeID);
+		PersonEdge edge = (PersonEdge) this.graphService.getEdge(edgeID);
 		JsonObject response = new JsonObject();
 
 		response.addProperty("type", "success");

@@ -24,6 +24,8 @@ public class App extends Application{
     private static final String LOGIN_RESOURCE = "/devops/view/LoginWindow.fxml";
     public static final String MAIN_RESOURCE = "/devops/view/MainWindow.fxml";
     private static final String CREATE_ACCOUNT_RESOURCE = "/devops/view/CreateAccountWindow.fxml";
+    private static Stage primaryStage;
+
     /**
      * JavaFX entry point.
      *
@@ -34,6 +36,7 @@ public class App extends Application{
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
+        App.primaryStage = primaryStage;
         FXRouter.initialize(this, primaryStage, App.WINDOW_TITLE);
         FXRouter.register("login", App.LOGIN_RESOURCE);
         FXRouter.register("main",App.MAIN_RESOURCE);
@@ -72,6 +75,15 @@ public class App extends Application{
      */
     public static GraphService getGraphService() {
         return App.graphService;
+    }
+
+    /**
+     * Returns the applications's primary Stage
+     * 
+     * @return the applications's primary Stage
+     */
+    public static Stage getPrimaryStage() {
+        return App.primaryStage;
     }
 
 }

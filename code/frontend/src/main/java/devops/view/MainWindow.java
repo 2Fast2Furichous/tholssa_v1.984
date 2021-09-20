@@ -3,26 +3,24 @@ package devops.view;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 
 import devops.App;
 import devops.model.implementations.NodeFilter;
-import devops.model.implementations.Person;
+import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.ServiceResponse;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
 
 /**
  * The main window controller.
@@ -68,236 +66,280 @@ public class MainWindow {
     @FXML
     private JFXButton addButton;
 
-     private static final String BUISNESS_NODE = "buisness";
-     private static final String FAMILY_NODE = "family";
-     private static final String FRIEND_NODE = "friend";
-     private static final String SPOUSE_NODE = "spouse";
-     
-    
+    private static final String BUSINESS_NODE = "business";
+    private static final String FAMILY_NODE = "family";
+    private static final String FRIEND_NODE = "friend";
+    private static final String SPOUSE_NODE = "spouse";
+
+    private JFXButton startNode;
+
     @FXML
     void addBuisnessNode(ActionEvent event) {
-        JFXButton buisnessNode = new JFXButton();
-        buisnessNode.setText("buisness");
-        buisnessNode.setStyle("-fx-background-color: #16ae58;");
-        buisnessNode.setTranslateX(100);
-        buisnessNode.setTranslateY(100);
-        this.tholssaGraph.getChildren().add(buisnessNode);
-        mousePressed(buisnessNode, "buisness");
-        mouseDragged(buisnessNode);
+        requestCreateNode("business", 250, 250);
     }
 
+    private void nodeDrag(JFXButton currentNode, String type) {
 
-    private void mousePressed(JFXButton currentNode, String type) {
-        currentNode.setOnMousePressed(new EventHandler<MouseEvent>(){
-            public void handle(MouseEvent mouseEvent){
-                if(mouseEvent.isSecondaryButtonDown()){
-                    ContextMenu contextMenu = new ContextMenu();
-                    MenuItem removeMenuItem = new MenuItem("Remove");
-                    MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
-                    MenuItem addInformationMenuItem = new MenuItem("Add Information");
-                    
 
-                    contextMenu.getItems().add(removeMenuItem);
-                    contextMenu.getItems().add(addEdgeMenuItem);
-                    contextMenu.getItems().add(addInformationMenuItem);
-                    
-                    
-                    if(backgroundPane.widthProperty().doubleValue() < 1000){
-                        contextMenu.show(tholssaGraph, mouseEvent.getSceneX()+320, mouseEvent.getSceneY()+100);
-                    }
-                    else{
-                        contextMenu.show(tholssaGraph, mouseEvent.getSceneX(), mouseEvent.getSceneY());
-                    }
+        final Delta mousePoint = new Delta();
+        final Delta nodePoint = new Delta();
 
-                    removeMenuItem.setOnAction((event) -> {
-                        tholssaGraph.getChildren().remove(currentNode);
-                        contextMenu.hide();
-                        PersonNode node = (PersonNode) currentNode.getUserData();
-                        ServiceResponse response = App.getGraphService().removeNode(node.getUniqueID());
-                    });
+        currentNode.setOnMousePressed(mouseEvent -> {
 
-                    addEdgeMenuItem.setOnAction((event) ->{
-                        if(type == BUISNESS_NODE){
-                            addBuisnessNode(event);
-                            Line line = new Line();
-                            int index = 0;
-                            for(var theCurrentNode : tholssaGraph.getChildren()){
-                                index++;
-                                if(currentNode == theCurrentNode){
-                                    line.setStartX(tholssaGraph.getChildren().get(index-1).getTranslateX());
-                                    line.setStartY(tholssaGraph.getChildren().get(index-1).getTranslateY());
-                                    line.setEndX(tholssaGraph.getChildren().get(index).getTranslateX());
-                                    line.setEndY(tholssaGraph.getChildren().get(index).getTranslateY());
+            mousePoint.x = mouseEvent.getSceneX();
+            mousePoint.y = mouseEvent.getSceneY();
 
-                                }
-                            }
+            nodePoint.x = currentNode.getTranslateX();
+            nodePoint.y = currentNode.getTranslateY();
 
-                            line.setStyle("-fx-background-color: #16ae58;");
-                            tholssaGraph.getChildren().add(line);
-
-                            mouseDraggedLine(line);
-                            
-                        }
-                        if(type == FAMILY_NODE){
-                            addFamilyNode(event);
-                        }
-                        if(type == FRIEND_NODE){
-                            addFriendFamily(event);
-                        }
-                        if(type == SPOUSE_NODE){
-                            addSpouseNode(event);
-                        }
-                        
-                    });
-
-                    addInformationMenuItem.setOnAction((event) ->{
-                        currentNode.setOnKeyReleased(new EventHandler<KeyEvent>(){
-                            
-                            public void handle(KeyEvent event){
-                                if(event.getCode().equals(KeyCode.BACK_SPACE)){
-                                    
-                                    currentNode.setText(currentNode.getText().substring(0, currentNode.getText().length()-1));
-                                }
-                                currentNode.setText(currentNode.getText()+ event.getText());   
-                            }
-                        });
-                        //Maybe is not neccessary
-                        // if(!currentNode.is){
-                        //     event.consume();
-
-                        // }
-                        // System.out.println(event.isConsumed());
-
-        
-                    });
+            if (mouseEvent.isPrimaryButtonDown()) {
+                if (MainWindow.this.startNode != null && MainWindow.this.startNode != currentNode) {
+                    requestCreateEdge(MainWindow.this.startNode, currentNode);
+                    MainWindow.this.startNode = null;
                 }
-                if(mouseEvent.isPrimaryButtonDown()){
-                   
-                }
-                else{
-                  
-                }
+            } else {
+
             }
+            
+        });
+
+        currentNode.setOnMouseDragged(mouseEvent -> {
+            double offsetX = mouseEvent.getSceneX() - mousePoint.x;
+            double offsetY = mouseEvent.getSceneY() - mousePoint.y;
+            double newTranslateX = nodePoint.x + offsetX;
+            double newTranslateY = nodePoint.y + offsetY;
+
+            currentNode.setTranslateX(newTranslateX);
+            currentNode.setTranslateY(newTranslateY);
+
         });
     }
 
+    private void setupNodeContextMenu(JFXButton currentNode) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem removeMenuItem = new MenuItem("Remove");
+        MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
+        MenuItem addInformationMenuItem = new MenuItem("Add Information");
 
-    private void mouseDragged(JFXButton currentNode) {
-        currentNode.setOnMouseDragged(new EventHandler<MouseEvent>(){
-            public void handle(MouseEvent mouseEvent){
-                currentNode.setTranslateX(mouseEvent.getSceneX() -150);
-                currentNode.setTranslateY(mouseEvent.getSceneY() -30);
-                
-                // if(tholssaGraph.getHeight() > mouseEvent.get){
-                //     mouseEvent.consume();
-                // }
-                // if(tholssaGraph.getWidth() < mouseEvent.getX()){
-                //     mouseEvent.consume();
-                // }
+        contextMenu.getItems().add(removeMenuItem);
+        contextMenu.getItems().add(addEdgeMenuItem);
+        contextMenu.getItems().add(addInformationMenuItem);
+
+        removeMenuItem.setOnAction(event -> {
+            contextMenu.hide();
+            PersonNode node = (PersonNode) currentNode.getUserData();
+            ServiceResponse response = App.getGraphService().removeNode(node.getUniqueID());
+
+            if (!response.getData().equals("error")) {
+                tholssaGraph.getChildren().remove(currentNode);
             }
         });
+
+        addEdgeMenuItem.setOnAction(event -> {
+            MainWindow.this.startNode = currentNode;
+            contextMenu.hide();
+        });
+
+        addInformationMenuItem.setOnAction(event -> {
+            //Add prompt
+        });
+
+        currentNode.setContextMenu(contextMenu);
     }
 
-    private void mouseDraggedLine(Line currentLine){
-        currentLine.setOnMouseDragged(new EventHandler<MouseEvent>(){
-            public void handle(MouseEvent mouseEvent){
-                currentLine.setTranslateX(mouseEvent.getSceneX()-300);
-                currentLine.setTranslateY(mouseEvent.getSceneY()-170);
+    class Delta {
+        double x, y;
+    }
+
+    private void mouseDraggedLine(Line currentLine) {
+        final Delta mousePoint = new Delta();
+        final Delta endPoint = new Delta();
+
+        currentLine.setOnMousePressed(mouseEvent -> {
+            mousePoint.x = mouseEvent.getSceneX();
+            mousePoint.y = mouseEvent.getSceneY();
+
+            endPoint.x = currentLine.getEndX();
+            endPoint.y = currentLine.getEndY();
+        });
+
+        currentLine.setOnMouseDragged(mouseEvent -> {
+            double offsetX = mouseEvent.getSceneX() - mousePoint.x;
+            double offsetY = mouseEvent.getSceneY() - mousePoint.y;
+            double newTranslateX = endPoint.x + offsetX;
+            double newTranslateY = endPoint.y + offsetY;
+
+            currentLine.setEndX(mouseEvent.getSceneX());
+            currentLine.setEndY(mouseEvent.getSceneY());
+
+        });
+
+    }
+
+
+    private void setupEdgeContextMenu(Line currentEdge) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem removeMenuItem = new MenuItem("Remove");
+        MenuItem addInformationMenuItem = new MenuItem("Add Information");
+
+        contextMenu.getItems().add(removeMenuItem);
+        contextMenu.getItems().add(addInformationMenuItem);
+
+        removeMenuItem.setOnAction(event -> {
+            
+            contextMenu.hide();
+            PersonEdge edge = (PersonEdge) currentEdge.getUserData();
+            ServiceResponse response = App.getGraphService().removeEdge(edge.getUniqueID());
+            if (!response.getData().equals("error")) {
+                tholssaGraph.getChildren().remove(currentEdge);
             }
         });
 
-        currentLine.setOnMouseDragOver(new EventHandler<MouseEvent>(){
-            public void handle(MouseEvent mouseEvent){
-                currentLine.setTranslateX(mouseEvent.getSceneX()-300);
-                currentLine.setTranslateY(mouseEvent.getSceneY()-170);
-            }
+
+        addInformationMenuItem.setOnAction(event -> {
+            // Add prompt
         });
 
-        // currentLine.setOnMouseClicked(new EventHandler<MouseEvent>(){
-        //     public void handle(MouseEvent mouseEvent){
-        //         currentLine.setStartX(currentLine.getStartX());
-        //         currentLine.setStartY(currentLine.getStartY());
-        //         currentLine.setEndX(mouseEvent.getSceneX()-300);
-        //         currentLine.setEndY(mouseEvent.getSceneY()-170);
-        //         // currentLine.setTranslateX(mouseEvent.getSceneX());
-        //         // currentLine.setTranslateY(mouseEvent.getSceneY());
-        //     }
-        // });
+        currentEdge.setOnMouseClicked(mouseEvent -> {
+            //if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
+                contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            //}
+        });
     }
 
     @FXML
     void addFamilyNode(ActionEvent event) {
-        JFXButton familyNode = new JFXButton();
-        familyNode.setText("family");
-        familyNode.setStyle("-fx-background-color: #16ae58;");
-        familyNode.setTranslateX(100);
-        familyNode.setTranslateY(150);
-        this.tholssaGraph.getChildren().add(familyNode);
-
-        mousePressed(familyNode, "family");
-        mouseDragged(familyNode);
-
-        ServiceResponse response = App.getGraphService().createNode(null,null,null,null,null,null,null,null,null);
-        familyNode.setUserData(response.getData());
+        requestCreateNode("family", 250, 250);
     }
 
     @FXML
     void addFriendFamily(ActionEvent event) {
-        JFXButton friendNode = new JFXButton();
-        friendNode.setText("friend");
-        friendNode.setStyle("-fx-background-color: #16ae58;");
-        friendNode.setTranslateX(0);
-        friendNode.setTranslateY(0);
-        this.tholssaGraph.getChildren().add(friendNode);
-
-        mousePressed(friendNode, "friend");
-        mouseDragged(friendNode);
+        requestCreateNode("friend", 250, 250);
     }
 
     @FXML
-    void removeNode(ActionEvent event){
+    void removeNode(ActionEvent event) {
 
     }
 
     @FXML
-    void saveGraph(ActionEvent event){
-        for(Node currNode: this.tholssaGraph.getChildren()){
-           JFXButton node = (JFXButton) currNode;
-           node.getText();
-           node.getTranslateX();
-           node.getTranslateY();
+    void saveGraph(ActionEvent event) {
+        for (Node currNode : this.tholssaGraph.getChildren()) {
+            JFXButton node = (JFXButton) currNode;
+            node.getText();
+            node.getTranslateX();
+            node.getTranslateY();
         }
     }
 
     @FXML
     void addSpouseNode(ActionEvent event) {
-        JFXButton spouseNode = new JFXButton();
-        spouseNode.setText("spouse");
-        spouseNode.setStyle("-fx-background-color: #16ae58;");
-        spouseNode.setTranslateX(100);
-        spouseNode.setTranslateY(180);
-        this.tholssaGraph.getChildren().add(spouseNode);
-
-        mousePressed(spouseNode, "spouse");
-        mouseDragged(spouseNode);
-
+        requestCreateNode("spouse", 250, 250);
     }
 
     @FXML
     void initialize() {
-        assert backgroundPane != null : "fx:id=\"backgroundPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert tholssaGraph != null : "fx:id=\"tholssaGraph\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert familyButton != null : "fx:id=\"familyButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert friendButton != null : "fx:id=\"friendButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert buisnessButton != null : "fx:id=\"buisnessButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert spouseButton != null : "fx:id=\"spouseButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert backgroundPane != null
+                : "fx:id=\"backgroundPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert tholssaGraph != null
+                : "fx:id=\"tholssaGraph\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert familyButton != null
+                : "fx:id=\"familyButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert friendButton != null
+                : "fx:id=\"friendButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert buisnessButton != null
+                : "fx:id=\"buisnessButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert spouseButton != null
+                : "fx:id=\"spouseButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert saveButton != null : "fx:id=\"saveButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert cancelButton != null : "fx:id=\"cancelButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert removeButton != null : "fx:id=\"removeButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert cancelButton != null
+                : "fx:id=\"cancelButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert removeButton != null
+                : "fx:id=\"removeButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert addButton != null : "fx:id=\"addButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
-        ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
-        PersonNetwork network = (PersonNetwork) response.getData();
+        try {
+            Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+            ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
+            PersonNetwork network = (PersonNetwork) response.getData();
+
+            HashMap<String, JFXButton> nodeMap = new HashMap<String, JFXButton>();
+            HashMap<String, Line> lineMap = new HashMap<String, Line>();
+
+            for (PersonNode node : network.getNodes()) {
+
+                JFXButton nodeButton = createNode("family", 250, 250);
+
+                nodeButton.setUserData(node);
+                nodeMap.put(node.getUniqueID(), nodeButton);
+            }
+
+            for (PersonEdge edge : network.getEdges()) {
+
+                JFXButton sourceButton = nodeMap.get(edge.getSource());
+                JFXButton destinationButton = nodeMap.get(edge.getDestination());
+
+                Line lineEdge = createEdge(sourceButton, destinationButton);
+                lineEdge.setUserData(edge);
+                lineMap.put(edge.getUniqueID(), lineEdge);
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
+
+    private void requestCreateNode(String type, int originX, int originY) {
+
+        
+        JFXButton nodeButton = createNode(type, originX, originY);
+
+        ServiceResponse response = App.getGraphService().createNode(null, null, null, null, null, null, null, null,
+                null);
+        nodeButton.setUserData(response.getData());
+    }
+
+    private JFXButton createNode (String type, int originX, int originY) {
+         JFXButton nodeButton = new JFXButton();
+        nodeButton.setText(type);
+        nodeButton.setStyle("-fx-background-color: #16ae58;");
+        nodeButton.setTranslateX(originX);
+        nodeButton.setTranslateY(originY);
+        this.tholssaGraph.getChildren().add(nodeButton);
+
+        nodeDrag(nodeButton, type);
+        setupNodeContextMenu(nodeButton);
+        return nodeButton;
+    }
+
+    private void requestCreateEdge(JFXButton sourceButton, JFXButton destinationButton) {
+
+        Line edge = createEdge(sourceButton, destinationButton);
+
+        PersonNode sourceNode = (PersonNode) sourceButton.getUserData();
+        PersonNode destinationNode = (PersonNode) destinationButton.getUserData();
+
+        ServiceResponse response = App.getGraphService().connectNodes(sourceNode.getUniqueID(), destinationNode.getUniqueID(), null, null, null);
+        edge.setUserData(response.getData());
+    }
+
+    private Line createEdge(JFXButton sourceButton, JFXButton destinationButton) {
+        Line line = new Line();
+        line.setStrokeWidth(5);
+
+        line.startXProperty().bind(sourceButton.translateXProperty());
+        line.startYProperty().bind(sourceButton.translateYProperty());
+
+        line.endXProperty().bind(destinationButton.translateXProperty());
+        line.endYProperty().bind(destinationButton.translateYProperty());
+
+        line.setStyle("-fx-background-color: #16ae58;");
+        tholssaGraph.getChildren().add(line);
+
+        setupEdgeContextMenu(line);
+
+        return line;
+    }
+
 }
