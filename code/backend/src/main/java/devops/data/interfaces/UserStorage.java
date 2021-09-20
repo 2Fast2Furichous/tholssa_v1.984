@@ -1,6 +1,6 @@
 package devops.data.interfaces;
 
-import devops.model.User;
+import devops.model.implementations.User;
 
 /**
  * Interface for the storage of users.

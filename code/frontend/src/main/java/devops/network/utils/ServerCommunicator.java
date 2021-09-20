@@ -1,9 +1,14 @@
 package devops.network.utils;
 
-import org.zeromq.ZMQ.Context;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
+import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
+
+import devops.model.implementations.ServiceResponse;
 
 /**
  * Communicates between back-end and front-end for data transfer.
@@ -37,11 +42,16 @@ public class ServerCommunicator {
         } else {
             response = "";
         }
-        
         socket.close();
         context.close();
         
         return response;
 
+    }
+
+    public static ServiceResponse handleError(Gson gson, JsonObject response) {
+        String title = "error";
+        String errorMessage = gson.fromJson(response.get("content"), String.class);
+        return new ServiceResponse(title, errorMessage);
     }
 }

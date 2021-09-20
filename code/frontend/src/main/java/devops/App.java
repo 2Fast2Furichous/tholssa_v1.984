@@ -1,8 +1,11 @@
 package devops;
 
 import java.io.IOException;
-import devops.network.interfaces.UserService;
+
+import devops.network.implementations.JeroGraphService;
 import devops.network.implementations.JeroUserService;
+import devops.network.interfaces.GraphService;
+import devops.network.interfaces.UserService;
 import devops.utils.FXRouter;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -16,6 +19,7 @@ import javafx.stage.Stage;
 public class App extends Application{
 
     private static UserService userService;
+    private static GraphService graphService;
     private static final String WINDOW_TITLE = "THOLSSA v1.984";
     private static final String LOGIN_RESOURCE = "/devops/view/LoginWindow.fxml";
     public static final String MAIN_RESOURCE = "/devops/view/MainWindow.fxml";
@@ -48,6 +52,7 @@ public class App extends Application{
      */
     public static void main(String[] args) {
         App.userService = new JeroUserService();
+        App.graphService = new JeroGraphService();
         App.launch(args);
     }
 
@@ -58,6 +63,15 @@ public class App extends Application{
      */
     public static UserService getUserService() {
         return App.userService;
+    }
+
+    /**
+     * Returns the applications's user service
+     * 
+     * @return The applications's user service
+     */
+    public static GraphService getGraphService() {
+        return App.graphService;
     }
 
 }

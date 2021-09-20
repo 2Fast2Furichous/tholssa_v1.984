@@ -3,7 +3,7 @@ package devops.data.implementations;
 import java.util.HashMap;
 
 import devops.data.interfaces.UserStorage;
-import devops.model.User;
+import devops.model.implementations.User;
 
 /**
  * Stores accounts into a database with the access being the credentials for the user.

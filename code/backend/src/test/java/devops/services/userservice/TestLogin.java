@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import devops.model.User;
+import devops.model.implementations.User;
 import devops.services.UserService;
 
 public class TestLogin {

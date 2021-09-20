@@ -1,7 +1,6 @@
 package devops.view;
 
 
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -52,7 +51,6 @@ public class LoginWindow {
 				UserAccount userAccount = (UserAccount) response.getData();
 				FXRouter.show("main", userAccount);
 			}
-
 		} catch (Exception e) {
 			GuiCommands.showErrorDialog(e.getMessage());
 		}

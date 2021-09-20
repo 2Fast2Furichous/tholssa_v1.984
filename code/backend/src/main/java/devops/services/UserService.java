@@ -2,7 +2,7 @@ package devops.services;
 
 import devops.data.implementations.HashMapUserStorage;
 import devops.data.interfaces.UserStorage;
-import devops.model.User;
+import devops.model.implementations.User;
 import devops.resources.ErrorMessages;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package devops.GraphService.model.interfaces;
+package devops.model.interfaces;
 
 import devops.Storage.interfaces.Unique;
 
@@ -18,7 +18,7 @@ public interface GraphEdge<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the source node
 	 */
-	public GraphNode<E> getSource();
+	public String getSource();
 
 	/**
 	 * Returns the destination node
@@ -28,7 +28,7 @@ public interface GraphEdge<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the destination node
 	 */
-	public GraphNode<E> getDestination();
+	public String getDestination();
 	
 	public String getUniqueID();
 }

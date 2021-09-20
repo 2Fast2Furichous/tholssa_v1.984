@@ -2,7 +2,7 @@ package devops.data.implementations;
 
 import java.util.HashMap;
 
-import devops.model.Credentials;
+import devops.model.implementations.Credentials;
 
 /**
  * Stores credentials and unique IDs for system access.

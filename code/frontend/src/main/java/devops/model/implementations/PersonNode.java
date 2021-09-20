@@ -1,10 +1,9 @@
-package devops.GraphService.model.implementations;
+package devops.model.implementations;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-import devops.GraphService.model.interfaces.GraphEdge;
-import devops.GraphService.model.interfaces.GraphNode;
+import devops.model.interfaces.GraphNode;
 
 /**
  * Node of a person
@@ -16,7 +15,7 @@ public class PersonNode implements GraphNode<Person> {
 
 	private final String uniqueID;
 	private Person person;
-	private final Collection<GraphEdge<Person>> edges;
+	private final Collection<String> edges;
 
 	/**
 	 * 
@@ -29,25 +28,19 @@ public class PersonNode implements GraphNode<Person> {
 	 * @param person
 	 */
 	public PersonNode(String uniqueID, Person person) {
-		if (uniqueID == null || uniqueID.isBlank()) {
-			throw new IllegalArgumentException("Unique ID must not be null or blank");
-		}
-		if (person == null) {
-			throw new IllegalArgumentException("Person must not be null");
-		}
 		this.uniqueID = uniqueID;
 		this.person = person;
-		this.edges = new HashSet<GraphEdge<Person>>();
+		this.edges = new HashSet<String>();
 	}
 
 	@Override
-	public boolean addEdge(GraphEdge<Person> edge) {
-		return this.edges.add(edge);
+	public boolean addEdge(String edgeID) {
+		return this.edges.add(edgeID);
 	}
 
 	@Override
-	public boolean removeEdge(GraphEdge<Person> edge) {
-		return this.edges.remove(edge);
+	public boolean removeEdge(String edgeID) {
+		return this.edges.remove(edgeID);
 	}
 
 	@Override
@@ -66,7 +59,7 @@ public class PersonNode implements GraphNode<Person> {
 	}
 
 	@Override
-	public Collection<GraphEdge<Person>> getEdges() {
+	public Collection<String> getEdges() {
 		return this.edges;
 	}
 }

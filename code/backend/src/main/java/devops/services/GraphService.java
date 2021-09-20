@@ -1,22 +1,23 @@
-package devops.GraphService;
+package devops.services;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import devops.GraphService.model.implementations.NodeFilter;
-import devops.GraphService.model.implementations.Person;
-import devops.GraphService.model.implementations.PersonEdge;
-import devops.GraphService.model.implementations.PersonNetwork;
-import devops.GraphService.model.implementations.PersonNode;
-import devops.GraphService.model.implementations.Relationship;
-import devops.GraphService.model.interfaces.GraphEdge;
-import devops.GraphService.model.interfaces.GraphNetwork;
-import devops.GraphService.model.interfaces.GraphNode;
 import devops.Storage.implementations.StorageHash;
 import devops.Storage.interfaces.Storage;
+import devops.model.implementations.NodeFilter;
+import devops.model.implementations.Person;
+import devops.model.implementations.PersonEdge;
+import devops.model.implementations.PersonNetwork;
+import devops.model.implementations.PersonNode;
+import devops.model.implementations.Relationship;
+import devops.model.interfaces.GraphEdge;
+import devops.model.interfaces.GraphNetwork;
+import devops.model.interfaces.GraphNode;
 
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges
@@ -106,8 +107,12 @@ public class GraphService {
 		GraphNode<Person> source = this.nodeStorage.get(sourceGuid);
 		GraphNode<Person> destination = this.nodeStorage.get(destinationGuid);
 
-		PersonEdge newEdge = new PersonEdge(uniqueID, source, destination, relation, dateOfConnection,
+		PersonEdge newEdge = new PersonEdge(uniqueID, 
+				sourceGuid, destinationGuid, relation, dateOfConnection,
 				dateOfConnectionEnd);
+
+		source.addEdge(uniqueID);
+		destination.addEdge(uniqueID);
 
 		this.edgeStorage.add(newEdge);
 		return uniqueID;
@@ -200,8 +205,8 @@ public class GraphService {
 	public GraphNode<Person> removeNode(String guid) {
 		GraphNode<Person> node = this.nodeStorage.remove(guid);
 
-		for (GraphEdge<Person> edge : node.getEdges()) {
-			this.edgeStorage.remove(edge.getUniqueID());
+		for (String edge : node.getEdges()) {
+			this.edgeStorage.remove(edge);
 			node.removeEdge(edge);
 		}
 
@@ -222,7 +227,8 @@ public class GraphService {
 	 */
 	public GraphEdge<Person> removeEdge(String guid) {
 		GraphEdge<Person> edge = this.edgeStorage.remove(guid);
-		edge.getSource().removeEdge(edge);
+		GraphNode<Person> sourceNode = this.nodeStorage.get(edge.getSource());
+		sourceNode.removeEdge(guid);
 		return edge;
 	}
 
@@ -254,15 +260,21 @@ public class GraphService {
 	private GraphNetwork<Person> floodFill(GraphNode<Person> rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
 		GraphNetwork<Person> newNetwork = new PersonNetwork();
 		LinkedList<GraphNode<Person>> queue = new LinkedList<GraphNode<Person>>();
+		HashSet<GraphNode<Person>> visited = new HashSet<GraphNode<Person>>();
+
+		queue.add(rootNode);
+		visited.add(rootNode);
 
 		while (!queue.isEmpty()) {
 			GraphNode<Person> currentNode = queue.poll();
-			for (GraphEdge<Person> neighborEdge : currentNode.getEdges()) {
-				GraphNode<Person> neighborNode = neighborEdge.getDestination();
-				if (nodePredicate.test(neighborEdge)) {
+			for (String neighborEdgeID : currentNode.getEdges()) {
+				GraphEdge<Person> neighborEdge = this.edgeStorage.get(neighborEdgeID);
+				GraphNode<Person> neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
+				if (!visited.contains(neighborNode) && nodePredicate.test(neighborEdge)) {
 					newNetwork.addEdge(neighborEdge);
 					newNetwork.addNode(neighborNode);
 					queue.add(neighborNode);
+					visited.add(neighborNode);
 				}
 			}
 		}
