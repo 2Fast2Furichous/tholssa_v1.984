@@ -48,6 +48,9 @@ public class PersonEdge implements GraphEdge<Person> {
 		this.uniqueID = uniqueID;
 		this.source = source;
 		this.destination = destination;
+		this.relation = relation;
+		this.dateOfConnection = dateOfConnection;
+		this.dateOfConnectionEnd = dateOfConnectionEnd;
 	}
 	
 

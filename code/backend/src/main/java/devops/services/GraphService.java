@@ -128,7 +128,7 @@ public class GraphService {
 	 * @return the node with the given uniqueID
 	 * @throws IllegalArgumentException
 	 */
-	public GraphNode<Person> getNode(String guid) {
+	public PersonNode getNode(String guid) {
 		return this.nodeStorage.get(guid);
 	}
 
@@ -142,7 +142,7 @@ public class GraphService {
 	 * @return the edge with the given uniqueID
 	 * @throws IllegalArgumentException
 	 */
-	public GraphEdge<Person> getEdge(String guid) {
+	public PersonEdge getEdge(String guid) {
 		return this.edgeStorage.get(guid);
 	}
 
@@ -158,7 +158,7 @@ public class GraphService {
 	 * @return the updated node
 	 * @throws IllegalArgumentException
 	 */
-	public GraphNode<Person> updateNode(String guid, Person person) {
+	public PersonNode updateNode(String guid, Person person) {
 		PersonNode updatedNode = this.nodeStorage.get(guid);
 		updatedNode.setValue(person);
 		return this.nodeStorage.update(updatedNode);
@@ -180,7 +180,7 @@ public class GraphService {
 	 * @return the updated edge
 	 * @throws IllegalArgumentException
 	 */
-	public GraphEdge<Person> updateEdge(String guid, Relationship relation, LocalDate dateOfConnection,
+	public PersonEdge updateEdge(String guid, Relationship relation, LocalDate dateOfConnection,
 			LocalDate dateOfConnectionEnd) {
 		PersonEdge updatedEdge = (PersonEdge) this.edgeStorage.get(guid);
 
@@ -202,8 +202,8 @@ public class GraphService {
 	 * @return the removed node
 	 * @throws IllegalArgumentException
 	 */
-	public GraphNode<Person> removeNode(String guid) {
-		GraphNode<Person> node = this.nodeStorage.remove(guid);
+	public PersonNode removeNode(String guid) {
+		PersonNode node = this.nodeStorage.remove(guid);
 
 		for (String edge : node.getEdges()) {
 			this.edgeStorage.remove(edge);
@@ -225,8 +225,8 @@ public class GraphService {
 	 * @return the removed edge
 	 * @throws IllegalArgumentException
 	 */
-	public GraphEdge<Person> removeEdge(String guid) {
-		GraphEdge<Person> edge = this.edgeStorage.remove(guid);
+	public PersonEdge removeEdge(String guid) {
+		PersonEdge edge = this.edgeStorage.remove(guid);
 		GraphNode<Person> sourceNode = this.nodeStorage.get(edge.getSource());
 		GraphNode<Person> destinationNode = this.nodeStorage.get(edge.getDestination());
 		sourceNode.removeEdge(guid);

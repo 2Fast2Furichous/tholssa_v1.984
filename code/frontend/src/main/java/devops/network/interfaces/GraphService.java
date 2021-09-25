@@ -19,7 +19,9 @@ public interface GraphService {
 	 * @return the generated unique ID of the created node
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse createNode(String nickname, String firstName, String lastName, String address,
+	public ServiceResponse createNode(
+			double positionX, 
+			double positionY, String nickname, String firstName, String lastName, String address,
 			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description);
 
 	/**
@@ -53,7 +55,9 @@ public interface GraphService {
 	 * @return the updated node
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse updateNode(String guid, String nickname, String firstName, String lastName, String address,
+	public ServiceResponse updateNode(
+			double positionX, 
+			double positionY, String guid, String nickname, String firstName, String lastName, String address,
 			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description);
 
 	/**

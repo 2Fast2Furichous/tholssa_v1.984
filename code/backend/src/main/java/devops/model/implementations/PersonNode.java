@@ -16,6 +16,7 @@ public class PersonNode implements GraphNode<Person> {
 	private Person person;
 	private final Collection<String> edges;
 
+
 	/**
 	 * 
 	 * Creates a new person node given the uniqueID and person
@@ -40,11 +41,17 @@ public class PersonNode implements GraphNode<Person> {
 
 	@Override
 	public boolean addEdge(String edge) {
+		if (edge == null || edge.isBlank()) {
+			throw new IllegalArgumentException("Edge must not be null or blank");
+		}
 		return this.edges.add(edge);
 	}
 
 	@Override
 	public boolean removeEdge(String edge) {
+		if (edge == null || edge.isBlank()) {
+			throw new IllegalArgumentException("Edge must not be null or blank");
+		}
 		return this.edges.remove(edge);
 	}
 

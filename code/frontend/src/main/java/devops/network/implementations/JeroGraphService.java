@@ -59,10 +59,12 @@ public class JeroGraphService implements GraphService {
 	}
 
 	@Override
-	public ServiceResponse createNode(String nickname, String firstName, String lastName, String address,
+	public ServiceResponse createNode(
+			double positionX, 
+			double positionY, String nickname, String firstName, String lastName, String address,
 			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description) {
 
-		Person person = new Person(nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
+		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
 		
 		JsonObject personRequest = new JsonObject();
 
@@ -107,10 +109,12 @@ public class JeroGraphService implements GraphService {
 	}
 
 	@Override
-	public ServiceResponse updateNode(String guid, String nickname, String firstName, String lastName, String address,
+	public ServiceResponse updateNode(
+			double positionX, 
+			double positionY, String guid, String nickname, String firstName, String lastName, String address,
 			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description) {
 
-		Person person = new Person(nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath,
+		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath,
 				occupation, description);
 
 		PersonNode updatedNode = new PersonNode(guid, person);

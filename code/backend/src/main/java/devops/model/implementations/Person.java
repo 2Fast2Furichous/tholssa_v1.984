@@ -18,6 +18,8 @@ public class Person implements Comparable<Person> {
 	private LocalDate dateOfDeath;
 	private String occupation;
 	private String description;
+	private double positionX;
+	private double positionY;
 
 	/**
 	 * Creates a new person with the given details
@@ -43,7 +45,9 @@ public class Person implements Comparable<Person> {
 	 * @param occupation
 	 * @param description
 	 */
-	public Person(String nickname,String firstName,String lastName,String address,String phoneNumber,LocalDate dateOfBirth,LocalDate dateOfDeath,String occupation, String description)  {
+	public Person(
+			double positionX, 
+			double positionY, String nickname,String firstName,String lastName,String address,String phoneNumber,LocalDate dateOfBirth,LocalDate dateOfDeath,String occupation, String description)  {
 		this.nickname = nickname;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -53,8 +57,25 @@ public class Person implements Comparable<Person> {
 		this.dateOfDeath = dateOfDeath;
 		this.occupation = occupation;
 		this.description = description;
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 	
+	/**
+	 * @return the positionY
+	 */
+	public double getPositionY() {
+		return this.positionY;
+	}
+
+	/**
+	 * @return the positionX
+	 */
+	public double getPositionX() {
+		return this.positionX;
+	}
+
+
 	/**
 	 * 
 	 * Gets the description of the person

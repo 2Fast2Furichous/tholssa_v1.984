@@ -46,15 +46,18 @@ public class PersonEdge implements GraphEdge<Person> {
 		if (uniqueID == null || uniqueID.isBlank()) {
 			throw new IllegalArgumentException("Unique ID must not be null or blank");
 		}
-		if (source == null) {
-			throw new IllegalArgumentException("Source must not be null");
+		if (source == null || source.isBlank()) {
+			throw new IllegalArgumentException("Source must not be null or blank");
 		}
-		if (destination == null) {
-			throw new IllegalArgumentException("Destination must not be null");
+		if (destination == null || destination.isBlank()) {
+			throw new IllegalArgumentException("Destination must not be null or blank");
 		}
 		this.uniqueID = uniqueID;
 		this.source = source;
 		this.destination = destination;
+		this.relation = relation;
+		this.dateOfConnection = dateOfConnection;
+		this.dateOfConnectionEnd = dateOfConnectionEnd;
 	}
 	
 

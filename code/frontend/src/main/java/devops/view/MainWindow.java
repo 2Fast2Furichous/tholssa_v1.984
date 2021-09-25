@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXButton;
 
 import devops.App;
 import devops.model.implementations.NodeFilter;
+import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
@@ -111,8 +112,18 @@ public class MainWindow {
 
             currentNode.setTranslateX(newTranslateX);
             currentNode.setTranslateY(newTranslateY);
-
         });
+
+         currentNode.setOnMouseReleased(mouseEvent -> {
+             System.out.println("Drag over");
+             PersonNode node = (PersonNode) currentNode.getUserData();
+             Person currentPerson = node.getValue();
+             ServiceResponse response = App.getGraphService().updateNode(currentNode.getTranslateX(),
+                     currentNode.getTranslateY(), node.getUniqueID(), currentPerson.getNickname(),
+                     currentPerson.getFirstName(), currentPerson.getLastName(), currentPerson.getAddress(),
+                     currentPerson.getPhoneNumber(), currentPerson.getDateOfBirth(), currentPerson.getDateOfDeath(),
+                     currentPerson.getOccupation(), currentPerson.getDescription());
+         });
     }
 
     private void setupNodeContextMenu(JFXButton currentNode) {
@@ -268,7 +279,8 @@ public class MainWindow {
 
             for (PersonNode node : network.getNodes()) {
 
-                JFXButton nodeButton = createNode("family", 250, 250);
+                Person currentPerson = node.getValue();
+                JFXButton nodeButton = createNode("family", currentPerson.getPositionX(), currentPerson.getPositionY());
 
                 nodeButton.setUserData(node);
                 nodeMap.put(node.getUniqueID(), nodeButton);
@@ -290,17 +302,18 @@ public class MainWindow {
         }
     }
 
-    private void requestCreateNode(String type, int originX, int originY) {
+    private void requestCreateNode(String type, double originX, double originY) {
 
         
         JFXButton nodeButton = createNode(type, originX, originY);
 
-        ServiceResponse response = App.getGraphService().createNode(null, null, null, null, null, null, null, null,
+        ServiceResponse response = App.getGraphService().createNode(originX,
+                originY, null, null, null, null, null, null, null, null,
                 null);
         nodeButton.setUserData(response.getData());
     }
 
-    private JFXButton createNode (String type, int originX, int originY) {
+    private JFXButton createNode (String type, double originX, double originY) {
          JFXButton nodeButton = new JFXButton();
         nodeButton.setText(type);
         nodeButton.setStyle("-fx-background-color: #16ae58;");
