@@ -3,7 +3,6 @@ package devops.network;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.Gson;
@@ -29,7 +28,6 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.User;
-import devops.model.interfaces.GraphEdge;
 import devops.services.GraphService;
 import devops.services.UserService;
 

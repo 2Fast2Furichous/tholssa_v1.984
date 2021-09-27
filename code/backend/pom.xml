@@ -58,33 +58,34 @@
         <version>3.8.0</version>
       </plugin>
       
-      <plugin><!-- testing services -->
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
+			<plugin><!-- testing services -->
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+      
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-              <id>default-test</id>
-              <phase>test</phase>
-              <goals>
-                  <goal>test</goal>
-              </goals>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
           </execution>
         </executions>
-      </plugin>
-      
-      <plugin><!-- builds executable jar files -->
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration><!-- Add this configuration group to establish the main class for launching the app -->
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
           <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>
-                <!-- The main class for launching the app -->
-                devops.App
-              </mainClass>
-            </manifest>
-          </archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>
+								<!-- The main class for launching the app -->
+								devops.App
+							</mainClass>
+						</manifest>
+					</archive>
         </configuration>
       </plugin>
       
@@ -104,28 +105,6 @@
             </mainClass>
         </configuration>
       </plugin>
-
-    <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.2</version>
-        <executions>
-          <execution>
-              <goals>
-                  <goal>prepare-agent</goal>
-              </goals>
-          </execution>
-          <!-- attached to Maven test phase -->
-          <execution>
-              <id>report</id>
-              <phase>test</phase>
-              <goals>
-                  <goal>report</goal>
-              </goals>
-          </execution>
-        </executions>
-    </plugin>
-
     </plugins>
   </build>
 </project>
