@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import devops.model.implementations.Person;
 import devops.model.implementations.PersonNode;
-import devops.model.implementations.Relationship;
 import devops.services.GraphService;
 
 public class UpdateNode {
@@ -42,7 +41,6 @@ public class UpdateNode {
 		Person testPerson1 = new Person(1.0, 1.0, "nickname1", "firstName1", "lastName1", "address1", "1234567890",
 				validDate, validDate, "occupation1", "description1");
 
-		String nodeGuid1 = this.service.createNode(testPerson1);
 		assertThrows(IllegalArgumentException.class,
 				() -> this.service.updateNode(null, testPerson1));
 	}

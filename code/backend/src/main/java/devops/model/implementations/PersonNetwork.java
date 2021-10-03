@@ -3,9 +3,6 @@ package devops.model.implementations;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import devops.model.interfaces.GraphEdge;
-import devops.model.interfaces.GraphNetwork;
-import devops.model.interfaces.GraphNode;
 
 /**
  * Network of person nodes and edges

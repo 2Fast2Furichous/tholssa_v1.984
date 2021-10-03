@@ -2,7 +2,6 @@ package devops.model.PersonNodeTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -10,7 +9,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import devops.model.implementations.Person;
-import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNode;
 
 public class AddEdge {

@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import devops.model.implementations.PersonEdge;
-import devops.model.implementations.Relationship;
 
 public class SetDateOfConnection {
 	private LocalDate validDate = LocalDate.of(1970, 10, 17);
