@@ -31,7 +31,8 @@ import javafx.scene.layout.GridPane;
  */
 public class CreateAccountWindow {
 
-    private static final Pattern PHONE_NUMBER_FORMAT = Pattern.compile("\\d{3}-?\\d{3}-?\\d{4}"); // Pattern.compile("^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")) Saying invalid text escape.
+    private final String PHONE_NUMBER_FORMAT = "^(\\+\\d{1,2}\\s?)?1?\\-?\\.?\\s?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
+
 
     @FXML
     private GridPane createAccountWindowPane;
@@ -69,7 +70,7 @@ public class CreateAccountWindow {
         this.createAccountButton.disableProperty().bind(this.firstNameTextField.textProperty().isEmpty()
                 .or(this.lastNameTextField.textProperty().isEmpty()).or(this.usernameTextField.textProperty().isEmpty())
                 .or(this.passwordTextField.textProperty().isEmpty())
-                .or(this.textPropertyBindingPattern(this.phoneNumberTextField, PHONE_NUMBER_FORMAT)));
+                .or(this.textPropertyBindingPattern(this.phoneNumberTextField, Pattern.compile(PHONE_NUMBER_FORMAT))));
     }
 
     @FXML
@@ -85,6 +86,9 @@ public class CreateAccountWindow {
 
     @FXML
     void handleCreateAccount(ActionEvent event) {
+        String regex2 = "\s";
+        String regex = "^(\\d{1,2}\s?)?1?-?\\.?\s?\\(?\\d{3}\\)?[\s.-]?\\d{3}[\s.-]?\\d{4}$";
+        
         UserService service = App.getUserService();
         String firstName = this.firstNameTextField.textProperty().getValue();
         String lastName = this.lastNameTextField.textProperty().getValue();
