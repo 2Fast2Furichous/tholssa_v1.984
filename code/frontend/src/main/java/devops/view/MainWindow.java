@@ -72,11 +72,6 @@ public class MainWindow {
     @FXML
     private JFXButton logoutButton;
 
-    private static final String BUSINESS_NODE = "business";
-    private static final String FAMILY_NODE = "family";
-    private static final String FRIEND_NODE = "friend";
-    private static final String SPOUSE_NODE = "spouse";
-
     private JFXButton startNode;
 
     

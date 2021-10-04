@@ -3,7 +3,6 @@ package devops.model.implementations;
 import java.time.LocalDate;
 
 import devops.model.interfaces.GraphEdge;
-import devops.model.interfaces.GraphNode;
 
 /**
  * Edge between person nodes

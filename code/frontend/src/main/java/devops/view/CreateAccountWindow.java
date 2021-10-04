@@ -2,6 +2,7 @@ package devops.view;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -14,6 +15,9 @@ import devops.model.implementations.UserAccount;
 import devops.network.interfaces.UserService;
 import devops.utils.FXRouter;
 import devops.utils.GuiCommands;
+
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -26,6 +30,10 @@ import javafx.scene.layout.GridPane;
  * @version Fall 2021
  */
 public class CreateAccountWindow {
+
+    private final String PHONE_NUMBER_FORMAT = "^(\\+\\d{1,2}\\s?)?1?\\-?\\.?\\s?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
+
+
     @FXML
     private GridPane createAccountWindowPane;
 
@@ -54,6 +62,18 @@ public class CreateAccountWindow {
     private JFXButton createAccountButton;
 
     @FXML
+    public void initialize() {
+        this.setupListeners();
+    }
+
+    private void setupListeners() {
+        this.createAccountButton.disableProperty().bind(this.firstNameTextField.textProperty().isEmpty()
+                .or(this.lastNameTextField.textProperty().isEmpty()).or(this.usernameTextField.textProperty().isEmpty())
+                .or(this.passwordTextField.textProperty().isEmpty())
+                .or(this.textPropertyBindingPattern(this.phoneNumberTextField, Pattern.compile(PHONE_NUMBER_FORMAT))));
+    }
+
+    @FXML
     void handleCancel(ActionEvent event) throws IOException {
         try {
             FXRouter.setAnimationType("fade", 300);
@@ -66,6 +86,9 @@ public class CreateAccountWindow {
 
     @FXML
     void handleCreateAccount(ActionEvent event) {
+        String regex2 = "\s";
+        String regex = "^(\\d{1,2}\s?)?1?-?\\.?\s?\\(?\\d{3}\\)?[\s.-]?\\d{3}[\s.-]?\\d{4}$";
+        
         UserService service = App.getUserService();
         String firstName = this.firstNameTextField.textProperty().getValue();
         String lastName = this.lastNameTextField.textProperty().getValue();
@@ -78,21 +101,22 @@ public class CreateAccountWindow {
             Credential credential = new Credential(username, password);
             UserAccount account = new UserAccount(firstName, lastName, dateOfBirth, phoneNumber);
 
-            ServiceResponse response =  service.createAccount(account, credential);
-            if (response.getMessage().equals("error")){
-				GuiCommands.showErrorDialog((String)response.getData());
-			} else {
+            ServiceResponse response = service.createAccount(account, credential);
+            if (response.getMessage().equals("error")) {
+                GuiCommands.showErrorDialog((String) response.getData());
+            } else {
                 UserAccount newUser = (UserAccount) response.getData();
                 FXRouter.show("main", newUser);
             }
-
-           
 
         } catch (Exception e) {
             GuiCommands.showErrorDialog(e.getMessage());
         }
     }
 
-
+    private BooleanBinding textPropertyBindingPattern(JFXTextField textField, Pattern pattern) {
+        return Bindings.createBooleanBinding(() -> !pattern.matcher(textField.getText()).matches(),
+                textField.textProperty());
+    }
 
 }

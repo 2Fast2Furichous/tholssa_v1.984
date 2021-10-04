@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import devops.model.implementations.Person;
-import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNode;
 
 public class AddEdge {

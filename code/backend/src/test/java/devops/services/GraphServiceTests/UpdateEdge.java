@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
 import devops.model.implementations.Relationship;
-import devops.model.interfaces.GraphNode;
 import devops.services.GraphService;
 
 public class UpdateEdge {

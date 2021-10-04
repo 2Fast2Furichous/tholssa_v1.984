@@ -16,7 +16,6 @@ import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
 import devops.model.interfaces.GraphEdge;
-import devops.model.interfaces.GraphNetwork;
 import devops.model.interfaces.GraphNode;
 
 /**
