@@ -1,5 +1,6 @@
 package devops.view;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.ServiceResponse;
+import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -67,12 +69,25 @@ public class MainWindow {
     @FXML
     private JFXButton addButton;
 
+    @FXML
+    private JFXButton logoutButton;
+
     private static final String BUSINESS_NODE = "business";
     private static final String FAMILY_NODE = "family";
     private static final String FRIEND_NODE = "friend";
     private static final String SPOUSE_NODE = "spouse";
 
     private JFXButton startNode;
+
+    
+    @FXML
+    void handleLogout(ActionEvent event) {
+        try {
+            FXRouter.show("login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void addBuisnessNode(ActionEvent event) {
