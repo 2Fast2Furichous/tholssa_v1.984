@@ -3,7 +3,6 @@ package devops.model.person_network;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 

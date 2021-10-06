@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import devops.model.implementations.Person;
 import devops.model.interfaces.GraphEdge;
-import devops.model.interfaces.GraphNode;
 import devops.services.GraphService;
 
 public class TestGetEdge {
@@ -28,8 +27,6 @@ public class TestGetEdge {
 		String nodeGuid1 = this.service.createNode(person1);
 		String nodeGuid2 = this.service.createNode(person2);
 
-		GraphNode<Person> node1 = this.service.getNode(nodeGuid1);
-		GraphNode<Person> node2 = this.service.getNode(nodeGuid2);
 
 		String edgeGuid = this.service.connectNodes(nodeGuid1, nodeGuid2, null, null, null);
 		GraphEdge<Person> edge = this.service.getEdge(edgeGuid);

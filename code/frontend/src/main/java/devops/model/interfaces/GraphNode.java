@@ -2,8 +2,6 @@ package devops.model.interfaces;
 
 import java.util.Collection;
 
-import devops.model.implementations.Person;
-
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges
  *

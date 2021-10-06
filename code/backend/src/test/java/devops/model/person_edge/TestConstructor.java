@@ -7,9 +7,7 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
-import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
 
 public class TestConstructor {

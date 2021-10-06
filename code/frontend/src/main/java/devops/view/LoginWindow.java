@@ -36,6 +36,15 @@ public class LoginWindow {
 	private JFXButton signUp;
 
 
+	@FXML
+	public void initialize(){
+		this.setupListeners();
+	}
+
+	private void setupListeners(){
+		this.login.disableProperty().bind(this.username.textProperty().isEmpty().or(this.password.textProperty().isEmpty()));
+	}
+
 	public void handleLogin(ActionEvent event) {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();

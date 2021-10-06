@@ -47,9 +47,6 @@ public class TestTestConstructor {
 
 	@Test
 	void testNullPerson() {
-		Person testPerson = new Person(1.0, 1.0, "nickname", "firstName", "lastName", "address", "1234567890",
-				validDate, validDate, "occupation", "description");
-
 		assertThrows(IllegalArgumentException.class, () -> {
 			new PersonNode("123", null);
 		});

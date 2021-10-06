@@ -33,6 +33,7 @@ public class TestConnectNodes {
 		GraphEdge<Person> edge = this.service.getEdge(edgeGuid);
 
 		assertTrue(node1.getEdges().contains(edgeGuid));
+		assertTrue(node2.getEdges().contains(edgeGuid));
 		assertEquals(nodeGuid1, edge.getSource());
 		assertEquals(nodeGuid2, edge.getDestination());
 	}

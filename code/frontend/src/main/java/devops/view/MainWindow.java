@@ -1,5 +1,6 @@
 package devops.view;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.ServiceResponse;
+import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -67,12 +69,33 @@ public class MainWindow {
     @FXML
     private JFXButton addButton;
 
-    private static final String BUSINESS_NODE = "business";
-    private static final String FAMILY_NODE = "family";
-    private static final String FRIEND_NODE = "friend";
-    private static final String SPOUSE_NODE = "spouse";
+    @FXML
+    private JFXButton logoutButton;
 
     private JFXButton startNode;
+
+    private PersonNode rootNode;
+
+    /**
+     * Zero-parameter constructor.
+     * 
+     * @precondition none
+     * @postcondition none
+     *
+     */
+    public MainWindow(){
+        this.rootNode = null;
+    }
+
+
+    @FXML
+    void handleLogout(ActionEvent event) {
+        try {
+            FXRouter.show("login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void addBuisnessNode(ActionEvent event) {
@@ -115,7 +138,6 @@ public class MainWindow {
         });
 
          currentNode.setOnMouseReleased(mouseEvent -> {
-             System.out.println("Drag over");
              PersonNode node = (PersonNode) currentNode.getUserData();
              Person currentPerson = node.getValue();
              ServiceResponse response = App.getGraphService().updateNode(currentNode.getTranslateX(),
@@ -131,10 +153,12 @@ public class MainWindow {
         MenuItem removeMenuItem = new MenuItem("Remove");
         MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
         MenuItem addInformationMenuItem = new MenuItem("Add Information");
+        MenuItem setAsRootNodeMenuItem = new MenuItem("Set as Root Node");
 
         contextMenu.getItems().add(removeMenuItem);
         contextMenu.getItems().add(addEdgeMenuItem);
         contextMenu.getItems().add(addInformationMenuItem);
+        contextMenu.getItems().add(setAsRootNodeMenuItem);
 
         removeMenuItem.setOnAction(event -> {
             contextMenu.hide();
@@ -154,6 +178,11 @@ public class MainWindow {
         addInformationMenuItem.setOnAction(event -> {
             //Add prompt
         });
+
+        setAsRootNodeMenuItem.setOnAction(event -> {
+            this.rootNode = (PersonNode) currentNode.getUserData();
+        });
+
 
         currentNode.setContextMenu(contextMenu);
     }
@@ -298,13 +327,11 @@ public class MainWindow {
 
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
     private void requestCreateNode(String type, double originX, double originY) {
-
-        
         JFXButton nodeButton = createNode(type, originX, originY);
 
         ServiceResponse response = App.getGraphService().createNode(originX,
