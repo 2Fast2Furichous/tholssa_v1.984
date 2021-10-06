@@ -86,9 +86,6 @@ public class CreateAccountWindow {
 
     @FXML
     void handleCreateAccount(ActionEvent event) {
-        String regex2 = "\s";
-        String regex = "^(\\d{1,2}\s?)?1?-?\\.?\s?\\(?\\d{3}\\)?[\s.-]?\\d{3}[\s.-]?\\d{4}$";
-        
         UserService service = App.getUserService();
         String firstName = this.firstNameTextField.textProperty().getValue();
         String lastName = this.lastNameTextField.textProperty().getValue();
