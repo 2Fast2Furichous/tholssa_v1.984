@@ -43,6 +43,7 @@ public class Gateway extends Thread {
 	private CredentialStorage credStorage;
 	private Socket socket;
 	private GraphService graphService;
+
 	/**
 	 * Default constructor.
 	 * 
@@ -108,8 +109,6 @@ public class Gateway extends Thread {
 				JsonObject response = null;
 				try {
 					String requstType = this.gson.fromJson(extractedJson.get("type"), String.class);
-					System.out.println(requstType);
-					System.out.println(extractedJson);
 					switch (requstType) {
 						case "Create Account":
 							response = this.handleCreateAccount(extractedJson);
@@ -149,8 +148,6 @@ public class Gateway extends Thread {
 				
 				String responseJson = this.gson.toJson(response);
 				this.socket.send(responseJson.getBytes(ZMQ.CHARSET));
-
-				System.out.println(responseJson);
 			
 			} catch(Exception e){
 				JsonObject error = new JsonObject();

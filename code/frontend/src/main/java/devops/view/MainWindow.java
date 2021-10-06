@@ -74,7 +74,20 @@ public class MainWindow {
 
     private JFXButton startNode;
 
-    
+    private PersonNode rootNode;
+
+    /**
+     * Zero-parameter constructor.
+     * 
+     * @precondition none
+     * @postcondition none
+     *
+     */
+    public MainWindow(){
+        this.rootNode = null;
+    }
+
+
     @FXML
     void handleLogout(ActionEvent event) {
         try {
@@ -125,7 +138,6 @@ public class MainWindow {
         });
 
          currentNode.setOnMouseReleased(mouseEvent -> {
-             System.out.println("Drag over");
              PersonNode node = (PersonNode) currentNode.getUserData();
              Person currentPerson = node.getValue();
              ServiceResponse response = App.getGraphService().updateNode(currentNode.getTranslateX(),
@@ -141,10 +153,12 @@ public class MainWindow {
         MenuItem removeMenuItem = new MenuItem("Remove");
         MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
         MenuItem addInformationMenuItem = new MenuItem("Add Information");
+        MenuItem setAsRootNodeMenuItem = new MenuItem("Set as Root Node");
 
         contextMenu.getItems().add(removeMenuItem);
         contextMenu.getItems().add(addEdgeMenuItem);
         contextMenu.getItems().add(addInformationMenuItem);
+        contextMenu.getItems().add(setAsRootNodeMenuItem);
 
         removeMenuItem.setOnAction(event -> {
             contextMenu.hide();
@@ -164,6 +178,11 @@ public class MainWindow {
         addInformationMenuItem.setOnAction(event -> {
             //Add prompt
         });
+
+        setAsRootNodeMenuItem.setOnAction(event -> {
+            this.rootNode = (PersonNode) currentNode.getUserData();
+        });
+
 
         currentNode.setContextMenu(contextMenu);
     }
@@ -308,13 +327,11 @@ public class MainWindow {
 
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
     private void requestCreateNode(String type, double originX, double originY) {
-
-        
         JFXButton nodeButton = createNode(type, originX, originY);
 
         ServiceResponse response = App.getGraphService().createNode(originX,
