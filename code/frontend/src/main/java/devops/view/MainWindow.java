@@ -224,6 +224,7 @@ public class MainWindow {
                 Person currentPerson = node.getValue();
                 JFXButton nodeButton = createNode("family", currentPerson.getPositionX(), currentPerson.getPositionY());
 
+                
                 nodeButton.setUserData(node);
                 nodeMap.put(node.getUniqueID(), nodeButton);
             }
@@ -275,7 +276,7 @@ public class MainWindow {
     private JFXButton createNode (String type, double originX, double originY) {
          JFXButton nodeButton = new JFXButton();
         nodeButton.setText(type);
-        nodeButton.setStyle("-fx-background-color: #16ae58;");
+        nodeButton.setStyle("-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;" );
         nodeButton.setTranslateX(originX);
         nodeButton.setTranslateY(originY);
         this.tholssaGraph.getChildren().add(nodeButton);
