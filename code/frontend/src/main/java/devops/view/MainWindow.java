@@ -1,11 +1,9 @@
 package devops.view;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -19,10 +17,11 @@ import devops.model.implementations.ServiceResponse;
 import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
@@ -34,43 +33,10 @@ import javafx.scene.shape.Line;
 public class MainWindow {
 
     @FXML
-    private AnchorPane backgroundPane;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+    private JFXButton logoutButton;
 
     @FXML
     private AnchorPane tholssaGraph;
-
-    @FXML
-    private JFXButton familyButton;
-
-    @FXML
-    private JFXButton friendButton;
-
-    @FXML
-    private JFXButton buisnessButton;
-
-    @FXML
-    private JFXButton spouseButton;
-
-    @FXML
-    private JFXButton saveButton;
-
-    @FXML
-    private JFXButton cancelButton;
-
-    @FXML
-    private JFXButton removeButton;
-
-    @FXML
-    private JFXButton addButton;
-
-    @FXML
-    private JFXButton logoutButton;
 
     private JFXButton startNode;
 
@@ -95,11 +61,6 @@ public class MainWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    void addBuisnessNode(ActionEvent event) {
-        requestCreateNode("business", 250, 250);
     }
 
     private void nodeDrag(JFXButton currentNode, String type) {
@@ -247,57 +208,9 @@ public class MainWindow {
         });
     }
 
-    @FXML
-    void addFamilyNode(ActionEvent event) {
-        requestCreateNode("family", 250, 250);
-    }
-
-    @FXML
-    void addFriendFamily(ActionEvent event) {
-        requestCreateNode("friend", 250, 250);
-    }
-
-    @FXML
-    void removeNode(ActionEvent event) {
-
-    }
-
-    @FXML
-    void saveGraph(ActionEvent event) {
-        for (Node currNode : this.tholssaGraph.getChildren()) {
-            JFXButton node = (JFXButton) currNode;
-            node.getText();
-            node.getTranslateX();
-            node.getTranslateY();
-        }
-    }
-
-    @FXML
-    void addSpouseNode(ActionEvent event) {
-        requestCreateNode("spouse", 250, 250);
-    }
 
     @FXML
     void initialize() {
-        assert backgroundPane != null
-                : "fx:id=\"backgroundPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert tholssaGraph != null
-                : "fx:id=\"tholssaGraph\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert familyButton != null
-                : "fx:id=\"familyButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert friendButton != null
-                : "fx:id=\"friendButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert buisnessButton != null
-                : "fx:id=\"buisnessButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert spouseButton != null
-                : "fx:id=\"spouseButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert saveButton != null : "fx:id=\"saveButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert cancelButton != null
-                : "fx:id=\"cancelButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert removeButton != null
-                : "fx:id=\"removeButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-        assert addButton != null : "fx:id=\"addButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-
         try {
             Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
             ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
@@ -325,6 +238,25 @@ public class MainWindow {
                 lineMap.put(edge.getUniqueID(), lineEdge);
             }
 
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addNodeMenuItem = new MenuItem("Add Node");
+
+            contextMenu.getItems().add(addNodeMenuItem);
+
+            final Delta mousePoint = new Delta();
+
+            addNodeMenuItem.setOnAction(event -> {
+                contextMenu.hide();
+                requestCreateNode("family", mousePoint.x, mousePoint.y);
+            });
+
+            tholssaGraph.setOnMouseClicked(mouseEvent -> {
+                if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
+                    mousePoint.x = mouseEvent.getSceneX();
+                    mousePoint.y = mouseEvent.getSceneY();
+                    contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                }
+            });
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -367,14 +299,15 @@ public class MainWindow {
     private Line createEdge(JFXButton sourceButton, JFXButton destinationButton) {
         Line line = new Line();
         line.setStrokeWidth(5);
-
+        line.setStroke(Color.web("#16ae58"));
+        
         line.startXProperty().bind(sourceButton.translateXProperty());
         line.startYProperty().bind(sourceButton.translateYProperty());
 
         line.endXProperty().bind(destinationButton.translateXProperty());
         line.endYProperty().bind(destinationButton.translateYProperty());
 
-        line.setStyle("-fx-background-color: #16ae58;");
+
         tholssaGraph.getChildren().add(line);
 
         setupEdgeContextMenu(line);
