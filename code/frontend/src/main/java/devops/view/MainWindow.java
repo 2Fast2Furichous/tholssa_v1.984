@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 
 import devops.App;
 import devops.model.implementations.NodeFilter;
@@ -18,18 +20,13 @@ import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-/**
- * The main window controller.
- * 
- * @author Javon Onuigbo
- * @version Fall 2021
- */
 public class MainWindow {
 
     @FXML
@@ -38,9 +35,56 @@ public class MainWindow {
     @FXML
     private AnchorPane tholssaGraph;
 
+    @FXML
+    private JFXTextField nickname;
+
+    @FXML
+    private JFXTextField firstName;
+
+    @FXML
+    private JFXTextField lastName;
+
+    @FXML
+    private JFXTextField address;
+
+    @FXML
+    private JFXTextField phoneNumber;
+
+    @FXML
+    private JFXTextField occupation;
+
+    @FXML
+    private JFXTextField description;
+
+    @FXML
+    private DatePicker dateOfBirth;
+
+    @FXML
+    private DatePicker dateOfDeath;
+
+    @FXML
+    private JFXComboBox<?> relation;
+
+    @FXML
+    private DatePicker relationStartDate;
+
+    @FXML
+    private DatePicker relationEndDate;
+
+    @FXML
+    private JFXTextField locationX;
+
+    @FXML
+    private JFXTextField locationY;
+
+    @FXML
+    private JFXButton submitNode;
+
     private JFXButton startNode;
 
     private PersonNode rootNode;
+    
+    private JFXButton selectedNode;
 
     /**
      * Zero-parameter constructor.
@@ -51,8 +95,91 @@ public class MainWindow {
      */
     public MainWindow(){
         this.rootNode = null;
+        this.selectedNode = null;
     }
 
+    @FXML
+    void handleAddress(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleDateOfBirth(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleDateOfDeath(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleDescription(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleFirstName(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleLastName(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleLocationX(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleLocationY(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleNickname(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleOccupation(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handlePhoneNumber(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleRelation(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleRelationEndDate(ActionEvent event) {
+
+    }
+
+    @FXML
+    void handleRelationStartDate(ActionEvent event) {
+
+    }
+
+    @FXML
+    void submitNode(ActionEvent event) {
+        
+        PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
+        Person currentPerson = currentNode.getValue();
+        
+        ServiceResponse response = App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
+                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), currentPerson.getNickname(),
+                currentPerson.getFirstName(), currentPerson.getLastName(), currentPerson.getAddress(),
+                currentPerson.getPhoneNumber(), currentPerson.getDateOfBirth(), currentPerson.getDateOfDeath(),
+                currentPerson.getOccupation(), currentPerson.getDescription());
+    }
 
     @FXML
     void handleLogout(ActionEvent event) {
@@ -63,9 +190,61 @@ public class MainWindow {
         }
     }
 
+    @FXML
+    void initialize() {
+        try {
+            Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+            ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
+            PersonNetwork network = (PersonNetwork) response.getData();
+
+            HashMap<String, JFXButton> nodeMap = new HashMap<String, JFXButton>();
+            HashMap<String, Line> lineMap = new HashMap<String, Line>();
+
+            for (PersonNode node : network.getNodes()) {
+
+                Person currentPerson = node.getValue();
+                JFXButton nodeButton = createNode("family", currentPerson.getPositionX(), currentPerson.getPositionY());
+
+                nodeButton.setUserData(node);
+                nodeMap.put(node.getUniqueID(), nodeButton);
+            }
+
+            for (PersonEdge edge : network.getEdges()) {
+
+                JFXButton sourceButton = nodeMap.get(edge.getSource());
+                JFXButton destinationButton = nodeMap.get(edge.getDestination());
+
+                Line lineEdge = createEdge(sourceButton, destinationButton);
+                lineEdge.setUserData(edge);
+                lineMap.put(edge.getUniqueID(), lineEdge);
+            }
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addNodeMenuItem = new MenuItem("Add Node");
+
+            contextMenu.getItems().add(addNodeMenuItem);
+
+            final Delta mousePoint = new Delta();
+
+            addNodeMenuItem.setOnAction(event -> {
+                contextMenu.hide();
+                requestCreateNode("family", mousePoint.x, mousePoint.y);
+            });
+
+            tholssaGraph.setOnMouseClicked(mouseEvent -> {
+                if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
+                    mousePoint.x = mouseEvent.getSceneX();
+                    mousePoint.y = mouseEvent.getSceneY();
+                    contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                }
+            });
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     private void nodeDrag(JFXButton currentNode, String type) {
-
-
         final Delta mousePoint = new Delta();
         final Delta nodePoint = new Delta();
 
@@ -206,62 +385,6 @@ public class MainWindow {
                 contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
             //}
         });
-    }
-
-
-    @FXML
-    void initialize() {
-        try {
-            Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
-            ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
-            PersonNetwork network = (PersonNetwork) response.getData();
-
-            HashMap<String, JFXButton> nodeMap = new HashMap<String, JFXButton>();
-            HashMap<String, Line> lineMap = new HashMap<String, Line>();
-
-            for (PersonNode node : network.getNodes()) {
-
-                Person currentPerson = node.getValue();
-                JFXButton nodeButton = createNode("family", currentPerson.getPositionX(), currentPerson.getPositionY());
-
-                
-                nodeButton.setUserData(node);
-                nodeMap.put(node.getUniqueID(), nodeButton);
-            }
-
-            for (PersonEdge edge : network.getEdges()) {
-
-                JFXButton sourceButton = nodeMap.get(edge.getSource());
-                JFXButton destinationButton = nodeMap.get(edge.getDestination());
-
-                Line lineEdge = createEdge(sourceButton, destinationButton);
-                lineEdge.setUserData(edge);
-                lineMap.put(edge.getUniqueID(), lineEdge);
-            }
-
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem addNodeMenuItem = new MenuItem("Add Node");
-
-            contextMenu.getItems().add(addNodeMenuItem);
-
-            final Delta mousePoint = new Delta();
-
-            addNodeMenuItem.setOnAction(event -> {
-                contextMenu.hide();
-                requestCreateNode("family", mousePoint.x, mousePoint.y);
-            });
-
-            tholssaGraph.setOnMouseClicked(mouseEvent -> {
-                if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
-                    mousePoint.x = mouseEvent.getSceneX();
-                    mousePoint.y = mouseEvent.getSceneY();
-                    contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                }
-            });
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
     }
 
     private void requestCreateNode(String type, double originX, double originY) {
