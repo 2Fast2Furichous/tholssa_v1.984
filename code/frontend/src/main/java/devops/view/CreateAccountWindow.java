@@ -95,7 +95,7 @@ public class CreateAccountWindow {
         String password = this.passwordTextField.textProperty().getValue();
 
         try {
-            Credential credential = new Credential(username, password);
+            Credential credential = new Credential(password, username);
             UserAccount account = new UserAccount(firstName, lastName, dateOfBirth, phoneNumber);
 
             ServiceResponse response = service.createAccount(account, credential);
