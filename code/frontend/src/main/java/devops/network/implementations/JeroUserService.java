@@ -70,6 +70,7 @@ public class JeroUserService implements UserService {
 		if(loginCredentials == null){
 			throw new IllegalArgumentException("Login Credentials cannot be null");
 		}
+		
 		JsonObject credentialsJson = new JsonObject();
 		JsonElement credentialsElement = this.gson.toJsonTree(loginCredentials, Credential.class);
 
@@ -81,15 +82,21 @@ public class JeroUserService implements UserService {
 		String responseJson = ServerCommunicator.sendRequest(credentialsRequest);
 		JsonObject response = this.gson.fromJson(responseJson, JsonObject.class);
 
+		
 		if(response.get("type").toString().equals("error")){
 			return ServerCommunicator.handleError(this.gson, response);
 		}
-
+	
+		if(this.gson.fromJson(response.get("userDateOfBirth"), String.class) == null){
+			return ServerCommunicator.handleError(this.gson, response);
+		}
+		
+	
 		String firstName = this.gson.fromJson(response.get("userFirstName"), String.class);
 		String lastName = this.gson.fromJson(response.get("userLastName"), String.class);
+		System.out.println(this.gson.fromJson(response.get("userDateOfBirth"), String.class));
 		LocalDate dateOfBirth = LocalDate.parse(this.gson.fromJson(response.get("userDateOfBirth"), String.class));
 		String phoneNumber = this.gson.fromJson(response.get("userPhoneNumber"), String.class);
-
 		return new ServiceResponse(new UserAccount(firstName, lastName, dateOfBirth, phoneNumber));
 	}
 
