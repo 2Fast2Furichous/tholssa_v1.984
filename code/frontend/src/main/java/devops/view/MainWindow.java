@@ -1,6 +1,7 @@
 package devops.view;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -83,7 +85,7 @@ public class MainWindow {
     private JFXButton startNode;
 
     private PersonNode rootNode;
-    
+
     private JFXButton selectedNode;
 
     /**
@@ -93,7 +95,7 @@ public class MainWindow {
      * @postcondition none
      *
      */
-    public MainWindow(){
+    public MainWindow() {
         this.rootNode = null;
         this.selectedNode = null;
     }
@@ -170,15 +172,24 @@ public class MainWindow {
 
     @FXML
     void submitNode(ActionEvent event) {
-        
+
         PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
-        Person currentPerson = currentNode.getValue();
-        
+
+        String nicname = this.nickname.getText();
+        String firstName = this.firstName.getText();
+        String lastName = this.lastName.getText();
+        String address = this.address.getText();
+        String phoneNumber = this.phoneNumber.getText();
+        LocalDate dateOfBirth = this.dateOfBirth.getValue();
+        LocalDate dateOfDeath = this.dateOfDeath.getValue();
+        String occupation = this.occupation.getText();
+        String description = this.description.getText();
+
         ServiceResponse response = App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
-                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), currentPerson.getNickname(),
-                currentPerson.getFirstName(), currentPerson.getLastName(), currentPerson.getAddress(),
-                currentPerson.getPhoneNumber(), currentPerson.getDateOfBirth(), currentPerson.getDateOfDeath(),
-                currentPerson.getOccupation(), currentPerson.getDescription());
+                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nicname, firstName, lastName, address,
+                phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
+        PersonNode updatedNode = (PersonNode) response.getData();
+        this.selectedNode.setUserData(updatedNode);
     }
 
     @FXML
@@ -236,12 +247,36 @@ public class MainWindow {
                     mousePoint.x = mouseEvent.getSceneX();
                     mousePoint.y = mouseEvent.getSceneY();
                     contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                } else if (MouseButton.PRIMARY.equals(mouseEvent.getButton())) {
+                    deselectNode();
                 }
             });
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private void selectNode(JFXButton node) {
+        this.selectedNode = node;
+
+        PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
+        Person currentPerson = currentNode.getValue();
+
+        this.nickname.setText(currentPerson.getNickname());
+
+        this.firstName.setText(currentPerson.getFirstName());
+        this.lastName.setText(currentPerson.getLastName());
+        this.address.setText(currentPerson.getAddress());
+        this.phoneNumber.setText(currentPerson.getPhoneNumber());
+        this.dateOfBirth.setValue(currentPerson.getDateOfBirth());
+        this.dateOfDeath.setValue(currentPerson.getDateOfDeath());
+        this.occupation.setText(currentPerson.getOccupation());
+        this.description.setText(currentPerson.getDescription());
+    }
+
+    private void deselectNode() {
+        this.selectedNode = null;
     }
 
     private void nodeDrag(JFXButton currentNode, String type) {
@@ -264,7 +299,7 @@ public class MainWindow {
             } else {
 
             }
-            
+
         });
 
         currentNode.setOnMouseDragged(mouseEvent -> {
@@ -277,15 +312,21 @@ public class MainWindow {
             currentNode.setTranslateY(newTranslateY);
         });
 
-         currentNode.setOnMouseReleased(mouseEvent -> {
-             PersonNode node = (PersonNode) currentNode.getUserData();
-             Person currentPerson = node.getValue();
-             ServiceResponse response = App.getGraphService().updateNode(currentNode.getTranslateX(),
-                     currentNode.getTranslateY(), node.getUniqueID(), currentPerson.getNickname(),
-                     currentPerson.getFirstName(), currentPerson.getLastName(), currentPerson.getAddress(),
-                     currentPerson.getPhoneNumber(), currentPerson.getDateOfBirth(), currentPerson.getDateOfDeath(),
-                     currentPerson.getOccupation(), currentPerson.getDescription());
-         });
+        currentNode.setOnMouseReleased(mouseEvent -> {
+            PersonNode node = (PersonNode) currentNode.getUserData();
+            Person currentPerson = node.getValue();
+            ServiceResponse response = App.getGraphService().updateNode(currentNode.getTranslateX(),
+                    currentNode.getTranslateY(), node.getUniqueID(), currentPerson.getNickname(),
+                    currentPerson.getFirstName(), currentPerson.getLastName(), currentPerson.getAddress(),
+                    currentPerson.getPhoneNumber(), currentPerson.getDateOfBirth(), currentPerson.getDateOfDeath(),
+                    currentPerson.getOccupation(), currentPerson.getDescription());
+            PersonNode updatedNode = (PersonNode) response.getData();
+            currentNode.setUserData(updatedNode);
+        });
+
+        currentNode.setOnMouseClicked(MouseEvent-> {
+            selectNode(currentNode);
+        });
     }
 
     private void setupNodeContextMenu(JFXButton currentNode) {
@@ -316,13 +357,12 @@ public class MainWindow {
         });
 
         addInformationMenuItem.setOnAction(event -> {
-            //Add prompt
+            // Add prompt
         });
 
         setAsRootNodeMenuItem.setOnAction(event -> {
             this.rootNode = (PersonNode) currentNode.getUserData();
         });
-
 
         currentNode.setContextMenu(contextMenu);
     }
@@ -356,7 +396,6 @@ public class MainWindow {
 
     }
 
-
     private void setupEdgeContextMenu(Line currentEdge) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem removeMenuItem = new MenuItem("Remove");
@@ -366,7 +405,7 @@ public class MainWindow {
         contextMenu.getItems().add(addInformationMenuItem);
 
         removeMenuItem.setOnAction(event -> {
-            
+
             contextMenu.hide();
             PersonEdge edge = (PersonEdge) currentEdge.getUserData();
             ServiceResponse response = App.getGraphService().removeEdge(edge.getUniqueID());
@@ -375,31 +414,30 @@ public class MainWindow {
             }
         });
 
-
         addInformationMenuItem.setOnAction(event -> {
             // Add prompt
         });
 
         currentEdge.setOnMouseClicked(mouseEvent -> {
-            //if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
-                contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
-            //}
+            // if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
+            contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            // }
         });
     }
 
     private void requestCreateNode(String type, double originX, double originY) {
         JFXButton nodeButton = createNode(type, originX, originY);
 
-        ServiceResponse response = App.getGraphService().createNode(originX,
-                originY, null, null, null, null, null, null, null, null,
-                null);
+        ServiceResponse response = App.getGraphService().createNode(originX, originY, null, null, null, null, null,
+                null, null, null, null);
         nodeButton.setUserData(response.getData());
     }
 
-    private JFXButton createNode (String type, double originX, double originY) {
-         JFXButton nodeButton = new JFXButton();
+    private JFXButton createNode(String type, double originX, double originY) {
+        JFXButton nodeButton = new JFXButton();
         nodeButton.setText(type);
-        nodeButton.setStyle("-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;" );
+        nodeButton.setStyle(
+                "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;");
         nodeButton.setTranslateX(originX);
         nodeButton.setTranslateY(originY);
         this.tholssaGraph.getChildren().add(nodeButton);
@@ -416,7 +454,8 @@ public class MainWindow {
         PersonNode sourceNode = (PersonNode) sourceButton.getUserData();
         PersonNode destinationNode = (PersonNode) destinationButton.getUserData();
 
-        ServiceResponse response = App.getGraphService().connectNodes(sourceNode.getUniqueID(), destinationNode.getUniqueID(), null, null, null);
+        ServiceResponse response = App.getGraphService().connectNodes(sourceNode.getUniqueID(),
+                destinationNode.getUniqueID(), null, null, null);
         edge.setUserData(response.getData());
     }
 
@@ -424,13 +463,12 @@ public class MainWindow {
         Line line = new Line();
         line.setStrokeWidth(5);
         line.setStroke(Color.web("#16ae58"));
-        
+
         line.startXProperty().bind(sourceButton.translateXProperty());
         line.startYProperty().bind(sourceButton.translateYProperty());
 
         line.endXProperty().bind(destinationButton.translateXProperty());
         line.endYProperty().bind(destinationButton.translateYProperty());
-
 
         tholssaGraph.getChildren().add(line);
 
