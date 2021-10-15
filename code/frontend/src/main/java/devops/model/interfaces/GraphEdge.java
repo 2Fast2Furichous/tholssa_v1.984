@@ -28,5 +28,13 @@ public interface GraphEdge<E extends Comparable<E>> extends Unique {
 	 */
 	public String getDestination();
 	
+	/**
+	 * Returns the UniqueId
+	 * 
+	 * @preconditon none
+	 * @postconditons none
+	 * 
+	 * @return the unique id
+	 */
 	public String getUniqueID();
 }

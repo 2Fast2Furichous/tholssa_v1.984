@@ -48,7 +48,12 @@ public class ServerCommunicator {
         return response;
 
     }
-
+    /**
+     * handles the errors that occur on the front end
+     * @param gson the gson
+     * @param response the response that is given
+     * @return a Service Response 
+     */
     public static ServiceResponse handleError(Gson gson, JsonObject response) {
         String title = "error";
         String errorMessage = gson.fromJson(response.get("content"), String.class);

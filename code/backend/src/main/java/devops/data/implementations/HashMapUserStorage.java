@@ -15,7 +15,7 @@ public class HashMapUserStorage implements UserStorage{
     private HashMap<String, User> accounts;
 
     /**
-     * Zero-parameter constructor
+     * Constructor that stores the user accounts 
      * 
      * @precondition none
      * @postcondition getAccounts() != null

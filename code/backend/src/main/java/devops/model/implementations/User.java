@@ -19,7 +19,8 @@ public class User {
 
     /**
      * 
-     * 5-parameter constructor.
+     * Constructor that creates a user with a firstName, lastName,
+     * dateOfBirth, phoneNumber and a uniqueId
      * 
      * 
      * @precondition firstName != null AND !firstName.isBlank() AND lastName !=

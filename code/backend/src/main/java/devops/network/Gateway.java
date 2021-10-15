@@ -49,7 +49,7 @@ public class Gateway extends Thread {
 	private boolean serverIsActive;
 
 	/**
-	 * Default constructor.
+	 * Constructor that create the Gateway for the system
 	 * 
 	 * @precondition none
 	 * @postcondition All default values have been initialized.
@@ -130,7 +130,7 @@ public class Gateway extends Thread {
         context.close();
 		
 	}
-
+	
 	private void handleShutdownServer(){
 		while (true){
 			try (BufferedReader reader = new BufferedReader(

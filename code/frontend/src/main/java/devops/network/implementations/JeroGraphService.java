@@ -26,7 +26,10 @@ import devops.network.utils.ServerCommunicator;
 
 public class JeroGraphService implements GraphService {
 	private Gson gson;
-	
+	/**
+	 * Constructor thata creates a Jero Graph service that serializes
+	 * and deserializes 
+	 */
 	public JeroGraphService(){
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.serializeNulls();

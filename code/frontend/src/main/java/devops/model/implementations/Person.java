@@ -59,6 +59,7 @@ public class Person implements Comparable<Person> {
 	}
 
 	/**
+	 * Gets the Y position
 	 * @return the positionY
 	 */
 	public double getPositionY() {
@@ -66,6 +67,7 @@ public class Person implements Comparable<Person> {
 	}
 
 	/**
+	 * Gets the X position
 	 * @return the positionX
 	 */
 	public double getPositionX() {

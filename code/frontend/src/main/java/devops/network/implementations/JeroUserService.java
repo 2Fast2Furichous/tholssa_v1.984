@@ -23,7 +23,7 @@ public class JeroUserService implements UserService {
 	private Gson gson;
 
 	/**
-	 * Default constructor.
+	 * Constructor that creates a Jero User service
 	 * 
 	 * @precondition none
 	 * @postcondition Default values have been initialized.

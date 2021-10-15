@@ -17,7 +17,7 @@ public class UserService {
     private UserStorage users;
 
     /**
-     * Zero-paramerer constructor.
+     * Costructor that creates the User Service
      * 
      * @precondition none
      * @postcondition getUsers() != null
