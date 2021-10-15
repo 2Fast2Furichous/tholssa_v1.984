@@ -13,7 +13,7 @@ public class Credentials {
     private String username;
 
     /**
-     * Two-parameter constructor.
+     * Constructor for Cradentials for the password and username
      * 
      * @precondition !password.isBlank() AND password != null AND& !username.isBlank() AND username != null
      * @postcondition getPassword() == password && getUsername() == username

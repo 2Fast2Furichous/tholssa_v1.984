@@ -55,7 +55,15 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * @param value
 	 */
 	public void setValue(E value);
-
+	
+	/**
+	 * Returns the UniqueId
+	 * 
+	 * @preconditon none
+	 * @postconditons none
+	 * 
+	 * @return the unique id
+	 */
 	public String getUniqueID();
 
 	/**

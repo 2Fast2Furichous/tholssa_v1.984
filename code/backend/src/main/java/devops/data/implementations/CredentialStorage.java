@@ -14,7 +14,8 @@ public class CredentialStorage {
     private HashMap<Credentials, String> accessKeys;
 
     /**
-     * Zero-parameter constructor
+     * Constructor for all of the access keys 
+     * to login into the main system
      * 
      * @precondition none
      * @postcondition getAccounts() != null

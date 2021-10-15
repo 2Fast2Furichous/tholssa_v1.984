@@ -15,7 +15,7 @@ public class PersonNetwork {
 	Collection<PersonNode> nodes;
 
 	/**
-	 * Zero parameter constructor
+	 * Constructor that creates the Person Network
 	 * 
 	 * @preconditions none
 	 * @postconditions getEdges() != null && getNodes() != null
@@ -27,7 +27,7 @@ public class PersonNetwork {
 	}
 
 	/**
-	 * Zero parameter constructor
+	 * Constructor that creates the Person Network with nodes and edges
 	 * 
 	 * @preconditions nodes != null && edges != null
 	 * @postconditions getEdges() == edges && getNodes() == nodes
@@ -44,7 +44,11 @@ public class PersonNetwork {
 		this.edges = edges;
 		this.nodes = nodes;
 	}
-
+	/**
+	 * adds an edge to a node
+	 * @param edge
+	 * @return true if the edge is added false otherwise
+	 */
 	public boolean addEdge(PersonEdge edge) {
 		if (edge == null) {
 			throw new IllegalArgumentException("Edge must not be null");
@@ -52,7 +56,11 @@ public class PersonNetwork {
 		return this.edges.add(edge);
 	}
 
-
+	/**
+	 * adds a node to the graph
+	 * @param node
+	 * @return true if the node is added false otherwise
+	 */
 	public boolean addNode(PersonNode node) {
 		if (node == null) {
 			throw new IllegalArgumentException("Node must not be null");
@@ -60,12 +68,18 @@ public class PersonNetwork {
 		return this.nodes.add(node);
 	}
 
-
+	/**
+	 * gets the edges 
+	 * @return a collection of edges
+	 */
 	public Collection<PersonEdge> getEdges() {
 		return this.edges;
 	}
 
-
+	/**
+	 * gets the nodes
+	 * @return a  collection of nodes
+	 */
 	public Collection<PersonNode> getNodes() {
 		return this.nodes;
 	}
