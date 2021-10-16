@@ -170,12 +170,16 @@ public class MainWindow {
 
     }
 
+    private void addSubmitNodeInputValidation(){
+        this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty().or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
+    }
+
     @FXML
     void submitNode(ActionEvent event) {
 
         PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
 
-        String nicname = this.nickname.getText();
+        String nickname = this.nickname.getText();
         String firstName = this.firstName.getText();
         String lastName = this.lastName.getText();
         String address = this.address.getText();
@@ -186,10 +190,12 @@ public class MainWindow {
         String description = this.description.getText();
 
         ServiceResponse response = App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
-                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nicname, firstName, lastName, address,
+                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nickname, firstName, lastName, address,
                 phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
         PersonNode updatedNode = (PersonNode) response.getData();
+
         this.selectedNode.setUserData(updatedNode);
+        this.selectedNode.textProperty().set(nickname);
     }
 
     @FXML
@@ -203,6 +209,11 @@ public class MainWindow {
 
     @FXML
     void initialize() {
+        this.makeGraph();
+        this.addSubmitNodeInputValidation();
+    }
+
+    private void makeGraph() {
         try {
             Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
             ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
@@ -212,9 +223,8 @@ public class MainWindow {
             HashMap<String, Line> lineMap = new HashMap<String, Line>();
 
             for (PersonNode node : network.getNodes()) {
-
                 Person currentPerson = node.getValue();
-                JFXButton nodeButton = createNode("family", currentPerson.getPositionX(), currentPerson.getPositionY());
+                JFXButton nodeButton = createNode("node", currentPerson.getPositionX(), currentPerson.getPositionY());
 
                 nodeButton.setUserData(node);
                 nodeMap.put(node.getUniqueID(), nodeButton);
@@ -239,7 +249,7 @@ public class MainWindow {
 
             addNodeMenuItem.setOnAction(event -> {
                 contextMenu.hide();
-                requestCreateNode("family", mousePoint.x, mousePoint.y);
+                requestCreateNode("empty node", mousePoint.x, mousePoint.y);
             });
 
             tholssaGraph.setOnMouseClicked(mouseEvent -> {
@@ -273,6 +283,9 @@ public class MainWindow {
         this.dateOfDeath.setValue(currentPerson.getDateOfDeath());
         this.occupation.setText(currentPerson.getOccupation());
         this.description.setText(currentPerson.getDescription());
+        this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
+        this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
+        this.selectedNode.textProperty().setValue(currentPerson.getNickname());
     }
 
     private void deselectNode() {
@@ -419,9 +432,7 @@ public class MainWindow {
         });
 
         currentEdge.setOnMouseClicked(mouseEvent -> {
-            // if (MouseButton.SECONDARY.equals(mouseEvent.getButton())) {
             contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
-            // }
         });
     }
 
