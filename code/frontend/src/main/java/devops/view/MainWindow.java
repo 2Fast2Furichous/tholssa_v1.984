@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 
@@ -85,8 +86,14 @@ public class MainWindow {
     private JFXButton startNode;
 
     private PersonNode rootNode;
-
+    
     private JFXButton selectedNode;
+
+    @FXML
+    private JFXCheckBox familyFilter;
+
+    @FXML
+    private JFXButton applyFiltersButton;
 
     /**
      * Zero-parameter constructor.
@@ -98,76 +105,6 @@ public class MainWindow {
     public MainWindow() {
         this.rootNode = null;
         this.selectedNode = null;
-    }
-
-    @FXML
-    void handleAddress(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleDateOfBirth(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleDateOfDeath(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleDescription(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleFirstName(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLastName(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLocationX(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLocationY(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleNickname(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleOccupation(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handlePhoneNumber(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRelation(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRelationEndDate(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRelationStartDate(ActionEvent event) {
-
     }
 
     private void addSubmitNodeInputValidation(){
@@ -209,13 +146,23 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        this.makeGraph();
+        this.makeGraph(new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
     }
 
-    private void makeGraph() {
+    @FXML
+    void handleApplyFilters(ActionEvent event) {
+        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+        if (this.familyFilter.isSelected()){
+            filters.add(NodeFilter.Family);
+        }
+
+        this.makeGraph(filters);
+    }
+
+    private void makeGraph(Collection<NodeFilter> filters) {
         try {
-            Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+             
             ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
             PersonNetwork network = (PersonNetwork) response.getData();
 
