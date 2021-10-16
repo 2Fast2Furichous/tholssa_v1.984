@@ -94,7 +94,6 @@ public class JeroUserService implements UserService {
 	
 		String firstName = this.gson.fromJson(response.get("userFirstName"), String.class);
 		String lastName = this.gson.fromJson(response.get("userLastName"), String.class);
-		System.out.println(this.gson.fromJson(response.get("userDateOfBirth"), String.class));
 		LocalDate dateOfBirth = LocalDate.parse(this.gson.fromJson(response.get("userDateOfBirth"), String.class));
 		String phoneNumber = this.gson.fromJson(response.get("userPhoneNumber"), String.class);
 		return new ServiceResponse(new UserAccount(firstName, lastName, dateOfBirth, phoneNumber));
