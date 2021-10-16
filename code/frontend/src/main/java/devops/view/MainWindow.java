@@ -180,12 +180,19 @@ public class MainWindow {
 
     }
 
+    private void addSubmitNodeInputValidation(){
+        this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty().or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
+    }
+
     @FXML
     void submitNode(ActionEvent event) {
+        if (this.selectedNode == null) {
+            return;
+        }
 
         PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
 
-        String nicname = this.nickname.getText();
+        String nickname = this.nickname.getText();
         String firstName = this.firstName.getText();
         String lastName = this.lastName.getText();
         String address = this.address.getText();
@@ -196,10 +203,12 @@ public class MainWindow {
         String description = this.description.getText();
 
         ServiceResponse response = App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
-                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nicname, firstName, lastName, address,
+                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nickname, firstName, lastName, address,
                 phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
         PersonNode updatedNode = (PersonNode) response.getData();
+
         this.selectedNode.setUserData(updatedNode);
+        this.selectedNode.textProperty().set(nickname);
     }
 
     @FXML
@@ -213,11 +222,15 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        
+        this.makeGraph();
+        this.addSubmitNodeInputValidation();
+    }
+
+    private void makeGraph() {
         this.canvas = new PannableCanvas();
         this.canvas.setPrefSize(tholssaGraph.getPrefWidth(), this.tholssaGraph.getPrefHeight());
         tholssaGraph.getChildren().add(this.canvas);
-        
+
         this.nodeGestures = new NodeGestures(this.canvas);
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addNodeMenuItem = new MenuItem("Add Node");
@@ -230,19 +243,19 @@ public class MainWindow {
             contextMenu.hide();
 
             Point2D relPoint = canvas.sceneToLocal(clickPoint.mouseAnchorX, clickPoint.mouseAnchorY);
-            requestCreateNode("family", relPoint.getX(), relPoint.getY());
+            requestCreateNode(relPoint.getX(), relPoint.getY());
         });
 
-        tholssaGraph.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+        tholssaGraph.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     clickPoint.mouseAnchorX = mouseEvent.getSceneX();
                     clickPoint.mouseAnchorY = mouseEvent.getSceneY();
-          
+
                     contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
                     deselectNode();
-                
+
                 }
             }
         });
@@ -251,7 +264,6 @@ public class MainWindow {
         tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-        
 
         try {
             Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
@@ -262,10 +274,9 @@ public class MainWindow {
             HashMap<String, Line> lineMap = new HashMap<String, Line>();
 
             for (PersonNode node : network.getNodes()) {
-
                 Person currentPerson = node.getValue();
-                JFXButton nodeButton = createNode("family", currentPerson.getPositionX(), currentPerson.getPositionY());
-
+                JFXButton nodeButton = createNode(currentPerson.getPositionX(), currentPerson.getPositionY());
+                nodeButton.textProperty().set(currentPerson.getNickname());
                 nodeButton.setUserData(node);
                 nodeMap.put(node.getUniqueID(), nodeButton);
             }
@@ -301,13 +312,15 @@ public class MainWindow {
         this.occupation.setText(currentPerson.getOccupation());
         this.description.setText(currentPerson.getDescription());
 
+        this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
+        this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
     }
 
     private void deselectNode() {
         this.selectedNode = null;
     }
 
-    private void nodeDrag(JFXButton currentNode, String type) {
+    private void nodeDrag(JFXButton currentNode) {
 
         currentNode.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -380,17 +393,17 @@ public class MainWindow {
         currentNode.setContextMenu(contextMenu);
     }
 
-    private void requestCreateNode(String type, double originX, double originY) {
-        JFXButton nodeButton = createNode(type, originX, originY);
+    private void requestCreateNode(double originX, double originY) {
+        JFXButton nodeButton = createNode(originX, originY);
 
-        ServiceResponse response = App.getGraphService().createNode(originX, originY, null, null, null, null, null,
+        ServiceResponse response = App.getGraphService().createNode(originX, originY, "unknown", null, null, null, null,
                 null, null, null, null);
         nodeButton.setUserData(response.getData());
+        nodeButton.textProperty().set("unknown");
     }
 
-    private JFXButton createNode(String type, double originX, double originY) {
+    private JFXButton createNode(double originX, double originY) {
         JFXButton nodeButton = new JFXButton();
-        nodeButton.setText(type);
         nodeButton.setStyle(
                 "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;");
         nodeButton.setTranslateX(originX);
@@ -398,7 +411,7 @@ public class MainWindow {
 
         this.canvas.getChildren().add(nodeButton);
 
-        nodeDrag(nodeButton, type);
+        nodeDrag(nodeButton);
         setupNodeContextMenu(nodeButton);
         return nodeButton;
     }
