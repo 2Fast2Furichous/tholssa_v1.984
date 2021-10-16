@@ -82,6 +82,12 @@ public class MainWindow {
     @FXML
     private JFXButton submitNode;
 
+    @FXML
+    private JFXTextField searchTextField;
+
+    @FXML
+    private JFXButton searchButton;
+
     private JFXButton startNode;
 
     private PersonNode rootNode;
@@ -255,6 +261,17 @@ public class MainWindow {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    @FXML
+    void handleSearch(ActionEvent event) {
+        String textFromSearchTextField = this.searchTextField.getText();
+        for(var currNode: this.tholssaGraph.getChildren()){
+            
+        }
+        
+
+        
     }
 
     private void selectNode(JFXButton node) {

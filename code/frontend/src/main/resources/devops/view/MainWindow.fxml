@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane style="-fx-background-color: black; -fx-border-color: white;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+<GridPane prefHeight="560.0" prefWidth="757.0" style="-fx-background-color: black; -fx-border-color: white;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
       <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
@@ -141,5 +141,11 @@
          </GridPane.margin>
       </Accordion>
       <JFXButton fx:id="submitNode" buttonType="RAISED" onAction="#submitNode" style="-fx-background-color: #16ae58;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <JFXTextField fx:id="searchTextField" style="-fx-background-color: #16ae58;" GridPane.columnIndex="1" />
+      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnIndex="1">
+         <GridPane.margin>
+            <Insets left="90.0" top="60.0" />
+         </GridPane.margin>
+      </JFXButton>
    </children>
 </GridPane>
