@@ -17,6 +17,7 @@ import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
+import devops.model.implementations.Relationship;
 import devops.model.implementations.ServiceResponse;
 import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
@@ -146,7 +147,7 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        this.makeGraph(new ArrayList<NodeFilter>());
+        this.makeGraph("", new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
     }
 
@@ -156,14 +157,16 @@ public class MainWindow {
         if (this.familyFilter.isSelected()){
             filters.add(NodeFilter.Family);
         }
-
-        this.makeGraph(filters);
+        if (this.rootNode != null) {
+            this.tholssaGraph.getChildren().clear();
+            this.makeGraph(this.rootNode.getUniqueID(), filters);
+        }
     }
 
-    private void makeGraph(Collection<NodeFilter> filters) {
+    private void makeGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
         try {
              
-            ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
+            ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
             PersonNetwork network = (PersonNetwork) response.getData();
 
             HashMap<String, JFXButton> nodeMap = new HashMap<String, JFXButton>();
@@ -413,7 +416,7 @@ public class MainWindow {
         PersonNode destinationNode = (PersonNode) destinationButton.getUserData();
 
         ServiceResponse response = App.getGraphService().connectNodes(sourceNode.getUniqueID(),
-                destinationNode.getUniqueID(), null, null, null);
+                destinationNode.getUniqueID(), Relationship.Parent, null, null);
         edge.setUserData(response.getData());
     }
 
