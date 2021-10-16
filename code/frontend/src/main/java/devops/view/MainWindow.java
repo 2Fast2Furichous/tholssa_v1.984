@@ -179,7 +179,7 @@ public class MainWindow {
 
         PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
 
-        String nicname = this.nickname.getText();
+        String nickname = this.nickname.getText();
         String firstName = this.firstName.getText();
         String lastName = this.lastName.getText();
         String address = this.address.getText();
@@ -190,12 +190,12 @@ public class MainWindow {
         String description = this.description.getText();
 
         ServiceResponse response = App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
-                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nicname, firstName, lastName, address,
+                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nickname, firstName, lastName, address,
                 phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
         PersonNode updatedNode = (PersonNode) response.getData();
 
         this.selectedNode.setUserData(updatedNode);
-        this.selectedNode.textProperty().set(nicname);
+        this.selectedNode.textProperty().set(nickname);
     }
 
     @FXML
