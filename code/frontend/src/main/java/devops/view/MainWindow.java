@@ -271,81 +271,7 @@ public class MainWindow {
     void handleSearch(ActionEvent event) {
         String textFromSearchTextField = this.searchTextField.getText();
 
-        ArrayList<Node> containsSearchText = new ArrayList<Node>();
-
-       
-        //System.out.println(textFromSearchTextField);
-
-        for(Node currNode: this.tholssaGraph.getChildren()){
-            //System.out.println("here");
-            PersonNode currentNode = (PersonNode) currNode.getUserData();
-            //System.out.println("here1");
-            Person currentPerson = currentNode.getValue();
-            //System.out.println("here2");
-            //System.out.println(currentPerson.getFirstName());
-           
-        
-            if(currentPerson.getFirstName() == null){
-                continue;
-            }
-            if(currentPerson.getLastName() == null){
-                continue;
-            }
-            if(currentPerson.getAddress() == null){
-                continue;
-            }
-            if(currentPerson.getNickname() == null){
-                continue;
-            }
-            if(currentPerson.getOccupation() == null){
-                continue;
-            }
-            if(currentPerson.getDescription() == null){
-                continue;
-            }
-            if(currentPerson.getDateOfBirth() == null){
-                continue;
-            }
-            if(currentPerson.getDateOfDeath() == null){
-                continue;
-            }
-            if(currentPerson.getPhoneNumber() == null){
-                continue;
-            }
-
-            System.out.println(currentPerson.getFirstName().contains("k")); 
-
-            if(currentPerson.getFirstName().contains(textFromSearchTextField)){
-                System.out.println("here1");
-                containsSearchText.add(currNode);
-                continue;
-            }
-            if(currentPerson.getLastName().contains(textFromSearchTextField)){
-                System.out.println("here2");
-                containsSearchText.add(currNode);
-                continue;
-                
-            }
-            if(currentPerson.getAddress().contains(textFromSearchTextField)){
-                System.out.println("here3");
-                containsSearchText.add(currNode);
-                continue;
-            }
-            if(currentPerson.getNickname().contains(textFromSearchTextField)){
-                System.out.println("here4");
-                containsSearchText.add(currNode);
-                continue;
-            }
-            if(currentPerson.getOccupation().contains(textFromSearchTextField)){
-                System.out.println("here5");
-                containsSearchText.add(currNode);
-                continue;
-            }
-            if(currentPerson.getDescription().contains(textFromSearchTextField)){
-                System.out.println("here6");
-                containsSearchText.add(currNode);
-                continue;
-            }
+            
 
             // if(currentPerson.getDateOfBirth().isEqual(LocalDate.parse(textFromSearchTextField))){
             //     containsSearchText.add(currNode);
@@ -353,26 +279,19 @@ public class MainWindow {
             // if(currentPerson.getDateOfDeath().isEqual(LocalDate.parse(textFromSearchTextField))){
             //     containsSearchText.add(currNode);
             // }
-            if(currentPerson.getPhoneNumber().contains(textFromSearchTextField)){
-                containsSearchText.add(currNode);
+           
+            
+        
+        for(var tholssaNode : this.tholssaGraph.getChildren()){
+            PersonNode currentNode = (PersonNode) tholssaNode.getUserData();
+            Person currentPerson = currentNode.getValue();
+            if(!currentPerson.getFirstName().contains(textFromSearchTextField) && !currentPerson.getLastName().contains(textFromSearchTextField)&&
+            !currentPerson.getNickname().contains(textFromSearchTextField) && !currentPerson.getAddress().contains(textFromSearchTextField) &&
+            !currentPerson.getOccupation().contains(textFromSearchTextField) && !currentPerson.getDescription().contains(textFromSearchTextField)&&
+            !currentPerson.getPhoneNumber().contains(textFromSearchTextField)){
+                tholssaNode.setStyle("visibility:hidden");
             }
-            // if(!node.getText().equals(textFromSearchTextField)){
-            //     nodesToRemove.add(currNode);
-            // }
         }
-        
-       
-        //this.tholssaGraph.getChildren().clear();
-        
-        for(Node currNode: containsSearchText){
-            //System.out.println(currNode.getId());
-            for(var tholssaNode : this.tholssaGraph.getChildren()){
-                if(currNode != tholssaNode){
-                    tholssaNode.setStyle("visibility:hidden");
-                }
-            }
-          // this.tholssaGraph.getChildren().add(currNode);
-        }     
     }
 
     @FXML
