@@ -99,7 +99,8 @@ public class MainWindow {
     private JFXButton selectedNode;
 
     /**
-     * Zero-parameter constructor.
+     * Constructor for Main Window 
+     * creates the main window and sets the root node
      * 
      * @precondition none
      * @postcondition none
@@ -270,28 +271,21 @@ public class MainWindow {
     @FXML
     void handleSearch(ActionEvent event) {
         String textFromSearchTextField = this.searchTextField.getText();
-
-            
-
-            // if(currentPerson.getDateOfBirth().isEqual(LocalDate.parse(textFromSearchTextField))){
-            //     containsSearchText.add(currNode);
-            // }
-            // if(currentPerson.getDateOfDeath().isEqual(LocalDate.parse(textFromSearchTextField))){
-            //     containsSearchText.add(currNode);
-            // }
            
-            
-        
         for(var tholssaNode : this.tholssaGraph.getChildren()){
             PersonNode currentNode = (PersonNode) tholssaNode.getUserData();
             Person currentPerson = currentNode.getValue();
-            if(!currentPerson.getFirstName().contains(textFromSearchTextField) && !currentPerson.getLastName().contains(textFromSearchTextField)&&
-            !currentPerson.getNickname().contains(textFromSearchTextField) && !currentPerson.getAddress().contains(textFromSearchTextField) &&
-            !currentPerson.getOccupation().contains(textFromSearchTextField) && !currentPerson.getDescription().contains(textFromSearchTextField)&&
-            !currentPerson.getPhoneNumber().contains(textFromSearchTextField)){
+            if(checkForMatchToSearchValue(textFromSearchTextField, currentPerson)){
                 tholssaNode.setStyle("visibility:hidden");
             }
         }
+    }
+
+    private boolean checkForMatchToSearchValue(String textFromSearchTextField, Person currentPerson) {
+        return !currentPerson.getFirstName().contains(textFromSearchTextField) && !currentPerson.getLastName().contains(textFromSearchTextField)&&
+        !currentPerson.getNickname().contains(textFromSearchTextField) && !currentPerson.getAddress().contains(textFromSearchTextField) &&
+        !currentPerson.getOccupation().contains(textFromSearchTextField) && !currentPerson.getDescription().contains(textFromSearchTextField)&&
+        !currentPerson.getPhoneNumber().contains(textFromSearchTextField);
     }
 
     @FXML
