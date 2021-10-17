@@ -20,6 +20,7 @@ import devops.model.implementations.ServiceResponse;
 import devops.utils.FXRouter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
@@ -87,6 +88,9 @@ public class MainWindow {
 
     @FXML
     private JFXButton searchButton;
+
+    @FXML
+    private JFXButton showButton;
 
     private JFXButton startNode;
 
@@ -266,13 +270,118 @@ public class MainWindow {
     @FXML
     void handleSearch(ActionEvent event) {
         String textFromSearchTextField = this.searchTextField.getText();
-        for(var currNode: this.tholssaGraph.getChildren()){
-            
+
+        ArrayList<Node> containsSearchText = new ArrayList<Node>();
+
+       
+        //System.out.println(textFromSearchTextField);
+
+        for(Node currNode: this.tholssaGraph.getChildren()){
+            //System.out.println("here");
+            PersonNode currentNode = (PersonNode) currNode.getUserData();
+            //System.out.println("here1");
+            Person currentPerson = currentNode.getValue();
+            //System.out.println("here2");
+            //System.out.println(currentPerson.getFirstName());
+           
+        
+            if(currentPerson.getFirstName() == null){
+                continue;
+            }
+            if(currentPerson.getLastName() == null){
+                continue;
+            }
+            if(currentPerson.getAddress() == null){
+                continue;
+            }
+            if(currentPerson.getNickname() == null){
+                continue;
+            }
+            if(currentPerson.getOccupation() == null){
+                continue;
+            }
+            if(currentPerson.getDescription() == null){
+                continue;
+            }
+            if(currentPerson.getDateOfBirth() == null){
+                continue;
+            }
+            if(currentPerson.getDateOfDeath() == null){
+                continue;
+            }
+            if(currentPerson.getPhoneNumber() == null){
+                continue;
+            }
+
+            System.out.println(currentPerson.getFirstName().contains("k")); 
+
+            if(currentPerson.getFirstName().contains(textFromSearchTextField)){
+                System.out.println("here1");
+                containsSearchText.add(currNode);
+                continue;
+            }
+            if(currentPerson.getLastName().contains(textFromSearchTextField)){
+                System.out.println("here2");
+                containsSearchText.add(currNode);
+                continue;
+                
+            }
+            if(currentPerson.getAddress().contains(textFromSearchTextField)){
+                System.out.println("here3");
+                containsSearchText.add(currNode);
+                continue;
+            }
+            if(currentPerson.getNickname().contains(textFromSearchTextField)){
+                System.out.println("here4");
+                containsSearchText.add(currNode);
+                continue;
+            }
+            if(currentPerson.getOccupation().contains(textFromSearchTextField)){
+                System.out.println("here5");
+                containsSearchText.add(currNode);
+                continue;
+            }
+            if(currentPerson.getDescription().contains(textFromSearchTextField)){
+                System.out.println("here6");
+                containsSearchText.add(currNode);
+                continue;
+            }
+
+            // if(currentPerson.getDateOfBirth().isEqual(LocalDate.parse(textFromSearchTextField))){
+            //     containsSearchText.add(currNode);
+            // }
+            // if(currentPerson.getDateOfDeath().isEqual(LocalDate.parse(textFromSearchTextField))){
+            //     containsSearchText.add(currNode);
+            // }
+            if(currentPerson.getPhoneNumber().contains(textFromSearchTextField)){
+                containsSearchText.add(currNode);
+            }
+            // if(!node.getText().equals(textFromSearchTextField)){
+            //     nodesToRemove.add(currNode);
+            // }
         }
         
-
+       
+        //this.tholssaGraph.getChildren().clear();
         
+        for(Node currNode: containsSearchText){
+            //System.out.println(currNode.getId());
+            for(var tholssaNode : this.tholssaGraph.getChildren()){
+                if(currNode != tholssaNode){
+                    tholssaNode.setStyle("visibility:hidden");
+                }
+            }
+          // this.tholssaGraph.getChildren().add(currNode);
+        }     
     }
+
+    @FXML
+    void handleShow(ActionEvent event) {
+        for(var tholssaNode : this.tholssaGraph.getChildren()){
+            tholssaNode.setStyle("-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;" );
+        }
+    }
+
 
     private void selectNode(JFXButton node) {
         this.selectedNode = node;
