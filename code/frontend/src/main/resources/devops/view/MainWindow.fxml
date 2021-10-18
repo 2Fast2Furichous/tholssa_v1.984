@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane prefHeight="560.0" prefWidth="757.0" style="-fx-background-color: black; -fx-border-color: white;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+<GridPane prefHeight="441.0" prefWidth="1027.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
-      <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="200.0" />
+      <ColumnConstraints hgrow="ALWAYS" percentWidth="65.0" />
+      <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
+      <ColumnConstraints hgrow="ALWAYS" percentWidth="15.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-      <RowConstraints vgrow="SOMETIMES" />
-      <RowConstraints minHeight="30.0" vgrow="NEVER" />
+      <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="35.0" vgrow="SOMETIMES" />
+      <RowConstraints percentHeight="90.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="30.0" percentHeight="5.0" vgrow="NEVER" />
       <RowConstraints />
    </rowConstraints>
    <children>
-      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets left="20.0" />
-         </GridPane.margin>
-      </JFXButton>
-      <AnchorPane fx:id="tholssaGraph" prefHeight="409.0" prefWidth="555.0" style="-fx-background-color: black; -fx-border-color: white;" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <AnchorPane fx:id="tholssaGraph" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.rowIndex="1" GridPane.rowSpan="2">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </AnchorPane>
-      <Accordion style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <AnchorPane layoutX="11.0" layoutY="11.0" prefHeight="409.0" prefWidth="555.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3" />
+      <AnchorPane layoutX="11.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <AnchorPane layoutX="677.0" layoutY="581.0" prefHeight="409.0" prefWidth="555.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <panes>
           <TitledPane animated="false" text="General">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: black;">
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
                      <children>
                         <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columnConstraints>
@@ -58,24 +59,24 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <JFXTextField editable="false" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Nickname" unFocusColor="WHITE" GridPane.columnIndex="1" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="13.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="First Name" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <JFXTextField editable="false" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Last Name" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <JFXTextField editable="false" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Address" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <JFXTextField editable="false" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Phone#" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="133.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Date of Birth" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <JFXTextField editable="false" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Date of Death" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="193.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Occupation" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="223.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Description" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                              <JFXTextField fx:id="nickname" onAction="#handleNickname" promptText="nickname" style="-fx-background-color: white;" GridPane.columnIndex="2" />
-                              <JFXTextField fx:id="firstName" onAction="#handleFirstName" promptText="first name" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <JFXTextField fx:id="lastName" layoutX="75.0" layoutY="43.0" onAction="#handleLastName" promptText="last name" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <JFXTextField fx:id="address" layoutX="90.0" layoutY="73.0" onAction="#handleAddress" promptText="address" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <JFXTextField fx:id="phoneNumber" layoutX="90.0" layoutY="103.0" onAction="#handlePhoneNumber" promptText="phone #" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <JFXTextField fx:id="occupation" layoutX="90.0" layoutY="193.0" onAction="#handleOccupation" promptText="occupation" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                              <JFXTextField fx:id="description" layoutX="90.0" layoutY="223.0" onAction="#handleDescription" promptText="description" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                              <DatePicker fx:id="dateOfBirth" onAction="#handleDateOfBirth" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <DatePicker fx:id="dateOfDeath" onAction="#handleDateOfDeath" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <JFXTextField fx:id="nickname" promptText="nickname" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" />
+                              <JFXTextField fx:id="firstName" promptText="first name" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <JFXTextField fx:id="lastName" layoutX="75.0" layoutY="43.0" promptText="last name" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <JFXTextField fx:id="address" layoutX="90.0" layoutY="73.0" promptText="address" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <JFXTextField fx:id="phoneNumber" layoutX="90.0" layoutY="103.0" promptText="phone #" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <JFXTextField fx:id="occupation" layoutX="90.0" layoutY="193.0" promptText="occupation" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                              <JFXTextField fx:id="description" layoutX="90.0" layoutY="223.0" promptText="description" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                              <DatePicker fx:id="dateOfBirth" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <DatePicker fx:id="dateOfDeath" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Nickname" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                              <Label style="-fx-text-fill: #16ae58;" text="First Name" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Last Name" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Address" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Phone #" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Birth Date" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Death Date" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Occupation" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Description" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
                            </children>
                         </GridPane>
                      </children>
@@ -84,7 +85,7 @@
           </TitledPane>
           <TitledPane animated="false" text="Relationship">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: black;">
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
                      <children>
                         <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columnConstraints>
@@ -98,12 +99,12 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <JFXTextField editable="false" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Relation" unFocusColor="WHITE" GridPane.columnIndex="1" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="13.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Date Start" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="43.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: white;" text="Date End" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <JFXComboBox fx:id="relation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleRelation" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-                              <DatePicker fx:id="relationStartDate" onAction="#handleRelationStartDate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <DatePicker fx:id="relationEndDate" layoutX="85.0" layoutY="43.0" onAction="#handleRelationEndDate" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <JFXComboBox fx:id="relation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                              <DatePicker fx:id="relationStartDate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="relationEndDate" layoutX="85.0" layoutY="43.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Relation" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Date Begin" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Date End" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </children>
@@ -112,7 +113,7 @@
           </TitledPane>
           <TitledPane animated="false" text="Location">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: black;">
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
                      <children>
                         <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
@@ -125,10 +126,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <JFXTextField editable="false" focusColor="WHITE" style="-fx-text-fill: white;" text="X:" unFocusColor="WHITE" GridPane.columnIndex="1" />
-                              <JFXTextField editable="false" focusColor="WHITE" layoutX="10.0" layoutY="13.0" style="-fx-text-fill: white;" text="Y:" unFocusColor="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <JFXTextField fx:id="locationX" onAction="#handleLocationX" promptText="location_x" style="-fx-background-color: white;" GridPane.columnIndex="2" />
-                              <JFXTextField fx:id="locationY" onAction="#handleLocationY" promptText="location_y" style="-fx-background-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label style="-fx-text-fill: #16ae58;" text="X:" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                              <JFXTextField fx:id="locationX" promptText="X-Location" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" />
+                              <JFXTextField fx:id="locationY" promptText="Y-Location" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label style="-fx-text-fill: #16ae58;" text="Y:" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -141,15 +142,49 @@
          </GridPane.margin>
       </Accordion>
       <JFXButton fx:id="submitNode" buttonType="RAISED" onAction="#submitNode" style="-fx-background-color: #16ae58;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <JFXTextField fx:id="searchTextField" style="-fx-background-color: #16ae58;" GridPane.columnIndex="1" />
-      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnIndex="1">
+      <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+         <content>
+            <AnchorPane style="-fx-background-color: black;">
+               <children>
+                  <GridPane layoutX="21.7" layoutY="21.7" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="80.0" prefWidth="20.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <JFXCheckBox fx:id="familyFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Family Only" textFill="#16ae58" unCheckedColor="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </TitledPane>
+      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
          <GridPane.margin>
-            <Insets left="90.0" top="60.0" />
+            <Insets left="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnIndex="1">
+      <JFXButton fx:id="applyFiltersButton" buttonType="RAISED" onAction="#handleApplyFilters" style="-fx-background-color: #16ae58; -fx-border-color: #16ae58;" text="Apply Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
          <GridPane.margin>
-            <Insets left="20.0" top="60.0" />
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </JFXButton>
+      <JFXTextField fx:id="searchTextField" style="-fx-background-color: #16ae58;" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></JFXTextField>
+      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin>
+      </JFXButton>
+      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnIndex="2" GridPane.halignment="LEFT">
+         <GridPane.margin>
+            <Insets left="20.0" />
          </GridPane.margin>
       </JFXButton>
    </children>
