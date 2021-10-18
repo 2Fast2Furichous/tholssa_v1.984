@@ -1,4 +1,4 @@
-package devops.Storage.interfaces;
+package devops.storage.interfaces;
 
 import java.util.Collection;
 

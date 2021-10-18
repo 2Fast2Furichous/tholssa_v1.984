@@ -1,6 +1,7 @@
 package devops.services.graph_service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -47,5 +48,17 @@ public class TestRemoveNode {
 		assertNull(this.service.getNode(guid2));
 		assertEquals(person, node1.getValue());
 		assertEquals(person, node2.getValue());
+	}
+
+	@Test
+	public void When_Edge_Added_Expect_Removal() {
+		Person person = new Person(0, 0, null, null, null, null, null, null, null, null, null);
+		String guid1 = this.service.createNode(person);
+		String guid2 = this.service.createNode(person);
+
+		String edgeGuid = this.service.connectNodes(guid1, guid2, null, null, null);
+
+		GraphNode<Person> node1 = this.service.removeNode(guid1);
+		assertFalse(node1.getEdges().contains(edgeGuid));
 	}
 }

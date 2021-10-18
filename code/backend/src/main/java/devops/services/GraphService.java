@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import devops.Storage.implementations.StorageHash;
-import devops.Storage.interfaces.Storage;
 import devops.model.implementations.NodeFilter;
 import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
@@ -17,6 +15,8 @@ import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
 import devops.model.interfaces.GraphEdge;
 import devops.model.interfaces.GraphNode;
+import devops.storage.implementations.StorageHash;
+import devops.storage.interfaces.Storage;
 
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges

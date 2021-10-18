@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import devops.Storage.interfaces.Storage;
 import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNode;
 import devops.services.GraphService;
+import devops.storage.interfaces.Storage;
 
 public class TestConstructor {
 	

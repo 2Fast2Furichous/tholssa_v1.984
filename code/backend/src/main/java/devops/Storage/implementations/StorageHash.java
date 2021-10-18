@@ -1,10 +1,10 @@
-package devops.Storage.implementations;
+package devops.storage.implementations;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-import devops.Storage.interfaces.Storage;
-import devops.Storage.interfaces.Unique;
+import devops.storage.interfaces.Storage;
+import devops.storage.interfaces.Unique;
 
 /**
  * A hashmap implementation for object management
