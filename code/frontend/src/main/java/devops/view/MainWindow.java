@@ -24,20 +24,38 @@ import devops.view.Elements.DragContext;
 import devops.view.Elements.NodeGestures;
 import devops.view.Elements.PannableCanvas;
 import devops.view.Elements.SceneGestures;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 public class MainWindow {
+
+    /**
+     *
+     */
+    private static final String HIDDEN_STYLE = "visibility:hidden";
+
+    /**
+     *
+     */
+    private static final String DEFAULT_NODE_STYLE = "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
 
     @FXML
     private JFXButton logoutButton;
@@ -105,6 +123,12 @@ public class MainWindow {
     @FXML
     private AnchorPane tholssaGraph;
 
+    @FXML
+    private ColumnConstraints infoColumn;
+
+    @FXML
+    private ColumnConstraints filterColumn;
+
     private JFXButton startNode;
 
     private PersonNode rootNode;
@@ -170,14 +194,24 @@ public class MainWindow {
 
     @FXML
     void initialize() {
+
         this.setupGraph();
         this.populateGraph("", new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
+
+        this.infoColumn.maxWidthProperty().set(0);
+        this.infoColumn.minWidthProperty().set(0);
+
+        this.filterColumn.maxWidthProperty().set(0);
+        this.filterColumn.minWidthProperty().set(0);
     }
 
     private void setupGraph() {
         this.canvas = new PannableCanvas();
-        this.canvas.setPrefSize(tholssaGraph.getPrefWidth(), this.tholssaGraph.getPrefHeight());
+        this.canvas.setPrefSize(this.tholssaGraph.getPrefWidth(), this.tholssaGraph.getPrefHeight());
+        this.canvas.setTranslateX(this.tholssaGraph.getPrefWidth() / 2);
+        this.canvas.setTranslateY(this.tholssaGraph.getPrefHeight() / 2);
+
         this.tholssaGraph.getChildren().add(this.canvas);
 
         this.nodeGestures = new NodeGestures(this.canvas);
@@ -195,24 +229,26 @@ public class MainWindow {
             requestCreateNode(relPoint.getX(), relPoint.getY());
         });
 
-        tholssaGraph.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getClickCount() == 2) {
+                if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 2) {
                     clickPoint.mouseAnchorX = mouseEvent.getSceneX();
                     clickPoint.mouseAnchorY = mouseEvent.getSceneY();
 
                     contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                }
+                if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 1) {
                     deselectNode();
-
                 }
             }
         });
 
         SceneGestures sceneGestures = new SceneGestures(canvas);
-        tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
-        tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-        tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
+        this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
+        this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
+        this.tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
+
     }
 
     @FXML
@@ -230,6 +266,8 @@ public class MainWindow {
 
     private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
         this.canvas.getChildren().clear();
+        this.canvas.addGrid();
+
         try {
 
             ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
@@ -244,7 +282,6 @@ public class MainWindow {
                 nodeButton.textProperty().set(currentPerson.getNickname());
                 nodeButton.setUserData(node);
                 nodeMap.put(node.getUniqueID(), nodeButton);
-                System.out.println(node.getUniqueID());
             }
 
             for (PersonEdge edge : network.getEdges()) {
@@ -264,31 +301,61 @@ public class MainWindow {
     @FXML
     void handleSearch(ActionEvent event) {
         String textFromSearchTextField = this.searchTextField.getText();
-
-        for (var tholssaNode : this.tholssaGraph.getChildren()) {
-            PersonNode currentNode = (PersonNode) tholssaNode.getUserData();
-            Person currentPerson = currentNode.getValue();
-            if (checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
-                tholssaNode.setStyle("visibility:hidden");
+        var visibleNodes = new ArrayList<Node>();
+        var hiddenNodes = new ArrayList<Node>();
+        if (textFromSearchTextField == null || textFromSearchTextField.isBlank()) {
+            visibleNodes.addAll(this.canvas.getChildren());
+        } else {
+            for (var tholssaNode : this.canvas.getChildren()) {
+                var nodeData = tholssaNode.getUserData();
+                if (nodeData instanceof PersonNode) {
+                    PersonNode currentNode = (PersonNode) nodeData;
+                    Person currentPerson = currentNode.getValue();
+                    if (!checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
+                        hiddenNodes.add(tholssaNode);
+                    } else {
+                        visibleNodes.add(tholssaNode);
+                    }
+                } else if (nodeData instanceof PersonEdge) {
+                    hiddenNodes.add(tholssaNode);
+                }
             }
+        }
+
+        for (var tholssaNode : visibleNodes) {
+            tholssaNode.setStyle(DEFAULT_NODE_STYLE);
+        }
+        for (var tholssaNode : hiddenNodes) {
+            tholssaNode.setStyle(HIDDEN_STYLE);
         }
     }
 
     private boolean checkForMatchToSearchValue(String textFromSearchTextField, Person currentPerson) {
-        return !currentPerson.getFirstName().contains(textFromSearchTextField)
-                && !currentPerson.getLastName().contains(textFromSearchTextField)
-                && !currentPerson.getNickname().contains(textFromSearchTextField)
-                && !currentPerson.getAddress().contains(textFromSearchTextField)
-                && !currentPerson.getOccupation().contains(textFromSearchTextField)
-                && !currentPerson.getDescription().contains(textFromSearchTextField)
-                && !currentPerson.getPhoneNumber().contains(textFromSearchTextField);
+
+        return (currentPerson.getNickname() != null ? currentPerson.getNickname().contains(textFromSearchTextField)
+                : false)
+                || (currentPerson.getFirstName() != null
+                        ? currentPerson.getFirstName().contains(textFromSearchTextField)
+                        : false)
+                || (currentPerson.getLastName() != null ? currentPerson.getLastName().contains(textFromSearchTextField)
+                        : false)
+                || (currentPerson.getAddress() != null ? currentPerson.getAddress().contains(textFromSearchTextField)
+                        : false)
+                || (currentPerson.getDescription() != null
+                        ? currentPerson.getDescription().contains(textFromSearchTextField)
+                        : false)
+                || (currentPerson.getOccupation() != null
+                        ? currentPerson.getOccupation().contains(textFromSearchTextField)
+                        : false)
+                || (currentPerson.getPhoneNumber() != null
+                        ? currentPerson.getPhoneNumber().contains(textFromSearchTextField)
+                        : false);
     }
 
     @FXML
     void handleShow(ActionEvent event) {
-        for (var tholssaNode : this.tholssaGraph.getChildren()) {
-            tholssaNode.setStyle(
-                    "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;");
+        for (var tholssaNode : this.canvas.getChildren()) {
+            tholssaNode.setStyle(DEFAULT_NODE_STYLE);
         }
     }
 
@@ -311,10 +378,33 @@ public class MainWindow {
 
         this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
         this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
+
+        Timeline timelineDown = new Timeline();
+
+        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+
+        final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
+
+        timelineDown.getKeyFrames().add(kfDwn);
+
+        timelineDown.play();
+
     }
 
     private void deselectNode() {
         this.selectedNode = null;
+
+        Timeline timelineDown = new Timeline();
+
+        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), 0);
+        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), 0);
+
+        final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
+
+        timelineDown.getKeyFrames().add(kfDwn);
+
+        timelineDown.play();
     }
 
     private void setupDrag(JFXButton currentNode) {
@@ -356,12 +446,10 @@ public class MainWindow {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem removeMenuItem = new MenuItem("Remove");
         MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
-        MenuItem addInformationMenuItem = new MenuItem("Add Information");
         MenuItem setAsRootNodeMenuItem = new MenuItem("Set as Root Node");
 
         contextMenu.getItems().add(removeMenuItem);
         contextMenu.getItems().add(addEdgeMenuItem);
-        contextMenu.getItems().add(addInformationMenuItem);
         contextMenu.getItems().add(setAsRootNodeMenuItem);
 
         removeMenuItem.setOnAction(event -> {
@@ -379,15 +467,36 @@ public class MainWindow {
             contextMenu.hide();
         });
 
-        addInformationMenuItem.setOnAction(event -> {
-            // Add prompt
-        });
-
         setAsRootNodeMenuItem.setOnAction(event -> {
-            this.rootNode = (PersonNode) currentNode.getUserData();
+            this.setRootNode((PersonNode) currentNode.getUserData());
         });
 
         currentNode.setContextMenu(contextMenu);
+    }
+
+    private void setRootNode(PersonNode node) {
+        this.rootNode = node;
+
+        if (node == null) {
+            Timeline timelineDown = new Timeline();
+            KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(), 0);
+            KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(), 0);
+
+            KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
+            timelineDown.getKeyFrames().add(kfDwn);
+            timelineDown.play();
+        } else {
+            Timeline timelineDown = new Timeline();
+            KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
+                    filterColumn.prefWidthProperty().doubleValue());
+            KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(),
+                    filterColumn.prefWidthProperty().doubleValue());
+
+            KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
+            timelineDown.getKeyFrames().add(kfDwn);
+            timelineDown.play();
+        }
+
     }
 
     private void requestCreateNode(double originX, double originY) {
@@ -401,15 +510,17 @@ public class MainWindow {
 
     private JFXButton createNode(double originX, double originY) {
         JFXButton nodeButton = new JFXButton();
-        nodeButton.setStyle(
-                "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;");
+        nodeButton.setStyle(DEFAULT_NODE_STYLE);
         nodeButton.setTranslateX(originX);
         nodeButton.setTranslateY(originY);
+        nodeButton.setMinWidth(100);
 
         this.canvas.getChildren().add(nodeButton);
+        nodeButton.toFront();
 
         setupDrag(nodeButton);
         setupNodeContextMenu(nodeButton);
+
         return nodeButton;
     }
 
@@ -430,15 +541,16 @@ public class MainWindow {
         line.setStrokeWidth(5);
         line.setStroke(Color.web("#16ae58"));
 
-        line.startXProperty().bind(sourceButton.translateXProperty());
-        line.startYProperty().bind(sourceButton.translateYProperty());
+        line.startXProperty().bind(sourceButton.translateXProperty().add(sourceButton.widthProperty().divide(2)));
+        line.startYProperty().bind(sourceButton.translateYProperty().add(sourceButton.heightProperty().divide(2)));
 
-        line.endXProperty().bind(destinationButton.translateXProperty());
-        line.endYProperty().bind(destinationButton.translateYProperty());
-
-        line.toBack();
+        line.endXProperty()
+                .bind(destinationButton.translateXProperty().add(destinationButton.widthProperty().divide(2)));
+        line.endYProperty()
+                .bind(destinationButton.translateYProperty().add(destinationButton.heightProperty().divide(2)));
 
         this.canvas.getChildren().add(line);
+        line.toBack();
         return line;
     }
 

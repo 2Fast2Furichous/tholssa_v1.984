@@ -14,32 +14,32 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane prefHeight="441.0" prefWidth="1027.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+<GridPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS" percentWidth="65.0" />
-      <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0" />
-      <ColumnConstraints hgrow="ALWAYS" percentWidth="15.0" />
+      <ColumnConstraints hgrow="ALWAYS" />
+      <ColumnConstraints fx:id="infoColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
+      <ColumnConstraints fx:id="filterColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="35.0" vgrow="SOMETIMES" />
-      <RowConstraints percentHeight="90.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="30.0" percentHeight="5.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="35.0" minHeight="35.0" vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="35.0" minHeight="35.0" vgrow="NEVER" />
       <RowConstraints />
    </rowConstraints>
    <children>
-      <AnchorPane fx:id="tholssaGraph" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <AnchorPane fx:id="tholssaGraph" minHeight="0.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.rowIndex="1" GridPane.rowSpan="2">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </AnchorPane>
-      <AnchorPane layoutX="11.0" layoutY="11.0" prefHeight="409.0" prefWidth="555.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3" />
-      <AnchorPane layoutX="11.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <AnchorPane layoutX="677.0" layoutY="581.0" prefHeight="409.0" prefWidth="555.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <AnchorPane layoutX="11.0" layoutY="11.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3" />
+      <AnchorPane layoutX="11.0" layoutY="46.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <AnchorPane layoutX="677.0" layoutY="581.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Accordion maxHeight="1.7976931348623157E308" minWidth="0.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <panes>
           <TitledPane animated="false" text="General">
             <content>
-              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
+              <AnchorPane style="-fx-background-color: black;">
                      <children>
                         <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columnConstraints>
@@ -85,7 +85,7 @@
           </TitledPane>
           <TitledPane animated="false" text="Relationship">
             <content>
-              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
+              <AnchorPane style="-fx-background-color: black;">
                      <children>
                         <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <columnConstraints>
@@ -113,7 +113,7 @@
           </TitledPane>
           <TitledPane animated="false" text="Location">
             <content>
-              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
+              <AnchorPane style="-fx-background-color: black;">
                      <children>
                         <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columnConstraints>
@@ -141,12 +141,12 @@
             <Insets />
          </GridPane.margin>
       </Accordion>
-      <JFXButton fx:id="submitNode" buttonType="RAISED" onAction="#submitNode" style="-fx-background-color: #16ae58;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+      <JFXButton fx:id="submitNode" buttonType="RAISED" minWidth="0.0" onAction="#submitNode" style="-fx-background-color: #16ae58;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <TitledPane animated="false" maxHeight="1.7976931348623157E308" minWidth="0.0" text="Filters" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <content>
             <AnchorPane style="-fx-background-color: black;">
                <children>
-                  <GridPane layoutX="21.7" layoutY="21.7" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane layoutX="21.7" layoutY="21.7" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
                         <ColumnConstraints />
                         <ColumnConstraints hgrow="ALWAYS" minWidth="80.0" prefWidth="20.0" />
@@ -155,7 +155,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <JFXCheckBox fx:id="familyFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Family Only" textFill="#16ae58" unCheckedColor="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                        <JFXCheckBox fx:id="familyFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Family Only" textFill="#16ae58" unCheckedColor="#16ae58" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
                      </children>
                   </GridPane>
                </children>
@@ -167,24 +167,25 @@
             <Insets left="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXButton fx:id="applyFiltersButton" buttonType="RAISED" onAction="#handleApplyFilters" style="-fx-background-color: #16ae58; -fx-border-color: #16ae58;" text="Apply Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <JFXButton fx:id="applyFiltersButton" buttonType="RAISED" minWidth="0.0" onAction="#handleApplyFilters" style="-fx-background-color: #16ae58; -fx-border-color: #16ae58;" text="Apply Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
       <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets left="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXTextField fx:id="searchTextField" style="-fx-background-color: #16ae58;" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+      <JFXTextField fx:id="searchTextField" maxWidth="300.0" style="-fx-background-color: #16ae58;" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
-            <Insets />
-         </GridPane.margin></JFXTextField>
-      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+            <Insets right="160.0" />
+         </GridPane.margin>
+      </JFXTextField>
+      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
             <Insets right="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnIndex="2" GridPane.halignment="LEFT">
+      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
-            <Insets left="20.0" />
+            <Insets right="90.0" />
          </GridPane.margin>
       </JFXButton>
    </children>
