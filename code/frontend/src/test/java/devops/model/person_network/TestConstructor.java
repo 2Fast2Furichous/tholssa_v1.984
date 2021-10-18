@@ -2,6 +2,7 @@ package devops.model.person_network;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,5 +35,26 @@ public class TestConstructor {
 
 		assertEquals(nodes, testNetwork.getNodes());
 		assertEquals(edges, testNetwork.getEdges());
+	}
+
+	@Test
+	void testNullNodes() {
+		Collection<PersonNode> nodes = new ArrayList<PersonNode>();
+		Collection<PersonEdge> edges = new ArrayList<PersonEdge>();
+
+		assertThrows(IllegalArgumentException.class, () -> {
+			PersonNetwork testNetwork = new PersonNetwork(null, edges);
+		});
+
+	}
+
+	@Test
+	void testNullEdges() {
+		Collection<PersonNode> nodes = new ArrayList<PersonNode>();
+		Collection<PersonEdge> edges = new ArrayList<PersonEdge>();
+
+		assertThrows(IllegalArgumentException.class, () -> {
+			PersonNetwork testNetwork = new PersonNetwork(nodes, null);
+		});
 	}
 }

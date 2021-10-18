@@ -1,4 +1,4 @@
-package devops.Storage.interfaces;
+package devops.storage.interfaces;
 
 /**
  * A object that has a unique key.

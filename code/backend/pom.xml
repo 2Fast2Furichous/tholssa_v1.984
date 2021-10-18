@@ -136,13 +136,9 @@
 									<includes>
 										<include>devops.model</include>
                     <include>devops.data</include>
-                    <include>devops.network</include>
                     <include>devops.services</include>
-                    <include>devops.Storage</include>
+                    <include>devops.storage</include>
 									</includes>
-									<!--excludes>
-										<exclude>edu.westga.cs3211.a2.test</exclude>
-									</excludes-->
 									<limits>
 										<limit>
 											<counter>LINE</counter>

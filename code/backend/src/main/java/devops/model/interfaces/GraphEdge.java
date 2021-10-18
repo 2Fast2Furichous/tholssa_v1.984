@@ -1,6 +1,6 @@
 package devops.model.interfaces;
 
-import devops.Storage.interfaces.Unique;
+import devops.storage.interfaces.Unique;
 
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges
