@@ -12,28 +12,21 @@ public class PannableCanvas extends Pane {
 	DoubleProperty myScale = new SimpleDoubleProperty(1.0);
 
 	public PannableCanvas() {
-
-		setPrefSize(500, 500);
-		//setStyle("-fx-background-color: lightgrey; -fx-border-color: blue;");
-
-		// add scale transform
+		setPrefSize(1000, 1000);
 		scaleXProperty().bind(myScale);
 		scaleYProperty().bind(myScale);
 
 	}
 
-	/**
-	 * Add a grid to the canvas, send it to back
-	 */
+
 	public void addGrid() {
 
 		double w = getBoundsInLocal().getWidth();
 		double h = getBoundsInLocal().getHeight();
 
-		// add grid
+
 		Canvas grid = new Canvas(w, h);
 
-		// don't catch mouse events
 		grid.setMouseTransparent(true);
 
 		GraphicsContext gc = grid.getGraphicsContext2D();
@@ -41,12 +34,11 @@ public class PannableCanvas extends Pane {
 		gc.setStroke(Color.GRAY);
 		gc.setLineWidth(1);
 
-		// draw grid lines
-		double offset = 50;
+
+		double offset = 100;
 		for (double i = offset; i < w; i += offset) {
-			// vertical
+
 			gc.strokeLine(i, 0, i, h);
-			// horizontal
 			gc.strokeLine(0, i, w, i);
 		}
 
