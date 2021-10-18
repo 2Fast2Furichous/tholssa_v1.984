@@ -165,5 +165,11 @@
          </content>
       </TitledPane>
       <JFXButton fx:id="applyFiltersButton" buttonType="RAISED" onAction="#handleApplyFilters" style="-fx-background-color: #16ae58; -fx-border-color: #16ae58;" text="Apply Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <AnchorPane layoutX="11.0" layoutY="46.0" prefHeight="409.0" prefWidth="555.0" style="-fx-background-color: black; -fx-border-color: white;" GridPane.columnSpan="2" />
+      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </JFXButton>
    </children>
 </GridPane>
