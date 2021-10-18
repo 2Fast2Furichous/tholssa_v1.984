@@ -251,7 +251,7 @@ public class GraphService {
 		if (filters.isEmpty()) {
 			filteredNetwork = new PersonNetwork(this.nodeStorage.getAll(), this.edgeStorage.getAll());
 		} else {
-			GraphNode<Person> rootNode = this.nodeStorage.get(rootNodeGuid);
+			PersonNode rootNode = this.nodeStorage.get(rootNodeGuid);
 			Predicate<GraphEdge<Person>> nodePredicate = new NodeFilterPredicate(filters);
 			filteredNetwork = this.floodFill(rootNode, nodePredicate);
 		}
@@ -259,10 +259,11 @@ public class GraphService {
 		return filteredNetwork;
 	}
 
-	private PersonNetwork floodFill(GraphNode<Person> rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
+	private PersonNetwork floodFill(PersonNode rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
 		PersonNetwork newNetwork = new PersonNetwork();
 		LinkedList<GraphNode<Person>> queue = new LinkedList<GraphNode<Person>>();
 		HashSet<GraphNode<Person>> visited = new HashSet<GraphNode<Person>>();
+		newNetwork.addNode(rootNode);
 
 		queue.add(rootNode);
 		visited.add(rootNode);
@@ -272,6 +273,9 @@ public class GraphService {
 			for (String neighborEdgeID : currentNode.getEdges()) {
 				PersonEdge neighborEdge = this.edgeStorage.get(neighborEdgeID);
 				PersonNode neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
+				if (neighborNode == currentNode) {
+					neighborNode = this.nodeStorage.get(neighborEdge.getSource());
+				}
 				if (!visited.contains(neighborNode) && nodePredicate.test(neighborEdge)) {
 					newNetwork.addEdge(neighborEdge);
 					newNetwork.addNode(neighborNode);

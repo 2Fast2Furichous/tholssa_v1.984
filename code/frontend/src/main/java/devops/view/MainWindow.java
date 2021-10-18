@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 
@@ -16,6 +17,7 @@ import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
+import devops.model.implementations.Relationship;
 import devops.model.implementations.ServiceResponse;
 import devops.utils.FXRouter;
 import devops.view.Elements.DragContext;
@@ -85,14 +87,20 @@ public class MainWindow {
     @FXML
     private JFXButton submitNode;
 
+    @FXML
+    private JFXCheckBox familyFilter;
+
+    @FXML
+    private JFXButton applyFiltersButton;
+
+    @FXML
+    private AnchorPane tholssaGraph;
+
     private JFXButton startNode;
 
     private PersonNode rootNode;
 
     private JFXButton selectedNode;
-
-    @FXML
-    private AnchorPane tholssaGraph;
 
     private NodeGestures nodeGestures;
 
@@ -107,81 +115,12 @@ public class MainWindow {
      */
     public MainWindow() {
         this.rootNode = null;
-       
-    }
-
-    @FXML
-    void handleAddress(ActionEvent event) {
 
     }
 
-    @FXML
-    void handleDateOfBirth(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleDateOfDeath(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleDescription(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleFirstName(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLastName(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLocationX(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLocationY(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleNickname(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleOccupation(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handlePhoneNumber(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRelation(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRelationEndDate(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRelationStartDate(ActionEvent event) {
-
-    }
-
-    private void addSubmitNodeInputValidation(){
-        this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty().or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
+    private void addSubmitNodeInputValidation() {
+        this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty()
+                .or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
     }
 
     @FXML
@@ -222,11 +161,23 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        this.makeGraph();
+        this.makeGraph("", new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
     }
 
-    private void makeGraph() {
+    @FXML
+    void handleApplyFilters(ActionEvent event) {
+        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+        if (this.familyFilter.isSelected()) {
+            filters.add(NodeFilter.Family);
+        }
+        if (this.rootNode != null) {
+            this.tholssaGraph.getChildren().clear();
+            this.makeGraph(this.rootNode.getUniqueID(), filters);
+        }
+    }
+
+    private void makeGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
         this.canvas = new PannableCanvas();
         this.canvas.setPrefSize(tholssaGraph.getPrefWidth(), this.tholssaGraph.getPrefHeight());
         tholssaGraph.getChildren().add(this.canvas);
@@ -266,8 +217,8 @@ public class MainWindow {
         tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 
         try {
-            Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
-            ServiceResponse response = App.getGraphService().getFilteredNetwork("", filters);
+
+            ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
             PersonNetwork network = (PersonNetwork) response.getData();
 
             HashMap<String, JFXButton> nodeMap = new HashMap<String, JFXButton>();
@@ -325,7 +276,7 @@ public class MainWindow {
         currentNode.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                
+
                 if (event.isPrimaryButtonDown()) {
                     if (MainWindow.this.startNode != null && MainWindow.this.startNode != currentNode) {
                         requestCreateEdge(MainWindow.this.startNode, currentNode);
@@ -424,7 +375,7 @@ public class MainWindow {
         PersonNode destinationNode = (PersonNode) destinationButton.getUserData();
 
         ServiceResponse response = App.getGraphService().connectNodes(sourceNode.getUniqueID(),
-                destinationNode.getUniqueID(), null, null, null);
+                destinationNode.getUniqueID(), Relationship.Parent, null, null);
         edge.setUserData(response.getData());
     }
 
