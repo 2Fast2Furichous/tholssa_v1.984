@@ -88,6 +88,15 @@ public class MainWindow {
     private JFXButton submitNode;
 
     @FXML
+    private JFXTextField searchTextField;
+
+    @FXML
+    private JFXButton searchButton;
+
+    @FXML
+    private JFXButton showButton;
+
+    @FXML
     private JFXCheckBox familyFilter;
 
     @FXML
@@ -107,7 +116,7 @@ public class MainWindow {
     private PannableCanvas canvas;
 
     /**
-     * Zero-parameter constructor.
+     * Constructor for Main Window creates the main window and sets the root node
      * 
      * @precondition none
      * @postcondition none
@@ -161,26 +170,15 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-        this.makeGraph("", new ArrayList<NodeFilter>());
+        this.setupGraph();
+        this.populateGraph("", new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
     }
 
-    @FXML
-    void handleApplyFilters(ActionEvent event) {
-        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
-        if (this.familyFilter.isSelected()) {
-            filters.add(NodeFilter.Family);
-        }
-        if (this.rootNode != null) {
-            this.tholssaGraph.getChildren().clear();
-            this.makeGraph(this.rootNode.getUniqueID(), filters);
-        }
-    }
-
-    private void makeGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
+    private void setupGraph() {
         this.canvas = new PannableCanvas();
         this.canvas.setPrefSize(tholssaGraph.getPrefWidth(), this.tholssaGraph.getPrefHeight());
-        tholssaGraph.getChildren().add(this.canvas);
+        this.tholssaGraph.getChildren().add(this.canvas);
 
         this.nodeGestures = new NodeGestures(this.canvas);
         ContextMenu contextMenu = new ContextMenu();
@@ -215,7 +213,23 @@ public class MainWindow {
         tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
+    }
 
+    @FXML
+    void handleApplyFilters(ActionEvent event) {
+        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+        if (this.rootNode != null) {
+            if (this.familyFilter.isSelected()) {
+                filters.add(NodeFilter.Family);
+            }
+            this.populateGraph(this.rootNode.getUniqueID(), filters);
+        } else {
+            this.populateGraph("", filters);
+        }
+    }
+
+    private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
+        this.canvas.getChildren().clear();
         try {
 
             ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
@@ -230,6 +244,7 @@ public class MainWindow {
                 nodeButton.textProperty().set(currentPerson.getNickname());
                 nodeButton.setUserData(node);
                 nodeMap.put(node.getUniqueID(), nodeButton);
+                System.out.println(node.getUniqueID());
             }
 
             for (PersonEdge edge : network.getEdges()) {
@@ -243,6 +258,37 @@ public class MainWindow {
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    void handleSearch(ActionEvent event) {
+        String textFromSearchTextField = this.searchTextField.getText();
+
+        for (var tholssaNode : this.tholssaGraph.getChildren()) {
+            PersonNode currentNode = (PersonNode) tholssaNode.getUserData();
+            Person currentPerson = currentNode.getValue();
+            if (checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
+                tholssaNode.setStyle("visibility:hidden");
+            }
+        }
+    }
+
+    private boolean checkForMatchToSearchValue(String textFromSearchTextField, Person currentPerson) {
+        return !currentPerson.getFirstName().contains(textFromSearchTextField)
+                && !currentPerson.getLastName().contains(textFromSearchTextField)
+                && !currentPerson.getNickname().contains(textFromSearchTextField)
+                && !currentPerson.getAddress().contains(textFromSearchTextField)
+                && !currentPerson.getOccupation().contains(textFromSearchTextField)
+                && !currentPerson.getDescription().contains(textFromSearchTextField)
+                && !currentPerson.getPhoneNumber().contains(textFromSearchTextField);
+    }
+
+    @FXML
+    void handleShow(ActionEvent event) {
+        for (var tholssaNode : this.tholssaGraph.getChildren()) {
+            tholssaNode.setStyle(
+                    "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;");
         }
     }
 
@@ -271,7 +317,7 @@ public class MainWindow {
         this.selectedNode = null;
     }
 
-    private void nodeDrag(JFXButton currentNode) {
+    private void setupDrag(JFXButton currentNode) {
 
         currentNode.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -362,7 +408,7 @@ public class MainWindow {
 
         this.canvas.getChildren().add(nodeButton);
 
-        nodeDrag(nodeButton);
+        setupDrag(nodeButton);
         setupNodeContextMenu(nodeButton);
         return nodeButton;
     }
