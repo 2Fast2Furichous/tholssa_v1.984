@@ -101,10 +101,20 @@ public class GraphService {
 	 */
 	public String connectNodes(String sourceGuid, String destinationGuid, Relationship relation,
 			LocalDate dateOfConnection, LocalDate dateOfConnectionEnd) {
-		String uniqueID = UUID.randomUUID().toString();
-
+		
 		GraphNode<Person> source = this.nodeStorage.get(sourceGuid);
+		
+		var existingEdge = source.getEdges().stream().filter((edgeUniqueID) -> {
+            PersonEdge currentEdge = this.edgeStorage.get(edgeUniqueID);
+            return currentEdge.getDestination().equals(destinationGuid);
+        }).findFirst();
+
+		if (existingEdge.isPresent()) {
+			return existingEdge.get();
+		}
+
 		GraphNode<Person> destination = this.nodeStorage.get(destinationGuid);
+		String uniqueID = UUID.randomUUID().toString();
 
 		PersonEdge newEdge = new PersonEdge(uniqueID, 
 				sourceGuid, destinationGuid, relation, dateOfConnection,
@@ -202,13 +212,12 @@ public class GraphService {
 	 * @throws IllegalArgumentException
 	 */
 	public PersonNode removeNode(String guid) {
-		PersonNode node = this.nodeStorage.remove(guid);
-
+		PersonNode node = this.nodeStorage.get(guid);
 		for (String edge : node.getEdges()) {
-			this.edgeStorage.remove(edge);
-			node.removeEdge(edge);
+			this.removeEdge(edge);
 		}
 
+		this.nodeStorage.remove(guid);
 		return node;
 	}
 
@@ -226,8 +235,8 @@ public class GraphService {
 	 */
 	public PersonEdge removeEdge(String guid) {
 		PersonEdge edge = this.edgeStorage.remove(guid);
-		GraphNode<Person> sourceNode = this.nodeStorage.get(edge.getSource());
-		GraphNode<Person> destinationNode = this.nodeStorage.get(edge.getDestination());
+		PersonNode sourceNode = this.nodeStorage.get(edge.getSource());
+		PersonNode destinationNode = this.nodeStorage.get(edge.getDestination());
 		sourceNode.removeEdge(guid);
 		destinationNode.removeEdge(guid);
 
@@ -248,7 +257,7 @@ public class GraphService {
 	public PersonNetwork getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters) {
 		PersonNetwork filteredNetwork;
 
-		if (filters.isEmpty()) {
+		if (rootNodeGuid == null || rootNodeGuid.isBlank() || filters.isEmpty() ) {
 			filteredNetwork = new PersonNetwork(this.nodeStorage.getAll(), this.edgeStorage.getAll());
 		} else {
 			PersonNode rootNode = this.nodeStorage.get(rootNodeGuid);
@@ -273,9 +282,6 @@ public class GraphService {
 			for (String neighborEdgeID : currentNode.getEdges()) {
 				PersonEdge neighborEdge = this.edgeStorage.get(neighborEdgeID);
 				PersonNode neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
-				if (neighborNode == currentNode) {
-					neighborNode = this.nodeStorage.get(neighborEdge.getSource());
-				}
 				if (!visited.contains(neighborNode) && nodePredicate.test(neighborEdge)) {
 					newNetwork.addEdge(neighborEdge);
 					newNetwork.addNode(neighborNode);
