@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -27,21 +28,24 @@ import devops.view.Elements.SceneGestures;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
@@ -56,6 +60,11 @@ public class MainWindow {
      *
      */
     private static final String DEFAULT_NODE_STYLE = "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
+
+
+    private static final String SELECTED_NODE_STYLE = "-fx-background-color: #6897bb; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
+
+    private static final String ROOT_NODE_STYLE = "-fx-background-color: #ea3645; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
 
     @FXML
     private JFXButton logoutButton;
@@ -88,7 +97,7 @@ public class MainWindow {
     private DatePicker dateOfDeath;
 
     @FXML
-    private JFXComboBox<?> relation;
+    private JFXComboBox<Relationship> relation;
 
     @FXML
     private DatePicker relationStartDate;
@@ -129,15 +138,20 @@ public class MainWindow {
     @FXML
     private ColumnConstraints filterColumn;
 
-    private JFXButton startNode;
+    @FXML
+    private TitledPane relationshipPane;
 
-    private PersonNode rootNode;
+    private JFXButton rootNode;
 
     private JFXButton selectedNode;
 
     private NodeGestures nodeGestures;
 
     private PannableCanvas canvas;
+
+    private HashMap<String, Group> lineMap;
+
+    private HashMap<String, JFXButton> nodeMap;
 
     /**
      * Constructor for Main Window creates the main window and sets the root node
@@ -148,6 +162,8 @@ public class MainWindow {
      */
     public MainWindow() {
         this.rootNode = null;
+        this.nodeMap = new HashMap<String, JFXButton>();
+        this.lineMap = new HashMap<String, Group>();
 
     }
 
@@ -163,7 +179,7 @@ public class MainWindow {
         }
 
         PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
-
+        String nodeUniqueID = currentNode.getUniqueID();
         String nickname = this.nickname.getText();
         String firstName = this.firstName.getText();
         String lastName = this.lastName.getText();
@@ -174,13 +190,44 @@ public class MainWindow {
         String occupation = this.occupation.getText();
         String description = this.description.getText();
 
-        ServiceResponse response = App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
-                this.selectedNode.getTranslateY(), currentNode.getUniqueID(), nickname, firstName, lastName, address,
-                phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
-        PersonNode updatedNode = (PersonNode) response.getData();
 
-        this.selectedNode.setUserData(updatedNode);
-        this.selectedNode.textProperty().set(nickname);
+        App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
+                this.selectedNode.getTranslateY(), nodeUniqueID, nickname, firstName, lastName, address,
+                phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
+
+        Relationship relation = this.relation.getValue();
+        LocalDate relationStartDate = this.relationStartDate.getValue();
+        LocalDate relationEndDate = this.relationEndDate.getValue();
+
+        var edge = this.findEdge(nodeUniqueID);
+        if (relation != null) {
+            if (edge.isPresent()) {
+                App.getGraphService().updateEdge(
+                        edge.get(), relation, relationStartDate, relationEndDate);
+
+            } else {
+                this.requestCreateEdge(this.rootNode, this.selectedNode, relation, relationStartDate, relationEndDate);
+            }
+        }
+        else if (edge.isPresent()) {
+            App.getGraphService().removeEdge(edge.get());
+        }
+
+        this.applyFilters();
+    }
+
+    private Optional<String> findEdge(String currentUniqueID) {
+        if (this.rootNode == null || currentUniqueID == null) {
+            return Optional.empty();
+        }
+        
+        PersonNode rootNode = (PersonNode) this.rootNode.getUserData();
+        
+        return rootNode.getEdges().stream().filter((edgeUniqueID) -> {
+            var line = this.lineMap.get(edgeUniqueID);
+            var currentEdge = (PersonEdge) line.getUserData();
+            return currentEdge.getDestination().equals(currentUniqueID);
+        }).findFirst();
     }
 
     @FXML
@@ -204,6 +251,9 @@ public class MainWindow {
 
         this.filterColumn.maxWidthProperty().set(0);
         this.filterColumn.minWidthProperty().set(0);
+
+        this.relation.getItems().add(null);
+        this.relation.getItems().addAll(Relationship.values());
     }
 
     private void setupGraph() {
@@ -239,7 +289,10 @@ public class MainWindow {
                     contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
                 }
                 if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 1) {
-                    deselectNode();
+                    MainWindow.this.deselectNode();
+                }
+                if (mouseEvent.isSecondaryButtonDown() && mouseEvent.getClickCount() == 2) {
+                    MainWindow.this.deselectRootNode();
                 }
             }
         });
@@ -253,12 +306,16 @@ public class MainWindow {
 
     @FXML
     void handleApplyFilters(ActionEvent event) {
-        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+       this.applyFilters();
+    }
+
+    private void applyFilters() {
+                Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
         if (this.rootNode != null) {
             if (this.familyFilter.isSelected()) {
                 filters.add(NodeFilter.Family);
             }
-            this.populateGraph(this.rootNode.getUniqueID(), filters);
+            this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters);
         } else {
             this.populateGraph("", filters);
         }
@@ -266,15 +323,14 @@ public class MainWindow {
 
     private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
         this.canvas.getChildren().clear();
-        this.canvas.addGrid();
+        //this.canvas.addGrid();
 
+        this.nodeMap.clear();
+        this.lineMap.clear();
         try {
 
             ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
             PersonNetwork network = (PersonNetwork) response.getData();
-
-            HashMap<String, JFXButton> nodeMap = new HashMap<String, JFXButton>();
-            HashMap<String, Line> lineMap = new HashMap<String, Line>();
 
             for (PersonNode node : network.getNodes()) {
                 Person currentPerson = node.getValue();
@@ -289,9 +345,22 @@ public class MainWindow {
                 JFXButton sourceButton = nodeMap.get(edge.getSource());
                 JFXButton destinationButton = nodeMap.get(edge.getDestination());
 
-                Line lineEdge = createEdge(sourceButton, destinationButton);
+                Group lineEdge = createEdge(sourceButton, destinationButton);
                 lineEdge.setUserData(edge);
                 lineMap.put(edge.getUniqueID(), lineEdge);
+            }
+
+            if (rootNodeGuid != null && !rootNodeGuid.isBlank()) {
+                var newRoot = nodeMap.get(rootNodeGuid);
+                this.rootNode = newRoot;
+                this.updateNodeStyle(this.rootNode);
+            }
+
+            if (this.selectedNode != null) {
+                var newSelected = nodeMap.get(((PersonNode) this.selectedNode.getUserData()).getUniqueID());
+                this.selectedNode = newSelected;
+                this.updateNodeStyle(this.selectedNode);
+
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -359,8 +428,25 @@ public class MainWindow {
         }
     }
 
+    private void updateNodeStyle(JFXButton node) {
+        if (node == null) {
+            return;
+        }
+        if (this.rootNode == node) {
+            node.setStyle(ROOT_NODE_STYLE);
+        } else if (this.selectedNode == node) {
+            node.setStyle(SELECTED_NODE_STYLE);
+        } else {
+            node.setStyle(DEFAULT_NODE_STYLE);
+        }
+    }
+
     private void selectNode(JFXButton node) {
+        JFXButton previousNode = this.selectedNode;
         this.selectedNode = node;
+
+        this.updateNodeStyle(previousNode);
+        this.updateNodeStyle(node);
 
         PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
         Person currentPerson = currentNode.getValue();
@@ -375,6 +461,24 @@ public class MainWindow {
         this.dateOfDeath.setValue(currentPerson.getDateOfDeath());
         this.occupation.setText(currentPerson.getOccupation());
         this.description.setText(currentPerson.getDescription());
+
+
+    
+        this.relationshipPane.setDisable(this.selectedNode == this.rootNode || this.rootNode == null);
+        var edge = this.findEdge(currentNode.getUniqueID());
+
+        if (edge.isPresent()) {
+            var edgeUniqueID = edge.get();
+            var line = this.lineMap.get(edgeUniqueID);
+            var currentEdge = (PersonEdge) line.getUserData();
+            this.relation.setValue(currentEdge.getRelation());
+            this.relationStartDate.setValue(currentEdge.getDateOfConnection());
+            this.relationEndDate.setValue(currentEdge.getDateOfConnectionEnd());
+        } else {
+            this.relation.setValue(null);
+            this.relationStartDate.setValue(null);
+            this.relationEndDate.setValue(null);
+        }
 
         this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
         this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
@@ -393,7 +497,10 @@ public class MainWindow {
     }
 
     private void deselectNode() {
+        JFXButton previousNode = this.selectedNode;
         this.selectedNode = null;
+
+        this.updateNodeStyle(previousNode);
 
         Timeline timelineDown = new Timeline();
 
@@ -414,10 +521,7 @@ public class MainWindow {
             public void handle(MouseEvent event) {
 
                 if (event.isPrimaryButtonDown()) {
-                    if (MainWindow.this.startNode != null && MainWindow.this.startNode != currentNode) {
-                        requestCreateEdge(MainWindow.this.startNode, currentNode);
-                        MainWindow.this.startNode = null;
-                    }
+                    
                     selectNode(currentNode);
                 }
             }
@@ -445,58 +549,63 @@ public class MainWindow {
     private void setupNodeContextMenu(JFXButton currentNode) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem removeMenuItem = new MenuItem("Remove");
-        MenuItem addEdgeMenuItem = new MenuItem("Add Edge");
         MenuItem setAsRootNodeMenuItem = new MenuItem("Set as Root Node");
 
         contextMenu.getItems().add(removeMenuItem);
-        contextMenu.getItems().add(addEdgeMenuItem);
         contextMenu.getItems().add(setAsRootNodeMenuItem);
 
         removeMenuItem.setOnAction(event -> {
             contextMenu.hide();
             PersonNode node = (PersonNode) currentNode.getUserData();
-            ServiceResponse response = App.getGraphService().removeNode(node.getUniqueID());
+            App.getGraphService().removeNode(node.getUniqueID());
 
-            if (!response.getData().equals("error")) {
-                this.canvas.getChildren().remove(currentNode);
-            }
+            this.canvas.getChildren().remove(currentNode);
+            this.applyFilters();
         });
 
-        addEdgeMenuItem.setOnAction(event -> {
-            MainWindow.this.startNode = currentNode;
-            contextMenu.hide();
-        });
 
         setAsRootNodeMenuItem.setOnAction(event -> {
-            this.setRootNode((PersonNode) currentNode.getUserData());
+            this.selectRootNode(currentNode);
         });
 
         currentNode.setContextMenu(contextMenu);
     }
 
-    private void setRootNode(PersonNode node) {
+    private void selectRootNode(JFXButton node) {
+        JFXButton previousNode = this.rootNode;
         this.rootNode = node;
 
-        if (node == null) {
-            Timeline timelineDown = new Timeline();
-            KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(), 0);
-            KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(), 0);
+        this.updateNodeStyle(previousNode);
+        this.updateNodeStyle(node);
 
-            KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
-            timelineDown.getKeyFrames().add(kfDwn);
-            timelineDown.play();
-        } else {
-            Timeline timelineDown = new Timeline();
-            KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
-                    filterColumn.prefWidthProperty().doubleValue());
-            KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(),
-                    filterColumn.prefWidthProperty().doubleValue());
+        Timeline timelineDown = new Timeline();
+        KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
+                filterColumn.prefWidthProperty().doubleValue());
+        KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(),
+                filterColumn.prefWidthProperty().doubleValue());
 
-            KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
-            timelineDown.getKeyFrames().add(kfDwn);
-            timelineDown.play();
-        }
+        KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
+        timelineDown.getKeyFrames().add(kfDwn);
+        timelineDown.play();
 
+        this.applyFilters();
+    }
+
+    private void deselectRootNode() {
+        JFXButton previousNode = this.rootNode;
+        this.rootNode = null;
+
+        this.updateNodeStyle(previousNode);
+
+        Timeline timelineDown = new Timeline();
+        KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(), 0);
+        KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(), 0);
+
+        KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
+        timelineDown.getKeyFrames().add(kfDwn);
+        timelineDown.play();
+
+        this.applyFilters();
     }
 
     private void requestCreateNode(double originX, double originY) {
@@ -504,8 +613,11 @@ public class MainWindow {
 
         ServiceResponse response = App.getGraphService().createNode(originX, originY, "unknown", null, null, null, null,
                 null, null, null, null);
-        nodeButton.setUserData(response.getData());
+        PersonNode node = (PersonNode) response.getData();
+        nodeButton.setUserData(node);
         nodeButton.textProperty().set("unknown");
+
+        nodeMap.put(node.getUniqueID(), nodeButton);
     }
 
     private JFXButton createNode(double originX, double originY) {
@@ -524,19 +636,22 @@ public class MainWindow {
         return nodeButton;
     }
 
-    private void requestCreateEdge(JFXButton sourceButton, JFXButton destinationButton) {
+    private void requestCreateEdge(JFXButton sourceButton, JFXButton destinationButton, Relationship relation, LocalDate relationStartDate, LocalDate relationEndDate) {
 
-        Line edge = createEdge(sourceButton, destinationButton);
+        Group edgeLine = createEdge(sourceButton, destinationButton);
 
         PersonNode sourceNode = (PersonNode) sourceButton.getUserData();
         PersonNode destinationNode = (PersonNode) destinationButton.getUserData();
 
         ServiceResponse response = App.getGraphService().connectNodes(sourceNode.getUniqueID(),
-                destinationNode.getUniqueID(), Relationship.Parent, null, null);
-        edge.setUserData(response.getData());
+                destinationNode.getUniqueID(), relation, relationStartDate, relationEndDate);
+        PersonEdge edge = (PersonEdge) response.getData();
+        edgeLine.setUserData(response.getData());
+
+        lineMap.put(edge.getUniqueID(), edgeLine);
     }
 
-    private Line createEdge(JFXButton sourceButton, JFXButton destinationButton) {
+    private Group createEdge(JFXButton sourceButton, JFXButton destinationButton) {
         Line line = new Line();
         line.setStrokeWidth(5);
         line.setStroke(Color.web("#16ae58"));
@@ -549,9 +664,41 @@ public class MainWindow {
         line.endYProperty()
                 .bind(destinationButton.translateYProperty().add(destinationButton.heightProperty().divide(2)));
 
-        this.canvas.getChildren().add(line);
-        line.toBack();
-        return line;
+        Circle circle = new Circle();
+        circle.setRadius(10);
+        circle.setStroke(Color.web("#16ae58"));
+
+        var deltaX = line.endXProperty().subtract(line.startXProperty());
+        var deltaY = line.endYProperty().subtract(line.startYProperty());
+
+        var xSqrd = deltaX.multiply(deltaX);
+        var ySqrd = deltaY.multiply(deltaY);
+
+        var sqrdSum = xSqrd.add(ySqrd);
+
+        DoubleBinding dist = new DoubleBinding() {
+        
+            {
+                super.bind(sqrdSum);
+            }
+        
+            @Override
+            protected double computeValue() {
+                return Math.sqrt(sqrdSum.get());
+            }
+        };
+
+        var unitX = deltaX.divide(dist);
+        var unitY = deltaY.divide(dist);
+
+        circle.centerXProperty().bind(line.endXProperty().add(unitX.multiply(-60)));
+        circle.centerYProperty().bind(line.endYProperty().add(unitY.multiply(-60)));
+        
+        Group arrow = new Group(line, circle);
+
+        this.canvas.getChildren().addAll(arrow);
+        arrow.toBack();
+        return arrow;
     }
 
 }
