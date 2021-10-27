@@ -1,0 +1,31 @@
+Coding Standards
+Naming Conventions
+	Classes
+		Camel-Case
+		Simple and descriptive
+	Interfaces
+		Like Classes
+	Methods
+		VERBS
+		Simple and descriptive
+	Variables
+		NOUNS unless using i, j, k, m for variable naming in equations
+	Constants
+		Use UPPER_CASE
+Testing Conventions
+	AAA
+	File Structure
+		test
+			className[Tests]
+				methodName
+	Test Naming
+		When_[event]_Expect_[outcome]
+Branch Management
+	Pull Request
+		Get a bot for notifications on discord
+	Feature Branches
+	Production + Development
+Communication
+	No talking about business after 11pm 
+	Discord primarily
+	Tuesday Thursday Saturday

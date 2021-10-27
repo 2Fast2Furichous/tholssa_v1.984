@@ -1,0 +1,167 @@
+Login
+
+Assumptions:
+	The user is not logged in to the system and the user has created an account.
+
+Primary Flow:
+	1. User enters credentials
+	2. System validates the credentials
+	3. User transitions to the main UI page
+
+Alternative Flow:
+	2a: Credentials are not valid
+		System returns a error message
+		Return to primary flow 1
+
+Create Account
+
+Assumptions:
+	User is not logged in to the system.
+
+Primary Flow:
+	1. User hits Create Account button
+	2. User enters information.
+	3. System validates the information.
+	4. System creates an account.
+	5. User is moved to the main UI.
+
+
+Alternative Flow:
+
+	2a:  User cancels account creation.
+	3a: User is returned to the login screen.
+	3b: System doesn’t validate the information
+	Return to Primary Flow 2.
+
+Add Node
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+
+Primary Flow:
+	1. User clicks a button
+	2. System creates a new node and stores
+	3. UI displays created node in the center of the screen.
+
+Alternative Flow:
+	None
+
+	As a user when I am on the main window I want to add a node
+		3a) When I select Family  a family node will display on the screen
+			
+		3b) When I select Business a business node will display on the screen
+3c) When I select Spouse a spouse node will display on the screen
+3d) When I select Friend a friend node will display on the screen
+
+Add Edge
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+
+Primary Flow:
+User right clicks on a node.
+User clicks a node button on the network view
+User holds and drags to another node
+System creates a new edge
+UI displays created edge between the nodes
+
+Alternative Flow:
+	None
+
+Remove Node
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+The system and UI already has a node in existence.
+
+Primary Flow:
+User right clicks on a node button
+User clicks the remove node option
+System removes the node
+UI removes the node
+
+Alternative Flow:
+	None
+
+Remove Edge
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+The system and UI already have an edge in existence.
+
+Primary Flow:
+User right clicks on an edge
+User clicks the remove edge option
+System removes the edge
+UI removes the edge
+
+Alternative Flow:
+	None
+
+Update Node
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+	The system and UI already have a node in existence.
+
+Primary Flow:
+User right-clicks a node.
+User selects the option to update node.
+User enters information
+System updates the node
+
+Alternative Flow:
+	2a) the user cancels the updates
+		UI returns to the main window
+
+Update Edge
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+	The system and UI already have an edge in existence.
+
+Primary Flow:
+User right-clicks an edge.
+User selects the option to update edge.
+User enters information
+System updates the edge
+
+Alternative Flow:
+	2a) the user cancels the updates
+		UI returns to the main window
+
+Search Person
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+
+Primary Flow:
+User enters the person they want to search for.
+System finds the node with the specified information.
+UI moves the graph to the found node.
+
+Alternative Flow:
+	2a. System has no nodes
+	3a. User is told no nodes were found
+	Return to normal flow.
+
+	2b. System doesn’t find a node with matching information.
+	3b. User is told no nodes were found
+	Return to normal flow.
+
+Filter Network
+
+Assumptions:
+	The user is logged in to the system and the user is on the main window.
+
+Primary Flow:
+User selects a node
+User selects multiple filters
+System provides filtered network
+UI displays filtered network of edges and nodes
+
+Alternative Flow:
+	2a) No filters selected
+		UI displays all nodes and edges
+3a) System does not find any nodes
+		UI displays no nodes and edges
