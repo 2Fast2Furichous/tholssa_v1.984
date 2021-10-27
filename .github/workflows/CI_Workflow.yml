@@ -1,0 +1,35 @@
+name: CI_Workflow
+
+# Controls when the workflow will run
+on: 
+  push:
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "test"
+  test:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Step 1 - Check out branch from GitHub
+        uses: actions/checkout@v2
+      - name: Step 2 - Set up JDK
+        uses: actions/setup-java@v2
+        with: 
+          java-version: 16
+          distribution: 'adopt'
+      - name: Step 3a - Test backend with Maven
+        run: |
+          echo Testing THOLSSA v1.984 backend
+          cd code/backend
+          mvn --batch-mode --update-snapshots verify
+          cd ../..
+      - name: Step 3b - Test frontend with Maven
+        run: |
+          echo Testing THOLSSA v1.984 frontend
+          cd code/frontend
+          mvn --batch-mode --update-snapshots verify
+          cd ../..
