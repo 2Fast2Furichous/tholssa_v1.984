@@ -26,10 +26,10 @@ jobs:
           echo Testing THOLSSA v1.984 backend
           cd code/backend
           mvn --batch-mode --update-snapshots verify
-          cd../..
+          cd ../..
       - name: Step 3b - Test frontend with Maven
         run: |
           echo Testing THOLSSA v1.984 frontend
           cd code/frontend
           mvn --batch-mode --update-snapshots verify
-          cd../..
+          cd ../..
