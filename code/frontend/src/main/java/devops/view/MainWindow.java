@@ -27,6 +27,8 @@ import devops.view.Elements.SceneGestures;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -128,6 +130,9 @@ public class MainWindow {
 
     @FXML
     private ColumnConstraints filterColumn;
+
+    @FXML
+    private JFXComboBox<String> searchResultsByName;
 
     private JFXButton startNode;
 
@@ -303,6 +308,8 @@ public class MainWindow {
         String textFromSearchTextField = this.searchTextField.getText();
         var visibleNodes = new ArrayList<Node>();
         var hiddenNodes = new ArrayList<Node>();
+        ObservableList<String> list = FXCollections.observableArrayList();
+        
         if (textFromSearchTextField == null || textFromSearchTextField.isBlank()) {
             visibleNodes.addAll(this.canvas.getChildren());
         } else {
@@ -314,6 +321,8 @@ public class MainWindow {
                     if (!checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
                         hiddenNodes.add(tholssaNode);
                     } else {
+                        list.add(currentPerson.getFirstName() +" "+ currentPerson.getLastName() +" "+ currentPerson.getNickname());
+                        this.searchResultsByName.setItems(list);
                         visibleNodes.add(tholssaNode);
                     }
                 } else if (nodeData instanceof PersonEdge) {
