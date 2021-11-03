@@ -198,6 +198,24 @@ public class MainWindow {
     }
 
     @FXML
+    void selectedSearchResultPerson(ActionEvent event) {
+        for (var tholssaNode : this.canvas.getChildren()) {
+            var nodeData = tholssaNode.getUserData();
+                if (nodeData instanceof PersonNode) {
+                    PersonNode currentNode = (PersonNode) nodeData;
+                    Person currentPerson = currentNode.getValue();
+                    if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
+                        this.setRootNode(currentNode);
+                        //this.canvas.setPivot(currentPerson.getPositionX(), currentPerson.getPositionY());
+                        this.canvas.setTranslateX(currentPerson.getPositionX() /2);
+                        this.canvas.setTranslateY(currentPerson.getPositionY()/2);
+                    }
+                } 
+        }
+       
+    }
+
+    @FXML
     void initialize() {
 
         this.setupGraph();
@@ -321,7 +339,7 @@ public class MainWindow {
                     if (!checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
                         hiddenNodes.add(tholssaNode);
                     } else {
-                        list.add(currentPerson.getFirstName() +" "+ currentPerson.getLastName() +" "+ currentPerson.getNickname());
+                        list.add(currentPerson.getFullNameWithNickname());
                         this.searchResultsByName.setItems(list);
                         visibleNodes.add(tholssaNode);
                     }

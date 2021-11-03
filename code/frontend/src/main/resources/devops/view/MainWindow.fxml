@@ -34,7 +34,7 @@
       </AnchorPane>
       <AnchorPane layoutX="11.0" layoutY="11.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3">
          <children>
-            <JFXComboBox fx:id="searchResultsByName" layoutX="104.0" layoutY="5.0" prefHeight="26.0" prefWidth="231.0" style="-fx-background-color: #16ae58;" />
+            <JFXComboBox fx:id="searchResultsByName" layoutX="104.0" layoutY="5.0" onAction="#selectedSearchResultPerson" prefHeight="26.0" prefWidth="231.0" style="-fx-background-color: #16ae58;" />
          </children></AnchorPane>
       <AnchorPane layoutX="11.0" layoutY="46.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <AnchorPane layoutX="677.0" layoutY="581.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
