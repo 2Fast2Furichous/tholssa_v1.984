@@ -206,9 +206,9 @@ public class MainWindow {
                     Person currentPerson = currentNode.getValue();
                     if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
                         this.setRootNode(currentNode);
-                        //this.canvas.setPivot(currentPerson.getPositionX(), currentPerson.getPositionY());
-                        this.canvas.setTranslateX(currentPerson.getPositionX() /2);
-                        this.canvas.setTranslateY(currentPerson.getPositionY()/2);
+                        this.canvas.setPivot(currentPerson.getPositionX(), currentPerson.getPositionY());
+				           
+                        //this.canvas.setScale(canvas.getScale() +100);
                     }
                 } 
         }
