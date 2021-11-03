@@ -22,7 +22,7 @@ import devops.storage.interfaces.Storage;
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges
  *
- * @author Furichous Jones IV
+ * @author Furichous Jones IV and Alexander Ayers
  * @version Fall 2021
  */
 public class GraphService {
@@ -271,6 +271,9 @@ public class GraphService {
 
 	/**
 	 * Adds a review to the person with the specified uniqueID.
+	 * 
+	 * @precondition none
+	 * @postcondition @return.getValue().getReviews().size() == @prev + 1
 	 * 
 	 * @param review the specified review
 	 * @param guid the uniqueID of the person being reviewed.

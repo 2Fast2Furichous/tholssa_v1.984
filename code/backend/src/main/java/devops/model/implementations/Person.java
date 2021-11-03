@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * The object representing a person
  *
- * @author Furichous Jones IV
+ * @author Furichous Jones IV and Alexander Ayers
  * @version Fall 2021
  */
 public class Person implements Comparable<Person> {
