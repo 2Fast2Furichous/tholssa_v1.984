@@ -14,7 +14,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+
 <GridPane minHeight="0.0" minWidth="0.0" prefHeight="363.0" prefWidth="810.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" />
       <ColumnConstraints fx:id="infoColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
@@ -86,7 +88,7 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="Relationship">
+          <TitledPane fx:id="relationshipPane" animated="false" text="Relationship">
             <content>
               <AnchorPane style="-fx-background-color: black;">
                      <children>
@@ -102,7 +104,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <JFXComboBox fx:id="relation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                              <JFXComboBox fx:id="relation" focusColor="WHITE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white;" unFocusColor="WHITE" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
                               <DatePicker fx:id="relationStartDate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                               <DatePicker fx:id="relationEndDate" layoutX="85.0" layoutY="43.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                               <Label style="-fx-text-fill: #16ae58;" text="Relation" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />

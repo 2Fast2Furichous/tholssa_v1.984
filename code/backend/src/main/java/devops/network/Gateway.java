@@ -106,24 +106,24 @@ public class Gateway extends Thread {
 		Context context = ZMQ.context(10);
 		this.socket = context.socket(ZMQ.REP);
 		this.socket.bind("tcp://127.0.0.1:5555");
-		Thread shutdownThread = new Thread(() -> {
-			this.handleShutdownServer();
-		});
+		//Thread shutdownThread = new Thread(() -> {
+			//this.handleShutdownServer();
+		//});
 
-		Thread serverThread = new Thread(() -> {
+		//Thread serverThread = new Thread(() -> {
 			this.handleServerRequests();
-		});
+		//});
 
-		shutdownThread.setDaemon(true);
-		serverThread.setDaemon(true);
-		serverThread.start();
-		shutdownThread.start();
-		try {
-			shutdownThread.join();
+		//shutdownThread.setDaemon(true);
+		//serverThread.setDaemon(true);
+		//serverThread.start();
+		//shutdownThread.start();
+		//try {
+		//	shutdownThread.join();
 
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		//} catch (InterruptedException e) {
+		//	e.printStackTrace();
+		//}
 
 
         this.socket.close();
