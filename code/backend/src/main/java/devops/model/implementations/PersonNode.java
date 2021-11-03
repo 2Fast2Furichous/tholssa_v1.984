@@ -1,5 +1,6 @@
 package devops.model.implementations;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -15,6 +16,7 @@ public class PersonNode implements GraphNode<Person> {
 	private final String uniqueID;
 	private Person person;
 	private final Collection<String> edges;
+	private final Collection<Review> reviews;
 
 
 	/**
@@ -37,6 +39,7 @@ public class PersonNode implements GraphNode<Person> {
 		this.uniqueID = uniqueID;
 		this.person = person;
 		this.edges = new HashSet<String>();
+		this.reviews = new ArrayList<Review>();
 	}
 
 	@Override
@@ -74,4 +77,17 @@ public class PersonNode implements GraphNode<Person> {
 	public Collection<String> getEdges() {
 		return this.edges;
 	}
+
+	public void addReview(Review review){
+		throw new UnsupportedOperationException();
+	}
+
+	public void removeReview(Review review){
+		throw new UnsupportedOperationException();
+	}
+
+	public Collection<Review> getReviews(){
+		return this.reviews;
+	}
+
 }
