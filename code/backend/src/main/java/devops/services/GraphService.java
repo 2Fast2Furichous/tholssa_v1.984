@@ -13,6 +13,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
+import devops.model.implementations.Review;
 import devops.model.interfaces.GraphEdge;
 import devops.model.interfaces.GraphNode;
 import devops.storage.implementations.StorageHash;
@@ -249,8 +250,8 @@ public class GraphService {
 	 * @preconditions none
 	 * @postconditions none
 	 * 
-	 * @param rootNodeGuid
-	 * @param filters
+	 * @param rootNodeGuid the guid of the root node to base the filtering off of.
+	 * @param filters the list of filters to apply to the filtering algorithm.
 	 * @return graph network given the filters and rootNode
 	 * @throws IllegalArgumentException
 	 */
@@ -267,6 +268,24 @@ public class GraphService {
 
 		return filteredNetwork;
 	}
+
+	/**
+	 * Adds a review to the person with the specified uniqueID.
+	 * 
+	 * @param review the specified review
+	 * @param guid the uniqueID of the person being reviewed.
+	 * 
+	 * @return the node of the person who was reviewed.
+	 */
+	public PersonNode addReview(Review review, String guid){
+		var node = this.nodeStorage.get(guid);
+		var person = node.getValue();
+		person.addReview(review);
+
+		return node;
+	}
+
+
 
 	private PersonNetwork floodFill(PersonNode rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
 		PersonNetwork newNetwork = new PersonNetwork();
