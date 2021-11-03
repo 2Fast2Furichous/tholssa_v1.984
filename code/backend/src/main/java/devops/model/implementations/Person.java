@@ -1,6 +1,8 @@
 package devops.model.implementations;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The object representing a person
@@ -20,6 +22,7 @@ public class Person implements Comparable<Person> {
 	private String description;
 	private double positionX;
 	private double positionY;
+	private Collection<Review> reviews;
 
 	/**
 	 * Creates a new person with the given details
@@ -33,17 +36,18 @@ public class Person implements Comparable<Person> {
 	 *                 	getPhoneNumber() == phoneNumber &&
 	 * 					getLastName() == lastName
 	 *                 	getFirstName() == firstName &&
-	 * 					getNickname() == nickname
+	 * 					getNickname() == nickname && 
+	 * 					getReviews() != null
 	 * 
-	 * @param nickname
-	 * @param firstName
-	 * @param lastName
-	 * @param address
-	 * @param phoneNumber
-	 * @param dateOfBirth
-	 * @param dateOfDeath
-	 * @param occupation
-	 * @param description
+	 * @param nickname		the specified nickname
+	 * @param firstName		the specified first name
+	 * @param lastName		the specified last name
+	 * @param address		the specified address
+	 * @param phoneNumber	the specified phone number
+	 * @param dateOfBirth	the specified date of birth
+	 * @param dateOfDeath	the specified date of death
+	 * @param occupation	the specified occupation
+	 * @param description	the specified description
 	 */
 	public Person(
 			double positionX, 
@@ -59,6 +63,7 @@ public class Person implements Comparable<Person> {
 		this.description = description;
 		this.positionX = positionX;
 		this.positionY = positionY;
+		this.reviews = new ArrayList<Review>();
 	}
 	
 	/**
@@ -201,6 +206,34 @@ public class Person implements Comparable<Person> {
 	 */
 	public String getNickname() {
 		return nickname;
+	}
+
+	/**
+	 * Gets the collection of reviews.
+	 * 
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return the collection of reviews
+	 */
+	public Collection<Review> getReviews(){
+		return this.reviews;
+	}
+
+	/**
+	 * Adds the specified review to the node.
+	 * 
+	 * @precondition review != null
+	 * @postcondition getReviews().size() == @prev + 1
+	 * 
+	 * @param review the added review
+	 */
+	public void addReview(Review review){
+		if (review == null){
+			throw new IllegalArgumentException("The added review cannot be null");
+		}
+
+		this.reviews.add(review);
 	}
 
 	@Override

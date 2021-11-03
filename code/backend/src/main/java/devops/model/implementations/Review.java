@@ -1,7 +1,5 @@
 package devops.model.implementations;
 
-import devops.resources.ErrorMessages;
-
 /**
  * Review of a Person
  * 

@@ -1,6 +1,6 @@
 package devops.model.person;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
@@ -26,5 +26,6 @@ public class TestConstructor {
 		assertEquals(validDate, testPerson.getDateOfDeath());
 		assertEquals("occupation", testPerson.getOccupation());
 		assertEquals("description", testPerson.getDescription());
+		assertNotNull(testPerson.getReviews());
 	}
 }
