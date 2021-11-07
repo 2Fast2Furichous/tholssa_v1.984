@@ -16,7 +16,6 @@ public class PersonNode implements GraphNode<Person> {
 	private Person person;
 	private final Collection<String> edges;
 
-
 	/**
 	 * 
 	 * Creates a new person node given the uniqueID and person
