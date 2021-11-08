@@ -141,7 +141,7 @@ public class MainWindow {
     private ColumnConstraints filterColumn;
 
     @FXML
-    private JFXComboBox<?> searchResultsByName;
+    private JFXComboBox<String> searchResultsByName;
 
     @FXML
     private TitledPane relationshipPane;
@@ -409,7 +409,7 @@ public class MainWindow {
                         hiddenNodes.add(tholssaNode);
                     } else {
                         list.add(currentPerson.getFullNameWithNickname());
-                        //this.searchResultsByName.setItems(list);
+                        this.searchResultsByName.setItems(list);
                         visibleNodes.add(tholssaNode);
                     }
                 } else if (nodeData instanceof PersonEdge) {
