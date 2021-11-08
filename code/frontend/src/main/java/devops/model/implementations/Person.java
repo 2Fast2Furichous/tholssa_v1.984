@@ -202,7 +202,7 @@ public class Person implements Comparable<Person> {
 
 	/**
      * Gets the full name of the person with their nickname
-	 * Displays as firstName \ lastname \ nickname
+	 * Displays as firstName lastname | nickname
      * 
      * @preconditions none
      * @postcondition none
@@ -210,7 +210,7 @@ public class Person implements Comparable<Person> {
      * @return the full name of the person with their nickname
      */
 	public String getFullNameWithNickname(){
-		return this.firstName + " " + this.lastName + " "+ this.nickname;
+		return this.firstName + " " + this.lastName + " | "+ this.nickname;
 	}
 
 	@Override
