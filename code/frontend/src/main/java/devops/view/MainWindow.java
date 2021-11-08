@@ -30,6 +30,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableDoubleValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -139,6 +141,9 @@ public class MainWindow {
     private ColumnConstraints filterColumn;
 
     @FXML
+    private JFXComboBox<?> searchResultsByName;
+
+    @FXML
     private TitledPane relationshipPane;
 
     private JFXButton rootNode;
@@ -237,6 +242,24 @@ public class MainWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void selectedSearchResultPerson(ActionEvent event) {
+        for (var tholssaNode : this.canvas.getChildren()) {
+            var nodeData = tholssaNode.getUserData();
+                if (nodeData instanceof PersonNode) {
+                    PersonNode currentNode = (PersonNode) nodeData;
+                    Person currentPerson = currentNode.getValue();
+                    if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
+                        //this.setRootNode(currentNode);
+                        this.canvas.setPivot(currentPerson.getPositionX(), currentPerson.getPositionY());
+				           
+                        //this.canvas.setScale(canvas.getScale() +100);
+                    }
+                } 
+        }
+       
     }
 
     @FXML
@@ -372,6 +395,8 @@ public class MainWindow {
         String textFromSearchTextField = this.searchTextField.getText();
         var visibleNodes = new ArrayList<Node>();
         var hiddenNodes = new ArrayList<Node>();
+        ObservableList<String> list = FXCollections.observableArrayList();
+        
         if (textFromSearchTextField == null || textFromSearchTextField.isBlank()) {
             visibleNodes.addAll(this.canvas.getChildren());
         } else {
@@ -383,6 +408,8 @@ public class MainWindow {
                     if (!checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
                         hiddenNodes.add(tholssaNode);
                     } else {
+                        list.add(currentPerson.getFullNameWithNickname());
+                        //this.searchResultsByName.setItems(list);
                         visibleNodes.add(tholssaNode);
                     }
                 } else if (nodeData instanceof PersonEdge) {

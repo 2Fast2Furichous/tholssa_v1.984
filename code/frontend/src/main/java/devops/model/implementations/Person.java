@@ -200,6 +200,10 @@ public class Person implements Comparable<Person> {
 		return nickname;
 	}
 
+	public String getFullNameWithNickname(){
+		return this.firstName + " " + this.lastName + " "+ this.nickname;
+	}
+
 	@Override
 	public int compareTo(Person o) {
 		return this.getLastName().compareTo(o.getLastName());
