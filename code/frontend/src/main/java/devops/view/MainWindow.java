@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 
 import devops.App;
@@ -141,6 +142,21 @@ public class MainWindow {
     @FXML
     private TitledPane relationshipPane;
 
+    @FXML
+    private JFXListView<?> reviewsListView;
+
+    @FXML
+    private JFXButton addReviewButton;
+
+    @FXML
+    private JFXTextField reviewNameTextBox;
+
+    @FXML
+    private JFXTextField reviewContentTextBox;
+
+    @FXML
+    private JFXComboBox<?> reviewScoreComboBox;
+
     private JFXButton rootNode;
 
     private JFXButton selectedNode;
@@ -170,6 +186,11 @@ public class MainWindow {
     private void addSubmitNodeInputValidation() {
         this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty()
                 .or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
+    }
+
+    @FXML
+    void handleAddReview(ActionEvent event) {
+
     }
 
     @FXML
