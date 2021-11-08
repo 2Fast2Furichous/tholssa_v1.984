@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="308.0" prefWidth="905.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" />
       <ColumnConstraints fx:id="infoColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
@@ -32,7 +32,10 @@
             <Insets />
          </GridPane.margin>
       </AnchorPane>
-      <AnchorPane layoutX="11.0" layoutY="11.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3" />
+      <AnchorPane layoutX="11.0" layoutY="11.0" prefHeight="44.0" prefWidth="878.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3">
+         <children>
+            <JFXComboBox fx:id="searchResultsByName" layoutX="109.0" layoutY="4.0" onAction="#selectedSearchResultPerson" prefHeight="26.0" prefWidth="216.0" style="-fx-background-color: #16ae58;" />
+         </children></AnchorPane>
       <AnchorPane layoutX="11.0" layoutY="46.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <AnchorPane layoutX="677.0" layoutY="581.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <Accordion maxHeight="1.7976931348623157E308" minWidth="0.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
