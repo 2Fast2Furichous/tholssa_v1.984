@@ -230,7 +230,8 @@ public class Person implements Comparable<Person> {
 		}
 
 		this.reviews.add(review);
-    
+	}
+
 	/**
      * Gets the full name of the person with their nickname
 	 * Displays as firstName lastname | nickname
