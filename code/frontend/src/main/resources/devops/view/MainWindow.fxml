@@ -34,10 +34,13 @@
             <Insets />
          </GridPane.margin>
       </AnchorPane>
-      <AnchorPane layoutX="11.0" layoutY="11.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.columnSpan="3" />
-      <AnchorPane layoutX="11.0" layoutY="46.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <AnchorPane layoutX="677.0" layoutY="581.0" minWidth="0.0" prefHeight="196.0" prefWidth="520.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-      <Accordion maxHeight="1.7976931348623157E308" minWidth="0.0" style="-fx-background-color: black;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <AnchorPane layoutX="11.0" layoutY="11.0" prefHeight="44.0" prefWidth="878.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3">
+         <children>
+            <JFXComboBox fx:id="searchResultsByName" layoutX="109.0" layoutY="4.0" onAction="#selectedSearchResultPerson" prefHeight="26.0" prefWidth="216.0" style="-fx-background-color: #16ae58;" />
+         </children></AnchorPane>
+      <AnchorPane layoutX="11.0" layoutY="46.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <AnchorPane layoutX="677.0" layoutY="581.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Accordion maxHeight="1.7976931348623157E308" minWidth="0.0" style="-fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <panes>
           <TitledPane animated="false" text="General">
             <content>
