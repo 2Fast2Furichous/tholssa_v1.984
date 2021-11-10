@@ -52,16 +52,9 @@ import javafx.util.Duration;
 
 public class MainWindow {
 
-    /**
-     *
-     */
     private static final String HIDDEN_STYLE = "visibility:hidden";
 
-    /**
-     *
-     */
     private static final String DEFAULT_NODE_STYLE = "-fx-background-color: #16ae58; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
-
 
     private static final String SELECTED_NODE_STYLE = "-fx-background-color: #6897bb; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
 
@@ -262,17 +255,16 @@ public class MainWindow {
 
     @FXML
     void initialize() {
-
         this.setupGraph();
         this.populateGraph("", new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
-
+        /*
         this.infoColumn.maxWidthProperty().set(0);
         this.infoColumn.minWidthProperty().set(0);
 
         this.filterColumn.maxWidthProperty().set(0);
         this.filterColumn.minWidthProperty().set(0);
-
+        */
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
     }
@@ -505,16 +497,16 @@ public class MainWindow {
         this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
         this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
 
-        Timeline timelineDown = new Timeline();
+        
+        // Timeline timelineDown = new Timeline();
+        // KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+        // KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
 
-        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
-        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+        // final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
 
-        final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
+        // timelineDown.getKeyFrames().add(kfDwn);
 
-        timelineDown.getKeyFrames().add(kfDwn);
-
-        timelineDown.play();
+        // timelineDown.play();
 
     }
 
@@ -524,16 +516,16 @@ public class MainWindow {
 
         this.updateNodeStyle(previousNode);
 
-        Timeline timelineDown = new Timeline();
+        // Timeline timelineDown = new Timeline();
 
-        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), 0);
-        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), 0);
+        // KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), 0);
+        // KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), 0);
 
-        final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
+        // final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
 
-        timelineDown.getKeyFrames().add(kfDwn);
+        // timelineDown.getKeyFrames().add(kfDwn);
 
-        timelineDown.play();
+        // timelineDown.play();
     }
 
     private void setupDrag(JFXButton currentNode) {
@@ -599,7 +591,7 @@ public class MainWindow {
 
         this.updateNodeStyle(previousNode);
         this.updateNodeStyle(node);
-
+        /*
         Timeline timelineDown = new Timeline();
         KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
                 filterColumn.prefWidthProperty().doubleValue());
@@ -609,7 +601,7 @@ public class MainWindow {
         KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
         timelineDown.getKeyFrames().add(kfDwn);
         timelineDown.play();
-
+        */
         this.applyFilters();
     }
 
@@ -618,7 +610,7 @@ public class MainWindow {
         this.rootNode = null;
 
         this.updateNodeStyle(previousNode);
-
+        /*
         Timeline timelineDown = new Timeline();
         KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(), 0);
         KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(), 0);
@@ -626,7 +618,7 @@ public class MainWindow {
         KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
         timelineDown.getKeyFrames().add(kfDwn);
         timelineDown.play();
-
+        */
         this.applyFilters();
     }
 
