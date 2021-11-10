@@ -190,7 +190,7 @@ public class MainWindow {
 
     @FXML
     void handleAddReview(ActionEvent event) {
-
+        //TODO Implement with sending review to Server an local add method.
     }
 
     @FXML
@@ -482,6 +482,7 @@ public class MainWindow {
         this.dateOfDeath.setValue(currentPerson.getDateOfDeath());
         this.occupation.setText(currentPerson.getOccupation());
         this.description.setText(currentPerson.getDescription());
+        //TODO Add in Review Fields Population
 
 
     
