@@ -265,10 +265,17 @@ public class MainWindow {
                     PersonNode currentNode = (PersonNode) nodeData;
                     Person currentPerson = currentNode.getValue();
                     if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
-                        //this.setRootNode(currentNode);
-                        this.canvas.setPivot(currentPerson.getPositionX(), currentPerson.getPositionY());
-				           
-                        //this.canvas.setScale(canvas.getScale() +100);
+
+                        this.canvas.setTranslateX(this.tholssaGraph.getPrefWidth() / 2);
+                        this.canvas.setTranslateY(this.tholssaGraph.getPrefHeight() / 2);
+
+                        this.canvas.setTranslateX(currentPerson.getPositionX());
+                        this.canvas.setTranslateY(currentPerson.getPositionY());
+
+                        this.canvas.setPivot((currentPerson.getPositionX()/3)-75, (currentPerson.getPositionY()/3)+100);
+				        this.canvas.setScale(1);
+                        this.canvas.setScale(canvas.getScale()/1.2);
+                        
                     }
                 } 
         }
