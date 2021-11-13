@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -38,6 +40,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
@@ -153,6 +156,9 @@ public class MainWindow {
 
     @FXML
     private JFXComboBox<?> reviewScoreComboBox;
+
+    @FXML
+    private JFXTextField zoomLevelTextField;
 
     private JFXButton rootNode;
 
@@ -289,6 +295,8 @@ public class MainWindow {
         
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
+        this.zoomLevelTextField.setStyle("-fx-text-fill: green; -fx-font-size: 10px;");
+        this.zoomLevelTextField.setText(Double.toString(this.canvas.getScale()));
     }
 
     private void setupGraph() {
@@ -313,6 +321,13 @@ public class MainWindow {
             Point2D relPoint = canvas.sceneToLocal(clickPoint.mouseAnchorX, clickPoint.mouseAnchorY);
             requestCreateNode(relPoint.getX(), relPoint.getY());
         });
+        this.tholssaGraph.addEventFilter(MouseEvent.ANY, new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                zoomLevelTextField.setText(Double.toString(canvas.getScale()));
+            }
+        });
 
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -335,8 +350,7 @@ public class MainWindow {
         SceneGestures sceneGestures = new SceneGestures(canvas);
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-        this.tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-
+        this.tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());   
     }
 
     @FXML
