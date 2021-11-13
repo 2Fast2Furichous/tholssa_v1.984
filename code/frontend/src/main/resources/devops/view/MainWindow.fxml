@@ -17,10 +17,9 @@
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="668.0" prefWidth="1056.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="devops.view.MainWindow">
    <columnConstraints>
-      <ColumnConstraints />
-      <ColumnConstraints fx:id="infoColumn" hgrow="ALWAYS" />
-      <ColumnConstraints fx:id="filterColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
+      <ColumnConstraints hgrow="ALWAYS" />
+      <ColumnConstraints fx:id="infoColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
+      <ColumnConstraints fx:id="filterColumn" halignment="CENTER" hgrow="ALWAYS" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="35.0" minHeight="35.0" vgrow="SOMETIMES" />
@@ -29,12 +28,12 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <AnchorPane fx:id="tholssaGraph" minHeight="0.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <AnchorPane fx:id="tholssaGraph" minHeight="0.0" minWidth="0.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.rowIndex="1" GridPane.rowSpan="2">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </AnchorPane>
-      <AnchorPane layoutX="11.0" layoutY="11.0" prefHeight="44.0" prefWidth="878.0" style="-fx-background-color: black; -fx-border-color: #16ae58;" GridPane.columnSpan="3">
+      <AnchorPane layoutX="11.0" layoutY="11.0" GridPane.columnSpan="3">
          <children>
             <JFXComboBox fx:id="searchResultsByName" layoutX="109.0" layoutY="4.0" onAction="#selectedSearchResultPerson" prefHeight="26.0" prefWidth="216.0" style="-fx-background-color: #16ae58;" />
          </children></AnchorPane>
@@ -193,8 +192,8 @@
             <Insets />
          </GridPane.margin>
       </Accordion>
-      <JFXButton fx:id="submitNode" buttonType="RAISED" minWidth="0.0" onAction="#submitNode" style="-fx-background-color: #16ae58;" text="Submit" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <TitledPane animated="false" maxHeight="1.7976931348623157E308" minWidth="0.0" text="Filters" GridPane.columnIndex="3" GridPane.rowIndex="1">
+      <JFXButton fx:id="submitNode" buttonType="RAISED" minWidth="0.0" onAction="#submitNode" style="-fx-background-color: #16ae58;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <TitledPane animated="false" maxHeight="1.7976931348623157E308" minWidth="0.0" text="Filters" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <content>
             <AnchorPane style="-fx-background-color: black;">
                <children>
@@ -214,28 +213,23 @@
             </AnchorPane>
          </content>
       </TitledPane>
-      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+      <JFXButton fx:id="applyFiltersButton" buttonType="RAISED" minWidth="0.0" onAction="#handleApplyFilters" style="-fx-background-color: #16ae58; -fx-border-color: #16ae58;" text="Apply Filters" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets left="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXButton fx:id="applyFiltersButton" buttonType="RAISED" minWidth="0.0" onAction="#handleApplyFilters" style="-fx-background-color: #16ae58; -fx-border-color: #16ae58;" text="Apply Filters" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-      <JFXButton fx:id="logoutButton" buttonType="RAISED" onAction="#handleLogout" style="-fx-background-color: #16ae58;" text="Logout" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets left="20.0" />
-         </GridPane.margin>
-      </JFXButton>
-      <JFXTextField fx:id="searchTextField" maxWidth="300.0" style="-fx-background-color: #16ae58;" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
+      <JFXTextField fx:id="searchTextField" maxWidth="300.0" style="-fx-background-color: #16ae58;" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
             <Insets right="160.0" />
          </GridPane.margin>
       </JFXTextField>
-      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
+      <JFXButton fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #16ae58;" text="Search" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
             <Insets right="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
+      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
             <Insets right="90.0" />
          </GridPane.margin>

@@ -30,7 +30,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -281,13 +280,13 @@ public class MainWindow {
         this.setupGraph();
         this.populateGraph("", new ArrayList<NodeFilter>());
         this.addSubmitNodeInputValidation();
-        /*
+        
         this.infoColumn.maxWidthProperty().set(0);
         this.infoColumn.minWidthProperty().set(0);
 
         this.filterColumn.maxWidthProperty().set(0);
         this.filterColumn.minWidthProperty().set(0);
-        */
+        
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
     }
@@ -525,15 +524,15 @@ public class MainWindow {
         this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
 
         
-        // Timeline timelineDown = new Timeline();
-        // KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
-        // KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+        Timeline timelineDown = new Timeline();
+        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
 
-        // final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
+        final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
 
-        // timelineDown.getKeyFrames().add(kfDwn);
+        timelineDown.getKeyFrames().add(kfDwn);
 
-        // timelineDown.play();
+        timelineDown.play();
 
     }
 
@@ -543,16 +542,16 @@ public class MainWindow {
 
         this.updateNodeStyle(previousNode);
 
-        // Timeline timelineDown = new Timeline();
+        Timeline timelineDown = new Timeline();
 
-        // KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), 0);
-        // KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), 0);
+        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), 0);
+        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), 0);
 
-        // final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
+        final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
 
-        // timelineDown.getKeyFrames().add(kfDwn);
+        timelineDown.getKeyFrames().add(kfDwn);
 
-        // timelineDown.play();
+        timelineDown.play();
     }
 
     private void setupDrag(JFXButton currentNode) {
@@ -618,7 +617,7 @@ public class MainWindow {
 
         this.updateNodeStyle(previousNode);
         this.updateNodeStyle(node);
-        /*
+        
         Timeline timelineDown = new Timeline();
         KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
                 filterColumn.prefWidthProperty().doubleValue());
@@ -628,7 +627,7 @@ public class MainWindow {
         KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
         timelineDown.getKeyFrames().add(kfDwn);
         timelineDown.play();
-        */
+        
         this.applyFilters();
     }
 
@@ -637,7 +636,7 @@ public class MainWindow {
         this.rootNode = null;
 
         this.updateNodeStyle(previousNode);
-        /*
+        
         Timeline timelineDown = new Timeline();
         KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(), 0);
         KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(), 0);
@@ -645,7 +644,7 @@ public class MainWindow {
         KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
         timelineDown.getKeyFrames().add(kfDwn);
         timelineDown.play();
-        */
+        
         this.applyFilters();
     }
 
