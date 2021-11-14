@@ -326,7 +326,7 @@ public class GraphService {
 		private Predicate<GraphEdge<Person>> compositePredicate;
 
 		public NodeFilterPredicate(Collection<NodeFilter> filters) {
-			this.compositePredicate = filters.stream().map(NodeFilter::getPredicate).reduce(x -> true, Predicate::and);
+			this.compositePredicate = filters.stream().map(NodeFilter::getPredicate).reduce(x -> false, Predicate::or);
 		}
 
 		@Override

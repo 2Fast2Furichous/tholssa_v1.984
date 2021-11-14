@@ -204,13 +204,18 @@
                   <GridPane layoutX="21.7" layoutY="21.7" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
                         <ColumnConstraints />
-                        <ColumnConstraints hgrow="ALWAYS" minWidth="80.0" prefWidth="20.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <JFXCheckBox fx:id="familyFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Family Only" textFill="#16ae58" unCheckedColor="#16ae58" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
+                        <JFXCheckBox fx:id="friendFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Friends" textFill="#16ae58" unCheckedColor="#16ae58" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                        <JFXCheckBox fx:id="familyFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Family" textFill="#16ae58" unCheckedColor="#16ae58" />
+                        <JFXCheckBox fx:id="businessFilter" checkedColor="#16ae58" prefHeight="18.0" prefWidth="113.0" text="Business" textFill="#16ae58" unCheckedColor="#16ae58" GridPane.rowIndex="2" />
+                        <JFXComboBox fx:id="depthFilter" promptText="Filter Depth" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
                </children>

@@ -64,6 +64,10 @@ public class MainWindow {
 
     private static final String ROOT_NODE_STYLE = "-fx-background-color: #ea3645; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
 
+    private static final int MINIMUM_DEPTH = 1;
+
+    private static final int MAXIMUM_DEPTH = 5;
+
     @FXML
     private JFXButton logoutButton;
 
@@ -122,7 +126,16 @@ public class MainWindow {
     private JFXButton showButton;
 
     @FXML
+    private JFXCheckBox friendFilter;
+
+    @FXML
     private JFXCheckBox familyFilter;
+
+    @FXML
+    private JFXCheckBox businessFilter;
+
+    @FXML
+    private JFXComboBox<Integer> depthFilter;
 
     @FXML
     private JFXButton applyFiltersButton;
@@ -322,6 +335,10 @@ public class MainWindow {
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
 
+        for (var depth = MINIMUM_DEPTH; depth <= MAXIMUM_DEPTH; depth++) {
+            this.depthFilter.getItems().add(depth);
+        }
+
         for (var score = Review.MINIMUM_SCORE; score <= Review.MAXIMUM_SCORE; score++) {
             this.reviewScoreComboBox.getItems().add(score);
         }
@@ -426,6 +443,12 @@ public class MainWindow {
         if (this.rootNode != null) {
             if (this.familyFilter.isSelected()) {
                 filters.add(NodeFilter.Family);
+            }
+            if (this.friendFilter.isSelected()) {
+                filters.add(NodeFilter.Friend);
+            }
+            if (this.businessFilter.isSelected()) {
+                filters.add(NodeFilter.Business);
             }
             this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters);
         } else {
