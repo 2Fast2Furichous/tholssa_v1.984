@@ -323,7 +323,7 @@ public class MainWindow {
     @FXML
     void initialize() {
         this.setupGraph();
-        this.populateGraph("", new ArrayList<NodeFilter>());
+        this.populateGraph("", new ArrayList<NodeFilter>(), MAXIMUM_DEPTH);
         this.addSubmitNodeInputValidation();
         
         this.infoColumn.maxWidthProperty().set(0);
@@ -338,7 +338,8 @@ public class MainWindow {
         for (var depth = MINIMUM_DEPTH; depth <= MAXIMUM_DEPTH; depth++) {
             this.depthFilter.getItems().add(depth);
         }
-
+        this.depthFilter.setValue(MAXIMUM_DEPTH);
+        
         for (var score = Review.MINIMUM_SCORE; score <= Review.MAXIMUM_SCORE; score++) {
             this.reviewScoreComboBox.getItems().add(score);
         }
@@ -450,13 +451,14 @@ public class MainWindow {
             if (this.businessFilter.isSelected()) {
                 filters.add(NodeFilter.Business);
             }
-            this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters);
+            var depth = this.depthFilter.getValue();
+            this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters, depth);
         } else {
-            this.populateGraph("", filters);
+            this.populateGraph("", filters, MAXIMUM_DEPTH);
         }
     }
 
-    private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
+    private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters, int depth) {
         this.canvas.getChildren().clear();
         //this.canvas.addGrid();
 
@@ -464,7 +466,7 @@ public class MainWindow {
         this.lineMap.clear();
         try {
 
-            ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
+            ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters, depth);
             PersonNetwork network = (PersonNetwork) response.getData();
 
             for (PersonNode node : network.getNodes()) {

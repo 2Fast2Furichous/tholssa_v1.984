@@ -360,8 +360,9 @@ public class Gateway extends Thread {
 
 		Type filterListType = new TypeToken<Collection<NodeFilter>>(){}.getType();
 		Collection<NodeFilter> filters = this.gson.fromJson(content.get("filters"), filterListType);
+		int depth = this.gson.fromJson(content.get("depth"), int.class);
 
-		PersonNetwork network = (PersonNetwork) this.graphService.getFilteredNetwork(rootNodeGuid, filters);
+		PersonNetwork network = (PersonNetwork) this.graphService.getFilteredNetwork(rootNodeGuid, filters, depth);
 
 		JsonObject response = new JsonObject();
 

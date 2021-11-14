@@ -120,6 +120,6 @@ public interface GraphService {
 	 * @return graph network given the filters and rootNode
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters);
+	public ServiceResponse getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters, int maxDepth);
 
 }
