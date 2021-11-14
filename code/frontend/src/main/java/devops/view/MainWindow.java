@@ -282,6 +282,8 @@ public class MainWindow {
                     this.canvas.setPivot((currentPerson.getPositionX()/3)-75, (currentPerson.getPositionY()/3)+100);
                     this.canvas.setScale(1);
                     this.canvas.setScale(canvas.getScale()/1.2);
+                    this.updateZoomLevel();
+                    break;
                 }
             }
         }
