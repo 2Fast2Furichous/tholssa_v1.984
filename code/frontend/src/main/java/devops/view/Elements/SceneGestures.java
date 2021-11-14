@@ -91,9 +91,7 @@ public class SceneGestures {
 
 			// note: pivot value must be untransformed, i. e. without scaling
 			canvas.setPivot(f * dx, f * dy);
-
 			event.consume();
-
 		}
 
 	};
