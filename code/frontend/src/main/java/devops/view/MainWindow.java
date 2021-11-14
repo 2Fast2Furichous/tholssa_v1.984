@@ -1,6 +1,7 @@
 package devops.view;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -154,6 +155,9 @@ public class MainWindow {
     @FXML
     private JFXComboBox<?> reviewScoreComboBox;
 
+    @FXML
+    private JFXTextField zoomLevelTextField;
+
     private JFXButton rootNode;
 
     private JFXButton selectedNode;
@@ -305,6 +309,13 @@ public class MainWindow {
         
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
+        this.zoomLevelTextField.setStyle("-fx-text-fill: green; -fx-font-size: 10px;");
+        this.updateZoomLevel();
+    }
+
+    private void updateZoomLevel() {
+        var format = new DecimalFormat("0.00");
+        this.zoomLevelTextField.setText(format.format(this.canvas.getScale()));
     }
 
     private void setupGraph() {
@@ -352,7 +363,12 @@ public class MainWindow {
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         this.tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-
+        this.tholssaGraph.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                MainWindow.this.updateZoomLevel();
+            }
+        });  
     }
 
     @FXML
