@@ -12,49 +12,49 @@ public class TestEquals {
     private Review review = new Review("test", "test2", 2);
 
     @Test
-    public void whenNullReviewExpectException() {
+    public void whenNullReviewExpectException(){
         assertFalse(review.equals(null));
     }
 
     @Test
-    public void whenItemNotOfSameTypeExpectException() {
+    public void whenItemNotOfSameTypeExpectException(){
         assertThrows(IllegalArgumentException.class, () -> {
             review.equals("test");
         });
     }
 
     @Test
-    public void whenNameNotSameEverythingElseSameExpectFalse() {
+    public void whenNameNotSameEverythingElseSameExpectFalse(){
         assertFalse(review.equals(new Review("name", "test2", 2)));
     }
 
     @Test
-    public void whenContentNotSameEverythingElseSameExpectFalse() {
+    public void whenContentNotSameEverythingElseSameExpectFalse(){
         assertFalse(review.equals(new Review("test", "test", 2)));
     }
 
     @Test
-    public void whenScoreNotSameEverythingElseSameExpectFalse() {
+    public void whenScoreNotSameEverythingElseSameExpectFalse(){
         assertFalse(review.equals(new Review("test", "test2", 1)));
     }
 
     @Test
-    public void whenScoreAndNameDifferentExpectFalse() {
+    public void whenScoreAndNameDifferentExpectFalse(){
         assertFalse(review.equals(new Review("test1", "test2", 1)));
     }
 
     @Test
-    public void whenScoreAndContentDifferentExpectFalse() {
+    public void whenScoreAndContentDifferentExpectFalse(){
         assertFalse(review.equals(new Review("test", "test", 1)));
     }
 
     @Test
-    public void whenContentAndNameDifferentExpectFalse() {
+    public void whenContentAndNameDifferentExpectFalse(){
         assertFalse(review.equals(new Review("test1", "test", 2)));
     }
 
     @Test
-    public void whenAllSameExpectTrue() {
+    public void whenAllSameExpectTrue(){
         assertTrue(review.equals(new Review("test", "test2", 2)));
     }
 }

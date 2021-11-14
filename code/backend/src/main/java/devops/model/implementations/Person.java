@@ -2,7 +2,7 @@ package devops.model.implementations;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * The object representing a person
@@ -22,7 +22,7 @@ public class Person implements Comparable<Person> {
 	private String description;
 	private double positionX;
 	private double positionY;
-	private Collection<Review> reviews;
+	private List<Review> reviews;
 
 	/**
 	 * Creates a new person with the given details
@@ -216,7 +216,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 * @return the collection of reviews
 	 */
-	public Collection<Review> getReviews(){
+	public List<Review> getReviews(){
 		return this.reviews;
 	}
 

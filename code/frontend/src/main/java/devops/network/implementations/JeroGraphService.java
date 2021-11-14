@@ -2,7 +2,9 @@ package devops.network.implementations;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +22,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
+import devops.model.implementations.Review;
 import devops.model.implementations.ServiceResponse;
 import devops.network.interfaces.GraphService;
 import devops.network.utils.ServerCommunicator;
@@ -34,7 +37,7 @@ public class JeroGraphService implements GraphService {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.serializeNulls();
 
-		JsonSerializer<LocalDate> serializer = new JsonSerializer<LocalDate>() {
+		JsonSerializer<LocalDate> localDateSerializer = new JsonSerializer<LocalDate>() {
 			@Override
 			public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
 				JsonObject jsonMerchant = new JsonObject();
@@ -45,7 +48,7 @@ public class JeroGraphService implements GraphService {
 			}
 		};
 
-		JsonDeserializer<LocalDate> deserializer = new JsonDeserializer<LocalDate>() {
+		JsonDeserializer<LocalDate> localDateDeserializer = new JsonDeserializer<LocalDate>() {
 			@Override
 			public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 					throws JsonParseException {
@@ -55,8 +58,32 @@ public class JeroGraphService implements GraphService {
 			}
 		};
 
-		gsonBuilder.registerTypeAdapter(LocalDate.class, serializer);
-		gsonBuilder.registerTypeAdapter(LocalDate.class, deserializer);
+		gsonBuilder.registerTypeAdapter(LocalDate.class, localDateSerializer);
+		gsonBuilder.registerTypeAdapter(LocalDate.class, localDateDeserializer);
+
+		JsonSerializer<LocalDateTime> localDateTimeSerializer = new JsonSerializer<LocalDateTime>() {
+			@Override
+			public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
+				JsonObject jsonMerchant = new JsonObject();
+
+				jsonMerchant.addProperty("datetime", src.toString());
+
+				return jsonMerchant;
+			}
+		};
+
+		JsonDeserializer<LocalDateTime> localDateTimeDeserializer = new JsonDeserializer<LocalDateTime>() {
+			@Override
+			public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+					throws JsonParseException {
+				JsonObject jsonObject = json.getAsJsonObject();
+
+				return LocalDateTime.parse(jsonObject.get("datetime").getAsString());
+			}
+		};
+
+		gsonBuilder.registerTypeAdapter(LocalDateTime.class, localDateTimeSerializer);
+		gsonBuilder.registerTypeAdapter(LocalDateTime.class, localDateTimeDeserializer);
 
 		this.gson = gsonBuilder.create();
 	}
@@ -115,10 +142,10 @@ public class JeroGraphService implements GraphService {
 	public ServiceResponse updateNode(
 			double positionX, 
 			double positionY, String guid, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description) {
+			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description, List<Review> reviews) {
 
 		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath,
-				occupation, description);
+				occupation, description, reviews);
 
 		PersonNode updatedNode = new PersonNode(guid, person);
 				

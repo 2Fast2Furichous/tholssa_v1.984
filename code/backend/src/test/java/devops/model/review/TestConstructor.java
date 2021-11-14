@@ -3,6 +3,8 @@ package devops.model.review;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import devops.model.implementations.Review;
@@ -58,5 +60,6 @@ public class TestConstructor {
         assertEquals("Furichous Jones IV", review.getName());
         assertEquals("Burn this heathen!", review.getContent());
         assertEquals(2, review.getScore());
+        assertEquals(LocalDateTime.now().getSecond(), review.getEntryDate().getSecond());
     }
 }

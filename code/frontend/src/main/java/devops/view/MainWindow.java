@@ -21,6 +21,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
+import devops.model.implementations.Review;
 import devops.model.implementations.ServiceResponse;
 import devops.utils.FXRouter;
 import devops.view.Elements.DragContext;
@@ -41,6 +42,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
@@ -141,7 +143,7 @@ public class MainWindow {
     private TitledPane relationshipPane;
 
     @FXML
-    private JFXListView<?> reviewsListView;
+    private JFXListView<Review> reviewsListView;
 
     @FXML
     private JFXButton addReviewButton;
@@ -153,14 +155,14 @@ public class MainWindow {
     private JFXTextField reviewContentTextBox;
 
     @FXML
-    private JFXComboBox<?> reviewScoreComboBox;
+    private JFXComboBox<Integer> reviewScoreComboBox;
 
     @FXML
     private JFXTextField zoomLevelTextField;
 
     private JFXButton rootNode;
 
-    private JFXButton selectedNode;
+    private JFXButton selectedNodeButton;
 
     private NodeGestures nodeGestures;
 
@@ -181,7 +183,6 @@ public class MainWindow {
         this.rootNode = null;
         this.nodeMap = new HashMap<String, JFXButton>();
         this.lineMap = new HashMap<String, Group>();
-
     }
 
     private void addSubmitNodeInputValidation() {
@@ -191,16 +192,25 @@ public class MainWindow {
 
     @FXML
     void handleAddReview(ActionEvent event) {
-        //TODO Implement with sending review to Server an local add method.
+        String name = this.reviewNameTextBox.getText();
+        String content = this.reviewContentTextBox.getText();
+        int score = this.reviewScoreComboBox.getValue();
+
+        var review = new Review(name, content, score);
+        this.reviewsListView.getItems().add(0, review);
+
+        this.reviewNameTextBox.setText(null);
+        this.reviewContentTextBox.setText(null);
+        this.reviewScoreComboBox.setValue(null);
     }
 
     @FXML
     void submitNode(ActionEvent event) {
-        if (this.selectedNode == null) {
+        if (this.selectedNodeButton == null) {
             return;
         }
 
-        PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
+        PersonNode currentNode = (PersonNode) this.selectedNodeButton.getUserData();
         String nodeUniqueID = currentNode.getUniqueID();
         String nickname = this.nickname.getText();
         String firstName = this.firstName.getText();
@@ -211,11 +221,11 @@ public class MainWindow {
         LocalDate dateOfDeath = this.dateOfDeath.getValue();
         String occupation = this.occupation.getText();
         String description = this.description.getText();
+        var reviews = this.reviewsListView.getItems();
 
-
-        App.getGraphService().updateNode(this.selectedNode.getTranslateX(),
-                this.selectedNode.getTranslateY(), nodeUniqueID, nickname, firstName, lastName, address,
-                phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
+        App.getGraphService().updateNode(this.selectedNodeButton.getTranslateX(),
+                this.selectedNodeButton.getTranslateY(), nodeUniqueID, nickname, firstName, lastName, address,
+                phoneNumber, dateOfBirth, dateOfDeath, occupation, description, reviews);
 
         Relationship relation = this.relation.getValue();
         LocalDate relationStartDate = this.relationStartDate.getValue();
@@ -228,7 +238,7 @@ public class MainWindow {
                         edge.get(), relation, relationStartDate, relationEndDate);
 
             } else {
-                this.requestCreateEdge(this.rootNode, this.selectedNode, relation, relationStartDate, relationEndDate);
+                this.requestCreateEdge(this.rootNode, this.selectedNodeButton, relation, relationStartDate, relationEndDate);
             }
         }
         else if (edge.isPresent()) {
@@ -311,8 +321,41 @@ public class MainWindow {
         
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
+
+        for (var score = Review.MINIMUM_SCORE; score <= Review.MAXIMUM_SCORE; score++) {
+            this.reviewScoreComboBox.getItems().add(score);
+        }
+        
+        this.reviewsListView.setCellFactory(param -> new ListCell<Review>(){
+            @Override
+            protected void updateItem(Review item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item==null) {
+                    this.setGraphic(null);
+                    this.setText(null); 
+                }else{
+                    this.setMinWidth(param.getWidth());
+                    this.setMaxWidth(param.getWidth());
+                    this.setPrefWidth(param.getWidth());
+
+                    this.setWrapText(true);
+                    var formattedReview = MainWindow.this.formatReview(item);
+                    this.setText(formattedReview);
+                }
+            }
+        });
+
         this.zoomLevelTextField.setStyle("-fx-text-fill: green; -fx-font-size: 10px;");
         this.updateZoomLevel();
+    }
+
+    private String formatReview(Review review) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Reviewer: ").append(review.getName()).append(System.lineSeparator());
+        builder.append("Content: ").append(review.getContent()).append(System.lineSeparator());
+        builder.append("Score: ").append(review.getScore()).append(System.lineSeparator());
+        builder.append("Entry Date: ").append(review.getEntryDate().toLocalDate());
+        return builder.toString();
     }
 
     private void updateZoomLevel() {
@@ -425,10 +468,10 @@ public class MainWindow {
                 this.updateNodeStyle(this.rootNode);
             }
 
-            if (this.selectedNode != null) {
-                var newSelected = nodeMap.get(((PersonNode) this.selectedNode.getUserData()).getUniqueID());
-                this.selectedNode = newSelected;
-                this.updateNodeStyle(this.selectedNode);
+            if (this.selectedNodeButton != null) {
+                var newSelected = nodeMap.get(((PersonNode) this.selectedNodeButton.getUserData()).getUniqueID());
+                this.selectedNodeButton = newSelected;
+                this.updateNodeStyle(this.selectedNodeButton);
 
             }
         } catch (Exception e) {
@@ -442,7 +485,6 @@ public class MainWindow {
         var visibleNodes = new ArrayList<Node>();
         var hiddenNodes = new ArrayList<Node>();
         ObservableList<String> list = FXCollections.observableArrayList();
-        
 
         if (textFromSearchTextField == null || textFromSearchTextField.isBlank()) {
             visibleNodes.addAll(this.canvas.getChildren());
@@ -508,7 +550,7 @@ public class MainWindow {
         }
         if (this.rootNode == node) {
             node.setStyle(ROOT_NODE_STYLE);
-        } else if (this.selectedNode == node) {
+        } else if (this.selectedNodeButton == node) {
             node.setStyle(SELECTED_NODE_STYLE);
         } else {
             node.setStyle(DEFAULT_NODE_STYLE);
@@ -516,14 +558,14 @@ public class MainWindow {
     }
 
     private void selectNode(JFXButton node) {
-        JFXButton previousNode = this.selectedNode;
-        this.selectedNode = node;
+        var previousNodeButton = this.selectedNodeButton;
+        this.selectedNodeButton = node;
 
-        this.updateNodeStyle(previousNode);
+        this.updateNodeStyle(previousNodeButton);
         this.updateNodeStyle(node);
 
-        PersonNode currentNode = (PersonNode) this.selectedNode.getUserData();
-        Person currentPerson = currentNode.getValue();
+        var currentNode = (PersonNode) this.selectedNodeButton.getUserData();
+        var currentPerson = currentNode.getValue();
 
         this.nickname.setText(currentPerson.getNickname());
 
@@ -535,11 +577,11 @@ public class MainWindow {
         this.dateOfDeath.setValue(currentPerson.getDateOfDeath());
         this.occupation.setText(currentPerson.getOccupation());
         this.description.setText(currentPerson.getDescription());
-        //TODO Add in Review Fields Population
 
+        var reviews = FXCollections.observableArrayList(currentPerson.getReviews());
+        this.reviewsListView.getItems().setAll(reviews);
 
-    
-        this.relationshipPane.setDisable(this.selectedNode == this.rootNode || this.rootNode == null);
+        this.relationshipPane.setDisable(this.selectedNodeButton == this.rootNode || this.rootNode == null);
         var edge = this.findEdge(currentNode.getUniqueID());
 
         if (edge.isPresent()) {
@@ -572,8 +614,8 @@ public class MainWindow {
     }
 
     private void deselectNode() {
-        JFXButton previousNode = this.selectedNode;
-        this.selectedNode = null;
+        JFXButton previousNode = this.selectedNodeButton;
+        this.selectedNodeButton = null;
 
         this.updateNodeStyle(previousNode);
 
@@ -614,7 +656,7 @@ public class MainWindow {
                         currentNode.getTranslateY(), node.getUniqueID(), currentPerson.getNickname(),
                         currentPerson.getFirstName(), currentPerson.getLastName(), currentPerson.getAddress(),
                         currentPerson.getPhoneNumber(), currentPerson.getDateOfBirth(), currentPerson.getDateOfDeath(),
-                        currentPerson.getOccupation(), currentPerson.getDescription());
+                        currentPerson.getOccupation(), currentPerson.getDescription(), currentPerson.getReviews());
                 PersonNode updatedNode = (PersonNode) response.getData();
                 currentNode.setUserData(updatedNode);
             }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ public class Gateway extends Thread {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.serializeNulls();
 
-		JsonSerializer<LocalDate> dateSerializer = new JsonSerializer<LocalDate>() {
+		JsonSerializer<LocalDate> localDateSerializer = new JsonSerializer<LocalDate>() {
 			@Override
 			public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
 				JsonObject jsonMerchant = new JsonObject();
@@ -69,7 +70,7 @@ public class Gateway extends Thread {
 			}
 		};
 
-		JsonDeserializer<LocalDate> dateDeserializer = new JsonDeserializer<LocalDate>() {
+		JsonDeserializer<LocalDate> localDateDeserializer = new JsonDeserializer<LocalDate>() {
 			@Override
 			public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 					throws JsonParseException {
@@ -79,8 +80,32 @@ public class Gateway extends Thread {
 			}
 		};
 
-		gsonBuilder.registerTypeAdapter(LocalDate.class, dateSerializer);
-		gsonBuilder.registerTypeAdapter(LocalDate.class, dateDeserializer);
+		gsonBuilder.registerTypeAdapter(LocalDate.class, localDateSerializer);
+		gsonBuilder.registerTypeAdapter(LocalDate.class, localDateDeserializer);
+
+		JsonSerializer<LocalDateTime> localDateTimeSerializer = new JsonSerializer<LocalDateTime>() {
+			@Override
+			public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
+				JsonObject jsonMerchant = new JsonObject();
+
+				jsonMerchant.addProperty("datetime", src.toString());
+
+				return jsonMerchant;
+			}
+		};
+
+		JsonDeserializer<LocalDateTime> localDateTimeDeserializer = new JsonDeserializer<LocalDateTime>() {
+			@Override
+			public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+					throws JsonParseException {
+				JsonObject jsonObject = json.getAsJsonObject();
+
+				return LocalDateTime.parse(jsonObject.get("datetime").getAsString());
+			}
+		};
+
+		gsonBuilder.registerTypeAdapter(LocalDateTime.class, localDateTimeSerializer);
+		gsonBuilder.registerTypeAdapter(LocalDateTime.class, localDateTimeDeserializer);
 		
 		this.gson = gsonBuilder.create();
 
@@ -88,6 +113,12 @@ public class Gateway extends Thread {
 		this.credStorage = new CredentialStorage();
 		this.graphService = new GraphService();
 		this.serverIsActive = true;
+
+		var testCredentials = new Credentials("pass", "user");
+		String uniqueId = UUID.randomUUID().toString();
+
+		credStorage.add(testCredentials, uniqueId);
+		this.userService.createAccount("User", "Testing", LocalDate.now(), "1234567890", uniqueId);
 	}
 
 	/**

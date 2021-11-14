@@ -1,5 +1,7 @@
 package devops.model.implementations;
 
+import java.time.LocalDateTime;
+
 /**
  * Review of a Person
  * 
@@ -13,7 +15,8 @@ public class Review {
     private String name;
     private String content;
     private int score;
-
+    private LocalDateTime entryDate;
+    
     /**
      * Three-paramater constructor.
      * 
@@ -42,6 +45,7 @@ public class Review {
         this.name = name;
         this.content = content;
         this.score = score;
+        this.entryDate = LocalDateTime.now();
     }
 
     /**
@@ -80,10 +84,22 @@ public class Review {
         return this.score;
     }
 
+    /**
+     * Gets the entry date.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return the entry date
+     */
+    public LocalDateTime getEntryDate() {
+        return this.entryDate;
+    }
+
     @Override
     public boolean equals(Object item){
         if (item == null){
-            throw new IllegalArgumentException("The review cannot be null.");
+            return false;
         }
         if (!(item instanceof Review)){
             throw new IllegalArgumentException("Comparison must be applied to object of type Review.");
