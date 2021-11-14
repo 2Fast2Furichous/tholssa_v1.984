@@ -263,20 +263,38 @@ public class MainWindow {
 
     @FXML
     void selectedSearchResultPerson(ActionEvent event) {
+        if (this.searchResultsByName.getValue() == null) {
+            return;
+        }
+
         for (var tholssaNode : this.canvas.getChildren()) {
             var nodeData = tholssaNode.getUserData();
-                if (nodeData instanceof PersonNode) {
-                    PersonNode currentNode = (PersonNode) nodeData;
-                    Person currentPerson = currentNode.getValue();
-                    if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
-                        //this.setRootNode(currentNode);
-                        this.canvas.setPivot(currentPerson.getPositionX(), currentPerson.getPositionY());
-				           
-                        //this.canvas.setScale(canvas.getScale() +100);
-                    }
-                } 
+            if (nodeData instanceof PersonNode) {
+                PersonNode currentNode = (PersonNode) nodeData;
+                Person currentPerson = currentNode.getValue();
+                if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
+                    this.canvas.setTranslateX(this.tholssaGraph.getPrefWidth() / 2);
+                    this.canvas.setTranslateY(this.tholssaGraph.getPrefHeight() / 2);
+
+                    this.canvas.setTranslateX(currentPerson.getPositionX());
+                    this.canvas.setTranslateY(currentPerson.getPositionY());
+
+                    this.canvas.setPivot((currentPerson.getPositionX()/3)-75, (currentPerson.getPositionY()/3)+100);
+                    this.canvas.setScale(1);
+                    this.canvas.setScale(canvas.getScale()/1.2);
+                    this.updateZoomLevel();
+                    break;
+                }
+            }
         }
-       
+        
+        this.deselectSearchSelection();
+    }
+
+    private void deselectSearchSelection() {
+        this.searchResultsByName.getItems().add(0, null);
+        this.searchResultsByName.setValue(null);
+        this.searchResultsByName.getItems().remove(0);
     }
 
     @FXML
@@ -425,6 +443,7 @@ public class MainWindow {
         var hiddenNodes = new ArrayList<Node>();
         ObservableList<String> list = FXCollections.observableArrayList();
         
+
         if (textFromSearchTextField == null || textFromSearchTextField.isBlank()) {
             visibleNodes.addAll(this.canvas.getChildren());
         } else {
@@ -437,7 +456,6 @@ public class MainWindow {
                         hiddenNodes.add(tholssaNode);
                     } else {
                         list.add(currentPerson.getFullNameWithNickname());
-                        this.searchResultsByName.setItems(list);
                         visibleNodes.add(tholssaNode);
                     }
                 } else if (nodeData instanceof PersonEdge) {
@@ -445,6 +463,7 @@ public class MainWindow {
                 }
             }
         }
+        this.searchResultsByName.setItems(list);
 
         for (var tholssaNode : visibleNodes) {
             tholssaNode.setStyle(DEFAULT_NODE_STYLE);
