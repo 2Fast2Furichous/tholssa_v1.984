@@ -2,7 +2,7 @@ package devops.model.implementations;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * The object representing a person
@@ -22,7 +22,7 @@ public class Person implements Comparable<Person> {
 	private String description;
 	private double positionX;
 	private double positionY;
-	private Collection<Review> reviews;
+	private List<Review> reviews;
 
 	/**
 	 * Creates a new person with the given details
@@ -31,8 +31,9 @@ public class Person implements Comparable<Person> {
 	 * @postconditions getDescription() == description && getOccupation() ==
 	 *                 occupation && getDateOfDeath() == dateOfDeath &&
 	 *                 getDateOfBirth() == dateOfBirth && getAddress() == address &&
-	 *                 getPhoneNumber() == phoneNumber && getLastName() == lastName
-	 *                 getFirstName() == firstName && getNickname() == nickname
+	 *                 getPhoneNumber() == phoneNumber && getLastName() == lastName &&
+	 *                 getFirstName() == firstName && getNickname() == nickname &&
+	 * 				getReviews() != null
 	 * 
 	 * @param nickname
 	 * @param firstName
@@ -60,6 +61,44 @@ public class Person implements Comparable<Person> {
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.reviews = new ArrayList<Review>();
+	}
+
+	/**
+	 * Creates a new person with the given details
+	 * 
+	 * @preconditions none
+	 * @postconditions getDescription() == description && getOccupation() ==
+	 *                 occupation && getDateOfDeath() == dateOfDeath &&
+	 *                 getDateOfBirth() == dateOfBirth && getAddress() == address &&
+	 *                 getPhoneNumber() == phoneNumber && getLastName() == lastName
+	 *                 && getFirstName() == firstName && getNickname() == nickname
+	 *                 && getReviews() == reviews
+	 * 
+	 * @param nickname
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param phoneNumber
+	 * @param dateOfBirth
+	 * @param dateOfDeath
+	 * @param occupation
+	 * @param description
+	 */
+	public Person(double positionX, double positionY, String nickname, String firstName, String lastName,
+			String address, String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation,
+			String description, List<Review> reviews) {
+		this.nickname = nickname;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.dateOfBirth = dateOfBirth;
+		this.dateOfDeath = dateOfDeath;
+		this.occupation = occupation;
+		this.description = description;
+		this.positionX = positionX;
+		this.positionY = positionY;
+		this.reviews = reviews;
 	}
 
 	/**
@@ -212,7 +251,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 * @return the collection of reviews
 	 */
-	public Collection<Review> getReviews(){
+	public List<Review> getReviews(){
 		return this.reviews;
 	}
 

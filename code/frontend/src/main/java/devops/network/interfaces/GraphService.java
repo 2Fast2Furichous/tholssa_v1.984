@@ -2,9 +2,11 @@ package devops.network.interfaces;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 import devops.model.implementations.NodeFilter;
 import devops.model.implementations.Relationship;
+import devops.model.implementations.Review;
 import devops.model.implementations.ServiceResponse;
 
 public interface GraphService {
@@ -58,7 +60,8 @@ public interface GraphService {
 	public ServiceResponse updateNode(
 			double positionX, 
 			double positionY, String guid, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description);
+			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description, 
+			List<Review> reviews);
 
 	/**
 	 * Updates the specified node with the new person

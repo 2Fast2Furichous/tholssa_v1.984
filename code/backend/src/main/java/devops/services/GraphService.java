@@ -171,6 +171,11 @@ public class GraphService {
 	public PersonNode updateNode(String guid, Person person) {
 		PersonNode updatedNode = this.nodeStorage.get(guid);
 		updatedNode.setValue(person);
+
+		person.getReviews().sort((var review1, var review2) -> {
+			return review2.getEntryDate().compareTo(review1.getEntryDate());
+		});
+		
 		return this.nodeStorage.update(updatedNode);
 	}
 

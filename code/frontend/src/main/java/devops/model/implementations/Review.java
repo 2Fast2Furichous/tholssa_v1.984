@@ -1,5 +1,7 @@
 package devops.model.implementations;
 
+import java.time.LocalDateTime;
+
 /**
  * Review of a Person
  * 
@@ -8,11 +10,12 @@ package devops.model.implementations;
  */
 public class Review {
 
-    private static final int MAXIMUM_SCORE = 5;
+    public static final int MAXIMUM_SCORE = 5;
     public static final int MINIMUM_SCORE = 1;
     private String name;
     private String content;
     private int score;
+    private LocalDateTime entryDate;
 
     /**
      * Three-paramater constructor.
@@ -24,24 +27,10 @@ public class Review {
      * @param score the score.
      */
     public Review(String name, String content, int score) {
-        if (name == null){
-            throw new IllegalArgumentException("Name cannot be null.");
-        }
-        if (name.isBlank()){
-            throw new IllegalArgumentException("Name cannot be blank.");
-        }
-        if(content == null){
-            throw new IllegalArgumentException("Content cannot be null.");
-        }
-        if(content.isBlank()){
-            throw new IllegalArgumentException("Content cannot be blank.");
-        }
-        if (score < MINIMUM_SCORE || score > MAXIMUM_SCORE){
-            throw new IllegalArgumentException("Score must be between 1 and 5.");
-        }
         this.name = name;
         this.content = content;
         this.score = score;
+        this.entryDate = LocalDateTime.now();
     }
 
     /**
@@ -80,10 +69,22 @@ public class Review {
         return this.score;
     }
 
+    /**
+     * Gets the entry date.
+     * 
+     * @precondition none
+     * @postcondition none
+     * 
+     * @return the entry date
+     */
+    public LocalDateTime getEntryDate() {
+        return this.entryDate;
+    }
+
     @Override
     public boolean equals(Object item){
         if (item == null){
-            throw new IllegalArgumentException("The review cannot be null.");
+            return false;
         }
         if (!(item instanceof Review)){
             throw new IllegalArgumentException("Comparison must be applied to object of type Review.");
