@@ -24,6 +24,7 @@ import devops.model.implementations.Relationship;
 import devops.model.implementations.Review;
 import devops.model.implementations.ServiceResponse;
 import devops.utils.FXRouter;
+import devops.utils.GuiCommands;
 import devops.view.Elements.DragContext;
 import devops.view.Elements.NodeGestures;
 import devops.view.Elements.PannableCanvas;
@@ -172,9 +173,6 @@ public class MainWindow {
     private JFXComboBox<Integer> reviewScoreComboBox;
 
     @FXML
-    private Label reviewError;
-
-    @FXML
     private JFXTextField zoomLevelTextField;
 
     private JFXButton rootNode;
@@ -214,16 +212,16 @@ public class MainWindow {
         Integer score = this.reviewScoreComboBox.getValue();
 
         if (name == null || name.isEmpty()) {
-            this.reviewError.setText("Name must not be empty.");
+            GuiCommands.showErrorDialog("Name must not be empty.");
             return;
         }
 
         if (content == null || content.isEmpty()) {
-            this.reviewError.setText("Content must not be empty.");
+            GuiCommands.showErrorDialog("Content must not be empty.");
             return;
         }
         if (score == null) {
-            this.reviewError.setText("A score must be selected.");
+            GuiCommands.showErrorDialog("A score must be selected.");
             return;
         }
 
