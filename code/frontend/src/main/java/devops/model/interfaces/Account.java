@@ -12,6 +12,48 @@ import java.time.LocalDate;
 public interface Account {
 
 	/**
+     * Set the account's last X coordinate
+     * 
+     * @param the account's last X coordinate
+     */
+	public void setLastX(double lastX);
+
+	/**
+     * Set the account's last X coordinate
+     * 
+     * @param the account's last X coordinate
+     */
+	public void setLastY(double lastY);
+
+	/**
+     * Set the account's last X coordinate
+     * 
+     * @param the account's last X coordinate
+     */
+	public void setLastScale(double lastScale);
+
+	/**
+	 * Get the account's last X coordinate
+	 * 
+	 * @return the account's last X coordinate
+	 */
+	public double getLastX();
+
+	/**
+	 * Get the account's last Y coordinate
+	 * 
+	 * @return the account's last Y coordinate
+	 */
+	public double getLastY();
+
+	/**
+	 * Get the account's last zoom scale
+	 * 
+	 * @return the account's last zoom scale
+	 */
+	public double getLastScale();
+
+	/**
 	 * Returns the account's phone number
 	 * 
 	 * @return the account's phone number

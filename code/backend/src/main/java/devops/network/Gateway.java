@@ -213,6 +213,9 @@ public class Gateway extends Thread {
 				case "Filter_Network":
 					response = this.handleFilteredNetwork(extractedJson);
 					break;
+				case "Update_Last_Root_Node":
+					response = this.handleUpdateLastRootNode(extractedJson);
+					break;
 				default:
 					throw new IllegalArgumentException("That request does not exist");
 			}
@@ -247,6 +250,9 @@ public class Gateway extends Thread {
 			response.addProperty("userLastName", account.getLastName());
 			response.addProperty("userDateOfBirth", account.getDateOfBirth().toString());
 			response.addProperty("userPhoneNumber", account.getPhoneNumber());
+			response.addProperty("lastX", account.getLastX());
+			response.addProperty("lastY", account.getLastY());
+			response.addProperty("lastScale", account.getLastScale());
 		} else {
 			throw new IllegalArgumentException("Unsuccessful login. Please try again.");
 		}
@@ -368,6 +374,23 @@ public class Gateway extends Thread {
 
 		response.addProperty("type", "success");
 		response.add("content", this.gson.toJsonTree(network));
+
+		return response;
+	}
+
+	private JsonObject handleUpdateLastRootNode(JsonObject extractedJson) {
+		Credentials loginInfo = this.gson.fromJson(extractedJson.get("credentials"), Credentials.class);
+		String uniqueId = this.credStorage.get(loginInfo);
+		double lastX = this.gson.fromJson(extractedJson.get("lastX"), Double.class);
+		double lastY = this.gson.fromJson(extractedJson.get("lastY"), Double.class);
+		double lastScale = this.gson.fromJson(extractedJson.get("lastScale"), Double.class);
+
+		this.userService.updateLastPosition(uniqueId, lastX, lastY, lastScale);
+		
+
+		JsonObject response = new JsonObject();
+
+		response.addProperty("type", "success");
 
 		return response;
 	}

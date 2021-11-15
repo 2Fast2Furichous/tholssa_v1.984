@@ -81,6 +81,9 @@ public class TestConstructor {
         assertEquals(validDate, actual.getDateOfBirth());
         assertEquals("1234567890", actual.getPhoneNumber());
         assertEquals("001", actual.getUniqueId());
+        assertEquals(0, actual.getLastX(), 0.001);
+        assertEquals(0, actual.getLastY(), 0.001);
+        assertEquals(1, actual.getLastScale(), 0.001);
     }
     
 }

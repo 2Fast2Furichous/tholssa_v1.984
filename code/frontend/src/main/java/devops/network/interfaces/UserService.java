@@ -33,4 +33,5 @@ public interface UserService {
 	 */
 	public ServiceResponse login(Credential loginCredentials);
 
+	public ServiceResponse updateLastPosition(double lastX, double lastY, double lastScale);
 }

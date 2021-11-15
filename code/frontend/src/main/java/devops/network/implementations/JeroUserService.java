@@ -21,6 +21,7 @@ import devops.network.utils.ServerCommunicator;
  */
 public class JeroUserService implements UserService {
 	private Gson gson;
+	private Object loginCredentials;
 
 	/**
 	 * Constructor that creates a Jero User service
@@ -90,13 +91,46 @@ public class JeroUserService implements UserService {
 		if(this.gson.fromJson(response.get("userDateOfBirth"), String.class) == null){
 			return ServerCommunicator.handleError(this.gson, response);
 		}
-		
 	
 		String firstName = this.gson.fromJson(response.get("userFirstName"), String.class);
 		String lastName = this.gson.fromJson(response.get("userLastName"), String.class);
 		LocalDate dateOfBirth = LocalDate.parse(this.gson.fromJson(response.get("userDateOfBirth"), String.class));
 		String phoneNumber = this.gson.fromJson(response.get("userPhoneNumber"), String.class);
-		return new ServiceResponse(new UserAccount(firstName, lastName, dateOfBirth, phoneNumber));
+		double lastX = this.gson.fromJson(response.get("lastX"), Double.class);
+		double lastY = this.gson.fromJson(response.get("lastY"), Double.class);
+		double lastScale = this.gson.fromJson(response.get("lastScale"), Double.class);
+
+		var user = new UserAccount(firstName, lastName, dateOfBirth, phoneNumber);
+		user.setLastX(lastX);
+		user.setLastY(lastY);
+		user.setLastScale(lastScale);
+
+		this.loginCredentials = loginCredentials;
+		return new ServiceResponse(user);
+	}
+
+	@Override
+	public ServiceResponse updateLastPosition(double lastX, double lastY, double lastScale) {
+
+		JsonObject lastPositionJson = new JsonObject();
+		JsonElement credentialsElement = this.gson.toJsonTree(this.loginCredentials, Credential.class);
+
+		lastPositionJson.addProperty("type", "Update_Last_Root_Node");
+		lastPositionJson.addProperty("lastX", lastX);
+		lastPositionJson.addProperty("lastY", lastY);
+		lastPositionJson.addProperty("lastScale", lastScale);
+		lastPositionJson.add("credentials", credentialsElement);
+	
+		String lastPositionRequest = this.gson.toJson(lastPositionJson);
+
+		String responseJson = ServerCommunicator.sendRequest(lastPositionRequest);
+		JsonObject response = this.gson.fromJson(responseJson, JsonObject.class);
+
+		if (response.get("type").toString().equals("error")) {
+			return ServerCommunicator.handleError(this.gson, response);
+		}
+
+		return new ServiceResponse(true);
 	}
 
 }

@@ -15,6 +15,9 @@ public class User {
 	private LocalDate dateOfBirth;
 	private String phoneNumber;
     private String uniqueId;
+    private double lastX;
+    private double lastScale;
+    private double lastY;
     
 
     /**
@@ -71,6 +74,9 @@ public class User {
     this.dateOfBirth = dateOfBirth;
     this.phoneNumber = phoneNumber;
     this.uniqueId = uniqueId;
+    this.lastX = 0;
+    this.lastY = 0;
+    this.lastScale = 1;
     }
 
     /**
@@ -139,5 +145,59 @@ public class User {
     @Override
     public int hashCode(){
         return this.uniqueId.hashCode();
+    }
+
+    /**
+     * Set the account's last X coordinate
+     * 
+     * @param the account's last X coordinate
+     */
+	public void setLastX(double lastX) {
+        this.lastX = lastX;
+	}
+
+    /**
+     * Set the account's last X coordinate
+     * 
+     * @param the account's last X coordinate
+     */
+	public void setLastY(double lastY) {
+        this.lastY = lastY;
+	}
+
+    /**
+     * Set the account's last X coordinate
+     * 
+     * @param the account's last X coordinate
+     */
+	public void setLastScale(double lastScale) {
+        this.lastScale = lastScale;
+	}
+
+    /**
+     * Get the account's last X coordinate
+     * 
+     * @return the account's last X coordinate
+     */
+    public double getLastX() {
+        return this.lastX;
+    }
+
+    /**
+     * Get the account's last X coordinate
+     * 
+     * @return the account's last X coordinate
+     */
+    public double getLastY() {
+        return this.lastY;
+    }
+
+    /**
+     * Get the account's last X coordinate
+     * 
+     * @return the account's last X coordinate
+     */
+    public double getLastScale() {
+        return this.lastScale;
     }
 }

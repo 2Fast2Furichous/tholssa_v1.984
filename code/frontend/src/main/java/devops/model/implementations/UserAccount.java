@@ -15,7 +15,9 @@ public class UserAccount implements Account {
 	private String lastName;
 	private LocalDate dateOfBirth;
 	private String phoneNumber;
-
+	private double lastX;
+	private double lastY;
+	private double lastScale;
 	/**
 	 * Instantiates a new UserAccount
 	 * 
@@ -66,7 +68,6 @@ public class UserAccount implements Account {
 		this.phoneNumber = phoneNumber;
 	}
 
-
 	@Override
 	public String getPhoneNumber() {
 		return this.phoneNumber;
@@ -85,5 +86,35 @@ public class UserAccount implements Account {
 	@Override
 	public String getFirstName() {
 		return this.firstName;
+	}
+
+	@Override
+	public double getLastX() {
+		return this.lastX;
+	}
+
+	@Override
+	public double getLastY() {
+		return this.lastY;
+	}
+
+	@Override
+	public double getLastScale() {
+		return this.lastScale;
+	}
+
+	@Override
+	public void setLastX(double lastX) {
+		this.lastX = lastX;
+	}
+
+	@Override
+	public void setLastY(double lastY) {
+		this.lastY = lastY;
+	}
+
+	@Override
+	public void setLastScale(double lastScale) {
+		this.lastScale = lastScale;
 	}
 }

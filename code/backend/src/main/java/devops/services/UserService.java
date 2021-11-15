@@ -82,4 +82,19 @@ public class UserService {
     public User login(String uniqueId){
         return this.users.get(uniqueId);
     }
+
+    /**
+     * Updates the users last root node
+     * 
+     * @precondition none
+     * @postcondition none
+     * @param uniqueId       the id that pertains to be desired user information.
+     * @param lastRootNodeID the last root node's unique ID
+     */
+    public void updateLastPosition(String uniqueId, double lastX, double lastY, double lastScale) {
+        var user = this.users.get(uniqueId);
+        user.setLastX(lastX);
+        user.setLastY(lastY);
+        user.setLastScale(lastScale);
+    }
 }

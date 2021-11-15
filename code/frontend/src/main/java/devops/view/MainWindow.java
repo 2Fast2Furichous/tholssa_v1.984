@@ -23,6 +23,7 @@ import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
 import devops.model.implementations.Review;
 import devops.model.implementations.ServiceResponse;
+import devops.model.implementations.UserAccount;
 import devops.utils.FXRouter;
 import devops.utils.GuiCommands;
 import devops.view.Elements.DragContext;
@@ -43,7 +44,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TitledPane;
@@ -175,7 +175,7 @@ public class MainWindow {
     @FXML
     private JFXTextField zoomLevelTextField;
 
-    private JFXButton rootNode;
+    private JFXButton rootNodeButton;
 
     private JFXButton selectedNodeButton;
 
@@ -195,7 +195,7 @@ public class MainWindow {
      *
      */
     public MainWindow() {
-        this.rootNode = null;
+        this.rootNodeButton = null;
         this.nodeMap = new HashMap<String, JFXButton>();
         this.lineMap = new HashMap<String, Group>();
     }
@@ -267,7 +267,7 @@ public class MainWindow {
                         edge.get(), relation, relationStartDate, relationEndDate);
 
             } else {
-                this.requestCreateEdge(this.rootNode, this.selectedNodeButton, relation, relationStartDate, relationEndDate);
+                this.requestCreateEdge(this.rootNodeButton, this.selectedNodeButton, relation, relationStartDate, relationEndDate);
             }
         }
         else if (edge.isPresent()) {
@@ -278,11 +278,11 @@ public class MainWindow {
     }
 
     private Optional<String> findEdge(String currentUniqueID) {
-        if (this.rootNode == null || currentUniqueID == null) {
+        if (this.rootNodeButton == null || currentUniqueID == null) {
             return Optional.empty();
         }
         
-        PersonNode rootNode = (PersonNode) this.rootNode.getUserData();
+        PersonNode rootNode = (PersonNode) this.rootNodeButton.getUserData();
         
         return rootNode.getEdges().stream().filter((edgeUniqueID) -> {
             var line = this.lineMap.get(edgeUniqueID);
@@ -312,22 +312,26 @@ public class MainWindow {
                 PersonNode currentNode = (PersonNode) nodeData;
                 Person currentPerson = currentNode.getValue();
                 if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
-                    this.canvas.setTranslateX(this.tholssaGraph.getPrefWidth() / 2);
-                    this.canvas.setTranslateY(this.tholssaGraph.getPrefHeight() / 2);
-
-                    this.canvas.setTranslateX(currentPerson.getPositionX());
-                    this.canvas.setTranslateY(currentPerson.getPositionY());
-
-                    this.canvas.setPivot((currentPerson.getPositionX()/3)-75, (currentPerson.getPositionY()/3)+100);
-                    this.canvas.setScale(1);
-                    this.canvas.setScale(canvas.getScale()/1.2);
-                    this.updateZoomLevel();
+                    this.focusOnPerson(currentPerson);
                     break;
                 }
             }
         }
         
         this.deselectSearchSelection();
+    }
+
+    private void focusOnPerson(Person person) {
+        this.canvas.setTranslateX(this.tholssaGraph.getPrefWidth() / 2);
+        this.canvas.setTranslateY(this.tholssaGraph.getPrefHeight() / 2);
+
+        this.canvas.setTranslateX(person.getPositionX());
+        this.canvas.setTranslateY(person.getPositionY());
+
+        this.canvas.setPivot((person.getPositionX() / 3) - 75, (person.getPositionY() / 3) + 100);
+        this.canvas.setScale(1);
+        this.canvas.setScale(canvas.getScale() / 1.2);
+        this.updateZoomLevel();
     }
 
     private void deselectSearchSelection() {
@@ -379,6 +383,15 @@ public class MainWindow {
         });
 
         this.zoomLevelTextField.setStyle("-fx-text-fill: green; -fx-font-size: 10px;");
+
+        var account = (UserAccount) FXRouter.getData();
+        double lastX = account.getLastX();
+        double lastY = account.getLastY();
+        double lastScale = account.getLastScale();
+        this.canvas.setScale(lastScale);
+        this.canvas.setTranslateX(lastX);
+        this.canvas.setTranslateY(lastY);
+
         this.updateZoomLevel();
     }
 
@@ -412,16 +425,14 @@ public class MainWindow {
 
         DragContext clickPoint = new DragContext();
 
-        addNodeMenuItem.setOnAction(event -> {
+        addNodeMenuItem.setOnAction(actionEvent -> {
             contextMenu.hide();
 
             Point2D relPoint = canvas.sceneToLocal(clickPoint.mouseAnchorX, clickPoint.mouseAnchorY);
             requestCreateNode(relPoint.getX(), relPoint.getY());
         });
 
-        this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
+        this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
                 if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 2) {
                     clickPoint.mouseAnchorX = mouseEvent.getSceneX();
                     clickPoint.mouseAnchorY = mouseEvent.getSceneY();
@@ -435,11 +446,15 @@ public class MainWindow {
                     MainWindow.this.deselectRootNode();
                 }
             }
-        });
+        );
 
         SceneGestures sceneGestures = new SceneGestures(canvas);
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
+        this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseEvent -> {
+                MainWindow.this.updateLastPosition();
+        });
+
         this.tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
         this.tholssaGraph.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
             @Override
@@ -449,6 +464,11 @@ public class MainWindow {
         });  
     }
 
+    private void updateLastPosition() {
+        App.getUserService().updateLastPosition(this.canvas.getTranslateX(), this.canvas.getTranslateY(),
+            this.canvas.getScale());
+    }
+
     @FXML
     void handleApplyFilters(ActionEvent event) {
        this.applyFilters();
@@ -456,7 +476,7 @@ public class MainWindow {
 
     private void applyFilters() {
                 Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
-        if (this.rootNode != null) {
+        if (this.rootNodeButton != null) {
             if (this.familyFilter.isSelected()) {
                 filters.add(NodeFilter.Family);
             }
@@ -467,7 +487,7 @@ public class MainWindow {
                 filters.add(NodeFilter.Business);
             }
             var depth = this.depthFilter.getValue();
-            this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters, depth);
+            this.populateGraph(((PersonNode) this.rootNodeButton.getUserData()).getUniqueID(), filters, depth);
         } else {
             this.populateGraph("", filters, MAXIMUM_DEPTH);
         }
@@ -504,8 +524,8 @@ public class MainWindow {
 
             if (rootNodeGuid != null && !rootNodeGuid.isBlank()) {
                 var newRoot = nodeMap.get(rootNodeGuid);
-                this.rootNode = newRoot;
-                this.updateNodeStyle(this.rootNode);
+                this.rootNodeButton = newRoot;
+                this.updateNodeStyle(this.rootNodeButton);
             }
 
             if (this.selectedNodeButton != null) {
@@ -588,7 +608,7 @@ public class MainWindow {
         if (node == null) {
             return;
         }
-        if (this.rootNode == node) {
+        if (this.rootNodeButton == node) {
             node.setStyle(ROOT_NODE_STYLE);
         } else if (this.selectedNodeButton == node) {
             node.setStyle(SELECTED_NODE_STYLE);
@@ -621,7 +641,7 @@ public class MainWindow {
         var reviews = FXCollections.observableArrayList(currentPerson.getReviews());
         this.reviewsListView.getItems().setAll(reviews);
 
-        this.relationshipPane.setDisable(this.selectedNodeButton == this.rootNode || this.rootNode == null);
+        this.relationshipPane.setDisable(this.selectedNodeButton == this.rootNodeButton || this.rootNodeButton == null);
         var edge = this.findEdge(currentNode.getUniqueID());
 
         if (edge.isPresent()) {
@@ -728,12 +748,12 @@ public class MainWindow {
         currentNode.setContextMenu(contextMenu);
     }
 
-    private void selectRootNode(JFXButton node) {
-        JFXButton previousNode = this.rootNode;
-        this.rootNode = node;
+    private void selectRootNode(JFXButton nodeButton) {
+        JFXButton previousNode = this.rootNodeButton;
+        this.rootNodeButton = nodeButton;
 
         this.updateNodeStyle(previousNode);
-        this.updateNodeStyle(node);
+        this.updateNodeStyle(nodeButton);
         
         Timeline timelineDown = new Timeline();
         KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
@@ -749,8 +769,8 @@ public class MainWindow {
     }
 
     private void deselectRootNode() {
-        JFXButton previousNode = this.rootNode;
-        this.rootNode = null;
+        JFXButton previousNode = this.rootNodeButton;
+        this.rootNodeButton = null;
 
         this.updateNodeStyle(previousNode);
         
