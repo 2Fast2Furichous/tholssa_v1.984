@@ -42,6 +42,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TitledPane;
@@ -171,6 +172,9 @@ public class MainWindow {
     private JFXComboBox<Integer> reviewScoreComboBox;
 
     @FXML
+    private Label reviewError;
+
+    @FXML
     private JFXTextField zoomLevelTextField;
 
     private JFXButton rootNode;
@@ -207,7 +211,21 @@ public class MainWindow {
     void handleAddReview(ActionEvent event) {
         String name = this.reviewNameTextBox.getText();
         String content = this.reviewContentTextBox.getText();
-        int score = this.reviewScoreComboBox.getValue();
+        Integer score = this.reviewScoreComboBox.getValue();
+
+        if (name == null || name.isEmpty()) {
+            this.reviewError.setText("Name must not be empty.");
+            return;
+        }
+
+        if (content == null || content.isEmpty()) {
+            this.reviewError.setText("Content must not be empty.");
+            return;
+        }
+        if (score == null) {
+            this.reviewError.setText("A score must be selected.");
+            return;
+        }
 
         var review = new Review(name, content, score);
         this.reviewsListView.getItems().add(0, review);
@@ -343,7 +361,6 @@ public class MainWindow {
         for (var score = Review.MINIMUM_SCORE; score <= Review.MAXIMUM_SCORE; score++) {
             this.reviewScoreComboBox.getItems().add(score);
         }
-        
         this.reviewsListView.setCellFactory(param -> new ListCell<Review>(){
             @Override
             protected void updateItem(Review item, boolean empty) {
