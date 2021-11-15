@@ -228,10 +228,11 @@ public class JeroGraphService implements GraphService {
 	}
 
 	@Override
-	public ServiceResponse getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters) {
+	public ServiceResponse getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters, int maxDepth) {
 
 		JsonObject filterRequest = new JsonObject();
 		filterRequest.addProperty("rootNodeGuid", rootNodeGuid);
+		filterRequest.addProperty("depth", maxDepth);
 		filterRequest.add("filters", this.gson.toJsonTree(filters));
 
 		JsonObject networkRequest = new JsonObject();

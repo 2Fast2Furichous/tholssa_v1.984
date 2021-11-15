@@ -64,6 +64,10 @@ public class MainWindow {
 
     private static final String ROOT_NODE_STYLE = "-fx-background-color: #ea3645; -fx-background-radius: 5em; -fx-border-radius: 15; -fx-background-insets: -1.4, 0;";
 
+    private static final int MINIMUM_DEPTH = 1;
+
+    private static final int MAXIMUM_DEPTH = 5;
+
     @FXML
     private JFXButton logoutButton;
 
@@ -122,7 +126,16 @@ public class MainWindow {
     private JFXButton showButton;
 
     @FXML
+    private JFXCheckBox friendFilter;
+
+    @FXML
     private JFXCheckBox familyFilter;
+
+    @FXML
+    private JFXCheckBox businessFilter;
+
+    @FXML
+    private JFXComboBox<Integer> depthFilter;
 
     @FXML
     private JFXButton applyFiltersButton;
@@ -310,7 +323,7 @@ public class MainWindow {
     @FXML
     void initialize() {
         this.setupGraph();
-        this.populateGraph("", new ArrayList<NodeFilter>());
+        this.populateGraph("", new ArrayList<NodeFilter>(), MAXIMUM_DEPTH);
         this.addSubmitNodeInputValidation();
         
         this.infoColumn.maxWidthProperty().set(0);
@@ -322,6 +335,11 @@ public class MainWindow {
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
 
+        for (var depth = MINIMUM_DEPTH; depth <= MAXIMUM_DEPTH; depth++) {
+            this.depthFilter.getItems().add(depth);
+        }
+        this.depthFilter.setValue(MAXIMUM_DEPTH);
+        
         for (var score = Review.MINIMUM_SCORE; score <= Review.MAXIMUM_SCORE; score++) {
             this.reviewScoreComboBox.getItems().add(score);
         }
@@ -427,13 +445,20 @@ public class MainWindow {
             if (this.familyFilter.isSelected()) {
                 filters.add(NodeFilter.Family);
             }
-            this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters);
+            if (this.friendFilter.isSelected()) {
+                filters.add(NodeFilter.Friend);
+            }
+            if (this.businessFilter.isSelected()) {
+                filters.add(NodeFilter.Business);
+            }
+            var depth = this.depthFilter.getValue();
+            this.populateGraph(((PersonNode) this.rootNode.getUserData()).getUniqueID(), filters, depth);
         } else {
-            this.populateGraph("", filters);
+            this.populateGraph("", filters, MAXIMUM_DEPTH);
         }
     }
 
-    private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters) {
+    private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters, int depth) {
         this.canvas.getChildren().clear();
         //this.canvas.addGrid();
 
@@ -441,7 +466,7 @@ public class MainWindow {
         this.lineMap.clear();
         try {
 
-            ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters);
+            ServiceResponse response = App.getGraphService().getFilteredNetwork(rootNodeGuid, filters, depth);
             PersonNetwork network = (PersonNetwork) response.getData();
 
             for (PersonNode node : network.getNodes()) {
