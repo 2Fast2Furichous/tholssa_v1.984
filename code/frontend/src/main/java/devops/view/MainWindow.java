@@ -791,7 +791,7 @@ public class MainWindow {
     private void requestCreateNode(double originX, double originY) {
         JFXButton nodeButton = this.createNode(originX, originY);
 
-        ServiceResponse response = App.getGraphService().createNode(originX, originY, "unknown", null, null, null, null,
+        ServiceResponse response = App.getGraphService().createNode(originX, originY, "unknown", "unknown", "unknown", null, null,
                 null, null, null, null);
         PersonNode node = (PersonNode) response.getData();
         nodeButton.setUserData(node);
