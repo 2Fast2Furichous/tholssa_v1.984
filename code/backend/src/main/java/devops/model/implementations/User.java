@@ -88,7 +88,7 @@ public class User {
      * @return the unique id
      */
     public String getUniqueId() {
-        return uniqueId;
+        return this.uniqueId;
     }
 
     /**
