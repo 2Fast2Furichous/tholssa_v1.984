@@ -106,7 +106,7 @@ public class Gateway extends Thread {
 
 		gsonBuilder.registerTypeAdapter(LocalDateTime.class, localDateTimeSerializer);
 		gsonBuilder.registerTypeAdapter(LocalDateTime.class, localDateTimeDeserializer);
-		
+
 		this.gson = gsonBuilder.create();
 
 		this.userService = new UserService();
@@ -117,7 +117,7 @@ public class Gateway extends Thread {
 		var testCredentials = new Credentials("pass", "user");
 		String uniqueId = UUID.randomUUID().toString();
 
-		credStorage.add(testCredentials, uniqueId);
+		this.credStorage.add(testCredentials, uniqueId);
 		this.userService.createAccount("User", "Testing", LocalDate.now(), "1234567890", uniqueId);
 	}
 
@@ -129,7 +129,7 @@ public class Gateway extends Thread {
 	 * @return the user service.
 	 */
 	public UserService getUserService() {
-		return userService;
+		return this.userService;
 	}
 
 	@Override
@@ -137,106 +137,104 @@ public class Gateway extends Thread {
 		Context context = ZMQ.context(10);
 		this.socket = context.socket(ZMQ.REP);
 		this.socket.bind("tcp://127.0.0.1:5555");
-		//Thread shutdownThread = new Thread(() -> {
-			//this.handleShutdownServer();
-		//});
+		// Thread shutdownThread = new Thread(() -> {
+		// this.handleShutdownServer();
+		// });
 
-		//Thread serverThread = new Thread(() -> {
-			this.handleServerRequests();
-		//});
+		// Thread serverThread = new Thread(() -> {
+		this.handleServerRequests();
+		// });
 
-		//shutdownThread.setDaemon(true);
-		//serverThread.setDaemon(true);
-		//serverThread.start();
-		//shutdownThread.start();
-		//try {
-		//	shutdownThread.join();
+		// shutdownThread.setDaemon(true);
+		// serverThread.setDaemon(true);
+		// serverThread.start();
+		// shutdownThread.start();
+		// try {
+		// shutdownThread.join();
 
-		//} catch (InterruptedException e) {
-		//	e.printStackTrace();
-		//}
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
 
+		this.socket.close();
+		context.close();
 
-        this.socket.close();
-        context.close();
-		
 	}
-	
-	private void handleShutdownServer(){
-		while (true){
-			try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(System.in))){
+
+	private void handleShutdownServer() {
+		while (true) {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
 				System.out.println("Enter shutdown to shut down the server: ");
-				
-				if (reader.readLine().equalsIgnoreCase("shutdown")){
+
+				if (reader.readLine().equalsIgnoreCase("shutdown")) {
 					break;
-				} 
-			} catch(IOException e){
+				}
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private void handleServerRequests(){
+	private void handleServerRequests() {
 		while (true) {
-	try {
-		String request = this.socket.recvStr();
-		JsonObject extractedJson = this.gson.fromJson(request, JsonObject.class);
-		JsonObject response = null;
-		try {
-			String requstType = this.gson.fromJson(extractedJson.get("type"), String.class);
-			switch (requstType) {
-				case "Create Account":
-					response = this.handleCreateAccount(extractedJson);
-					break;
-				case "Login":
-					response = this.handleLogin(extractedJson);
-					break;
-				case "Remove_Edge":
-					response = this.handleRemoveEdge(extractedJson);
-					break;
-				case "Remove_Node":
-					response = this.handleRemoveNode(extractedJson);
-					break;
-				case "Update_Edge":
-					response = this.handleUpdateEdge(extractedJson);
-					break;
-				case "Update_Node":
-					response = this.handleUpdateNode(extractedJson);
-					break;
-				case "Connect_Nodes":
-					response = this.handleConnectNodes(extractedJson);
-					break;
-				case "Create_Node":
-					response = this.handleCreateNode(extractedJson);
-					break;
-				case "Filter_Network":
-					response = this.handleFilteredNetwork(extractedJson);
-					break;
-				case "Update_Last_Root_Node":
-					response = this.handleUpdateLastRootNode(extractedJson);
-					break;
-				default:
-					throw new IllegalArgumentException("That request does not exist");
+			try {
+				String request = this.socket.recvStr();
+				JsonObject extractedJson = this.gson.fromJson(request, JsonObject.class);
+				JsonObject response = null;
+				try {
+					String requstType = this.gson.fromJson(extractedJson.get("type"), String.class);
+					switch (requstType) {
+						case "Create Account":
+							response = this.handleCreateAccount(extractedJson);
+							break;
+						case "Login":
+							response = this.handleLogin(extractedJson);
+							break;
+						case "Remove_Edge":
+							response = this.handleRemoveEdge(extractedJson);
+							break;
+						case "Remove_Node":
+							response = this.handleRemoveNode(extractedJson);
+							break;
+						case "Update_Edge":
+							response = this.handleUpdateEdge(extractedJson);
+							break;
+						case "Update_Node":
+							response = this.handleUpdateNode(extractedJson);
+							break;
+						case "Connect_Nodes":
+							response = this.handleConnectNodes(extractedJson);
+							break;
+						case "Create_Node":
+							response = this.handleCreateNode(extractedJson);
+							break;
+						case "Filter_Network":
+							response = this.handleFilteredNetwork(extractedJson);
+							break;
+						case "Update_Last_Root_Node":
+							response = this.handleUpdateLastRootNode(extractedJson);
+							break;
+						default:
+							throw new IllegalArgumentException("That request does not exist");
+					}
+				} catch (Exception e) {
+					response = new JsonObject();
+					response.addProperty("type", "error");
+					response.addProperty("content", e.getMessage());
+				}
+
+				String responseJson = this.gson.toJson(response);
+				this.socket.send(responseJson.getBytes(ZMQ.CHARSET));
+
+			} catch (Exception e) {
+				JsonObject error = new JsonObject();
+				error.addProperty("type", "error");
+				error.addProperty("content", e.getMessage());
+				String errorJson = this.gson.toJson(error);
+				this.socket.send(errorJson.getBytes(ZMQ.CHARSET));
 			}
-		} catch (Exception e) {
-			response = new JsonObject();
-			response.addProperty("type", "error");
-			response.addProperty("content", e.getMessage());
 		}
-		
-		String responseJson = this.gson.toJson(response);
-		this.socket.send(responseJson.getBytes(ZMQ.CHARSET));
-	
-	} catch(Exception e){
-		JsonObject error = new JsonObject();
-		error.addProperty("type", "error");
-		error.addProperty("content", e.getMessage());
-		String errorJson = this.gson.toJson(error);
-		this.socket.send(errorJson.getBytes(ZMQ.CHARSET));
-	} 
-}
-}
+	}
 
 	private JsonObject handleLogin(JsonObject extractedJson) {
 		Credentials loginInfo = this.gson.fromJson(extractedJson.get("credentials"), Credentials.class);
@@ -244,7 +242,7 @@ public class Gateway extends Thread {
 		User account = this.userService.login(uniqueId);
 
 		JsonObject response = new JsonObject();
-		if (account != null){
+		if (account != null) {
 			response.addProperty("type", "success");
 			response.addProperty("userFirstName", account.getFirstName());
 			response.addProperty("userLastName", account.getLastName());
@@ -263,15 +261,15 @@ public class Gateway extends Thread {
 		Credentials newCredentials = this.gson.fromJson(extractedJson.get("credentials"), Credentials.class);
 		String uniqueId = UUID.randomUUID().toString();
 
-		credStorage.add(newCredentials, uniqueId);
+		this.credStorage.add(newCredentials, uniqueId);
 
 		String firstName = this.gson.fromJson(extractedJson.get("userFirstName"), String.class);
 		String lastName = this.gson.fromJson(extractedJson.get("userLastName"), String.class);
 		LocalDate dateOfBirth = LocalDate.parse(this.gson.fromJson(extractedJson.get("userDateOfBirth"), String.class));
 		String phoneNumber = this.gson.fromJson(extractedJson.get("userPhoneNumber"), String.class);
-		
+
 		JsonObject response = new JsonObject();
-		if (userService.createAccount(firstName, lastName, dateOfBirth, phoneNumber, uniqueId) != null){
+		if (this.userService.createAccount(firstName, lastName, dateOfBirth, phoneNumber, uniqueId) != null) {
 			response.addProperty("type", "success");
 			response.addProperty("content", "user was added successfully");
 		} else {
@@ -282,7 +280,7 @@ public class Gateway extends Thread {
 
 	private JsonObject handleCreateNode(JsonObject extractedJson) {
 		Person person = this.gson.fromJson(extractedJson.get("content"), Person.class);
-		
+
 		String nodeID = this.graphService.createNode(person);
 
 		PersonNode node = (PersonNode) this.graphService.getNode(nodeID);
@@ -298,7 +296,8 @@ public class Gateway extends Thread {
 	private JsonObject handleConnectNodes(JsonObject extractedJson) {
 		PersonEdge newEdge = this.gson.fromJson(extractedJson.get("content"), PersonEdge.class);
 
-		String edgeID = this.graphService.connectNodes(newEdge.getSource(), newEdge.getDestination(), newEdge.getRelation(), newEdge.getDateOfConnection(), newEdge.getDateOfConnectionEnd());
+		String edgeID = this.graphService.connectNodes(newEdge.getSource(), newEdge.getDestination(),
+				newEdge.getRelation(), newEdge.getDateOfConnection(), newEdge.getDateOfConnectionEnd());
 
 		PersonEdge edge = (PersonEdge) this.graphService.getEdge(edgeID);
 		JsonObject response = new JsonObject();
@@ -332,7 +331,7 @@ public class Gateway extends Thread {
 
 		return response;
 	}
-	
+
 	private JsonObject handleUpdateNode(JsonObject extractedJson) {
 		PersonNode updateNode = this.gson.fromJson(extractedJson.get("content"), PersonNode.class);
 
@@ -348,9 +347,8 @@ public class Gateway extends Thread {
 	private JsonObject handleUpdateEdge(JsonObject extractedJson) {
 		PersonEdge updateEdge = this.gson.fromJson(extractedJson.get("content"), PersonEdge.class);
 
-		PersonEdge edge = (PersonEdge) this.graphService.updateEdge(
-				updateEdge.getUniqueID(),
-				updateEdge.getRelation(), updateEdge.getDateOfConnection(), updateEdge.getDateOfConnectionEnd());
+		PersonEdge edge = (PersonEdge) this.graphService.updateEdge(updateEdge.getUniqueID(), updateEdge.getRelation(),
+				updateEdge.getDateOfConnection(), updateEdge.getDateOfConnectionEnd());
 
 		JsonObject response = new JsonObject();
 
@@ -362,9 +360,10 @@ public class Gateway extends Thread {
 
 	private JsonObject handleFilteredNetwork(JsonObject extractedJson) {
 		JsonObject content = this.gson.fromJson(extractedJson.get("content"), JsonObject.class);
-		String rootNodeGuid =  this.gson.fromJson(content.get("rootNodeGuid"), String.class);
+		String rootNodeGuid = this.gson.fromJson(content.get("rootNodeGuid"), String.class);
 
-		Type filterListType = new TypeToken<Collection<NodeFilter>>(){}.getType();
+		Type filterListType = new TypeToken<Collection<NodeFilter>>() {
+		}.getType();
 		Collection<NodeFilter> filters = this.gson.fromJson(content.get("filters"), filterListType);
 		int depth = this.gson.fromJson(content.get("depth"), int.class);
 
@@ -386,7 +385,6 @@ public class Gateway extends Thread {
 		double lastScale = this.gson.fromJson(extractedJson.get("lastScale"), Double.class);
 
 		this.userService.updateLastPosition(uniqueId, lastX, lastY, lastScale);
-		
 
 		JsonObject response = new JsonObject();
 

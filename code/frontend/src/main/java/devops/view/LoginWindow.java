@@ -37,15 +37,16 @@ public class LoginWindow {
 
 
 	@FXML
-	public void initialize(){
+	void initialize() {
 		this.setupListeners();
 	}
 
-	private void setupListeners(){
+	private void setupListeners() {
 		this.login.disableProperty().bind(this.username.textProperty().isEmpty().or(this.password.textProperty().isEmpty()));
 	}
 
-	public void handleLogin(ActionEvent event) {
+	@FXML
+	void handleLogin(ActionEvent event) {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();
 		String passwordText = this.password.getText();
@@ -54,8 +55,8 @@ public class LoginWindow {
 		try {
 			Credential loginCredentials = new Credential(passwordText, usernameText);
 			ServiceResponse response = service.login(loginCredentials);
-			if (response.getMessage().equals("error")){
-				GuiCommands.showErrorDialog((String)response.getData());
+			if (response.getMessage().equals("error")) {
+				GuiCommands.showErrorDialog((String) response.getData());
 			} else {
 				UserAccount userAccount = (UserAccount) response.getData();
 				FXRouter.show("main", userAccount);
@@ -67,7 +68,7 @@ public class LoginWindow {
 	}
 
 	@FXML
-	public void handleSignUp(ActionEvent event) {
+	void handleSignUp(ActionEvent event) {
 		try {
 			FXRouter.show("createAccount");
 		} catch (Exception e) {

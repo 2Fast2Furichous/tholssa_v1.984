@@ -259,14 +259,13 @@ public class MainWindow {
         var edge = this.findEdge(nodeUniqueID);
         if (relation != null) {
             if (edge.isPresent()) {
-                App.getGraphService().updateEdge(
-                        edge.get(), relation, relationStartDate, relationEndDate);
+                App.getGraphService().updateEdge(edge.get(), relation, relationStartDate, relationEndDate);
 
             } else {
-                this.requestCreateEdge(this.rootNodeButton, this.selectedNodeButton, relation, relationStartDate, relationEndDate);
+                this.requestCreateEdge(this.rootNodeButton, this.selectedNodeButton, relation, relationStartDate,
+                        relationEndDate);
             }
-        }
-        else if (edge.isPresent()) {
+        } else if (edge.isPresent()) {
             App.getGraphService().removeEdge(edge.get());
         }
 
@@ -277,9 +276,9 @@ public class MainWindow {
         if (this.rootNodeButton == null || currentUniqueID == null) {
             return Optional.empty();
         }
-        
+
         PersonNode rootNode = (PersonNode) this.rootNodeButton.getUserData();
-        
+
         return rootNode.getEdges().stream().filter((edgeUniqueID) -> {
             var line = this.lineMap.get(edgeUniqueID);
             var currentEdge = (PersonEdge) line.getUserData();
@@ -307,13 +306,13 @@ public class MainWindow {
             if (nodeData instanceof PersonNode) {
                 PersonNode currentNode = (PersonNode) nodeData;
                 Person currentPerson = currentNode.getValue();
-                if(currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())){
+                if (currentPerson.getFullNameWithNickname().equals(this.searchResultsByName.getValue())) {
                     this.focusOnPerson(currentPerson);
                     break;
                 }
             }
         }
-        
+
         this.deselectSearchSelection();
     }
 
@@ -326,7 +325,7 @@ public class MainWindow {
 
         this.canvas.setPivot((person.getPositionX() / 3) - 75, (person.getPositionY() / 3) + 100);
         this.canvas.setScale(1);
-        this.canvas.setScale(canvas.getScale() / 1.2);
+        this.canvas.setScale(this.canvas.getScale() / 1.2);
         this.updateZoomLevel();
     }
 
@@ -338,6 +337,9 @@ public class MainWindow {
 
     @FXML
     void initialize() {
+        var account = (UserAccount) FXRouter.getData();
+
+        
         this.setupGraph();
         this.populateGraph("", new ArrayList<NodeFilter>(), MAXIMUM_DEPTH);
         
@@ -347,7 +349,7 @@ public class MainWindow {
 
         this.filterColumn.maxWidthProperty().set(0);
         this.filterColumn.minWidthProperty().set(0);
-        
+
         this.relation.getItems().add(null);
         this.relation.getItems().addAll(Relationship.values());
 
@@ -355,18 +357,18 @@ public class MainWindow {
             this.depthFilter.getItems().add(depth);
         }
         this.depthFilter.setValue(MAXIMUM_DEPTH);
-        
+
         for (var score = Review.MINIMUM_SCORE; score <= Review.MAXIMUM_SCORE; score++) {
             this.reviewScoreComboBox.getItems().add(score);
         }
-        this.reviewsListView.setCellFactory(param -> new ListCell<Review>(){
+        this.reviewsListView.setCellFactory(param -> new ListCell<Review>() {
             @Override
             protected void updateItem(Review item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item==null) {
+                if (empty || item == null) {
                     this.setGraphic(null);
-                    this.setText(null); 
-                }else{
+                    this.setText(null);
+                } else {
                     this.setMinWidth(param.getWidth());
                     this.setMaxWidth(param.getWidth());
                     this.setPrefWidth(param.getWidth());
@@ -380,7 +382,7 @@ public class MainWindow {
 
         this.zoomLevelTextField.setStyle("-fx-text-fill: green; -fx-font-size: 10px;");
 
-        var account = (UserAccount) FXRouter.getData();
+        
         double lastX = account.getLastX();
         double lastY = account.getLastY();
         double lastScale = account.getLastScale();
@@ -424,31 +426,30 @@ public class MainWindow {
         addNodeMenuItem.setOnAction(actionEvent -> {
             contextMenu.hide();
 
-            Point2D relPoint = canvas.sceneToLocal(clickPoint.mouseAnchorX, clickPoint.mouseAnchorY);
-            requestCreateNode(relPoint.getX(), relPoint.getY());
+            Point2D relPoint = this.canvas.sceneToLocal(clickPoint.mouseAnchorX, clickPoint.mouseAnchorY);
+            this.requestCreateNode(relPoint.getX(), relPoint.getY());
         });
 
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-                if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 2) {
-                    clickPoint.mouseAnchorX = mouseEvent.getSceneX();
-                    clickPoint.mouseAnchorY = mouseEvent.getSceneY();
+            if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 2) {
+                clickPoint.mouseAnchorX = mouseEvent.getSceneX();
+                clickPoint.mouseAnchorY = mouseEvent.getSceneY();
 
-                    contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                }
-                if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 1) {
-                    MainWindow.this.deselectNode();
-                }
-                if (mouseEvent.isSecondaryButtonDown() && mouseEvent.getClickCount() == 2) {
-                    MainWindow.this.deselectRootNode();
-                }
+                contextMenu.show(App.getPrimaryStage(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
             }
-        );
+            if (mouseEvent.isPrimaryButtonDown() && mouseEvent.getClickCount() == 1) {
+                MainWindow.this.deselectNode();
+            }
+            if (mouseEvent.isSecondaryButtonDown() && mouseEvent.getClickCount() == 2) {
+                MainWindow.this.deselectRootNode();
+            }
+        });
 
-        SceneGestures sceneGestures = new SceneGestures(canvas);
+        SceneGestures sceneGestures = new SceneGestures(this.canvas);
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         this.tholssaGraph.addEventFilter(MouseEvent.MOUSE_RELEASED, mouseEvent -> {
-                MainWindow.this.updateLastPosition();
+            MainWindow.this.updateLastPosition();
         });
 
         this.tholssaGraph.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
@@ -457,21 +458,21 @@ public class MainWindow {
             public void handle(ScrollEvent event) {
                 MainWindow.this.updateZoomLevel();
             }
-        });  
+        });
     }
 
     private void updateLastPosition() {
         App.getUserService().updateLastPosition(this.canvas.getTranslateX(), this.canvas.getTranslateY(),
-            this.canvas.getScale());
+                this.canvas.getScale());
     }
 
     @FXML
     void handleApplyFilters(ActionEvent event) {
-       this.applyFilters();
+        this.applyFilters();
     }
 
     private void applyFilters() {
-                Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
+        Collection<NodeFilter> filters = new ArrayList<NodeFilter>();
         if (this.rootNodeButton != null) {
             if (this.familyFilter.isSelected()) {
                 filters.add(NodeFilter.Family);
@@ -491,7 +492,7 @@ public class MainWindow {
 
     private void populateGraph(String rootNodeGuid, Collection<NodeFilter> filters, int depth) {
         this.canvas.getChildren().clear();
-        //this.canvas.addGrid();
+        // this.canvas.addGrid();
 
         this.nodeMap.clear();
         this.lineMap.clear();
@@ -502,30 +503,30 @@ public class MainWindow {
 
             for (PersonNode node : network.getNodes()) {
                 Person currentPerson = node.getValue();
-                JFXButton nodeButton = createNode(currentPerson.getPositionX(), currentPerson.getPositionY());
+                JFXButton nodeButton = this.createNode(currentPerson.getPositionX(), currentPerson.getPositionY());
                 nodeButton.textProperty().set(currentPerson.getNickname());
                 nodeButton.setUserData(node);
-                nodeMap.put(node.getUniqueID(), nodeButton);
+                this.nodeMap.put(node.getUniqueID(), nodeButton);
             }
 
             for (PersonEdge edge : network.getEdges()) {
 
-                JFXButton sourceButton = nodeMap.get(edge.getSource());
-                JFXButton destinationButton = nodeMap.get(edge.getDestination());
+                JFXButton sourceButton = this.nodeMap.get(edge.getSource());
+                JFXButton destinationButton = this.nodeMap.get(edge.getDestination());
 
-                Group lineEdge = createEdge(sourceButton, destinationButton);
+                Group lineEdge = this.createEdge(sourceButton, destinationButton);
                 lineEdge.setUserData(edge);
-                lineMap.put(edge.getUniqueID(), lineEdge);
+                this.lineMap.put(edge.getUniqueID(), lineEdge);
             }
 
             if (rootNodeGuid != null && !rootNodeGuid.isBlank()) {
-                var newRoot = nodeMap.get(rootNodeGuid);
+                var newRoot = this.nodeMap.get(rootNodeGuid);
                 this.rootNodeButton = newRoot;
                 this.updateNodeStyle(this.rootNodeButton);
             }
 
             if (this.selectedNodeButton != null) {
-                var newSelected = nodeMap.get(((PersonNode) this.selectedNodeButton.getUserData()).getUniqueID());
+                var newSelected = this.nodeMap.get(((PersonNode) this.selectedNodeButton.getUserData()).getUniqueID());
                 this.selectedNodeButton = newSelected;
                 this.updateNodeStyle(this.selectedNodeButton);
 
@@ -545,21 +546,7 @@ public class MainWindow {
         if (textFromSearchTextField == null || textFromSearchTextField.isBlank()) {
             visibleNodes.addAll(this.canvas.getChildren());
         } else {
-            for (var tholssaNode : this.canvas.getChildren()) {
-                var nodeData = tholssaNode.getUserData();
-                if (nodeData instanceof PersonNode) {
-                    PersonNode currentNode = (PersonNode) nodeData;
-                    Person currentPerson = currentNode.getValue();
-                    if (!checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
-                        hiddenNodes.add(tholssaNode);
-                    } else {
-                        list.add(currentPerson.getFullNameWithNickname());
-                        visibleNodes.add(tholssaNode);
-                    }
-                } else if (nodeData instanceof PersonEdge) {
-                    hiddenNodes.add(tholssaNode);
-                }
-            }
+            this.updateSearchNodes(textFromSearchTextField, visibleNodes, hiddenNodes, list);
         }
         this.searchResultsByName.setItems(list);
 
@@ -568,6 +555,25 @@ public class MainWindow {
         }
         for (var tholssaNode : hiddenNodes) {
             tholssaNode.setStyle(HIDDEN_STYLE);
+        }
+    }
+
+    private void updateSearchNodes(String textFromSearchTextField, ArrayList<Node> visibleNodes, ArrayList<Node> hiddenNodes,
+            ObservableList<String> list) {
+        for (var tholssaNode : this.canvas.getChildren()) {
+            var nodeData = tholssaNode.getUserData();
+            if (nodeData instanceof PersonNode) {
+                PersonNode currentNode = (PersonNode) nodeData;
+                Person currentPerson = currentNode.getValue();
+                if (!this.checkForMatchToSearchValue(textFromSearchTextField, currentPerson)) {
+                    hiddenNodes.add(tholssaNode);
+                } else {
+                    list.add(currentPerson.getFullNameWithNickname());
+                    visibleNodes.add(tholssaNode);
+                }
+            } else if (nodeData instanceof PersonEdge) {
+                hiddenNodes.add(tholssaNode);
+            }
         }
     }
 
@@ -655,10 +661,11 @@ public class MainWindow {
 
         
 
-        
         Timeline timelineDown = new Timeline();
-        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
-        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), infoColumn.prefWidthProperty().doubleValue());
+        KeyValue kvDwn1 = new KeyValue(this.infoColumn.maxWidthProperty(),
+                this.infoColumn.prefWidthProperty().doubleValue());
+        KeyValue kvDwn2 = new KeyValue(this.infoColumn.minWidthProperty(),
+                this.infoColumn.prefWidthProperty().doubleValue());
 
         final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
 
@@ -676,8 +683,8 @@ public class MainWindow {
 
         Timeline timelineDown = new Timeline();
 
-        KeyValue kvDwn1 = new KeyValue(infoColumn.maxWidthProperty(), 0);
-        KeyValue kvDwn2 = new KeyValue(infoColumn.minWidthProperty(), 0);
+        KeyValue kvDwn1 = new KeyValue(this.infoColumn.maxWidthProperty(), 0);
+        KeyValue kvDwn2 = new KeyValue(this.infoColumn.minWidthProperty(), 0);
 
         final KeyFrame kfDwn = new KeyFrame(Duration.millis(200), kvDwn1, kvDwn2);
 
@@ -693,8 +700,8 @@ public class MainWindow {
             public void handle(MouseEvent event) {
 
                 if (event.isPrimaryButtonDown()) {
-                    
-                    selectNode(currentNode);
+
+                    MainWindow.this.selectNode(currentNode);
                 }
             }
         });
@@ -735,7 +742,6 @@ public class MainWindow {
             this.applyFilters();
         });
 
-
         setAsRootNodeMenuItem.setOnAction(event -> {
             this.selectRootNode(currentNode);
         });
@@ -749,17 +755,17 @@ public class MainWindow {
 
         this.updateNodeStyle(previousNode);
         this.updateNodeStyle(nodeButton);
-        
+
         Timeline timelineDown = new Timeline();
-        KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(),
-                filterColumn.prefWidthProperty().doubleValue());
-        KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(),
-                filterColumn.prefWidthProperty().doubleValue());
+        KeyValue transitionMax = new KeyValue(this.filterColumn.maxWidthProperty(),
+                this.filterColumn.prefWidthProperty().doubleValue());
+        KeyValue transitionMin = new KeyValue(this.filterColumn.minWidthProperty(),
+                this.filterColumn.prefWidthProperty().doubleValue());
 
         KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
         timelineDown.getKeyFrames().add(kfDwn);
         timelineDown.play();
-        
+
         this.applyFilters();
     }
 
@@ -768,20 +774,20 @@ public class MainWindow {
         this.rootNodeButton = null;
 
         this.updateNodeStyle(previousNode);
-        
+
         Timeline timelineDown = new Timeline();
-        KeyValue transitionMax = new KeyValue(filterColumn.maxWidthProperty(), 0);
-        KeyValue transitionMin = new KeyValue(filterColumn.minWidthProperty(), 0);
+        KeyValue transitionMax = new KeyValue(this.filterColumn.maxWidthProperty(), 0);
+        KeyValue transitionMin = new KeyValue(this.filterColumn.minWidthProperty(), 0);
 
         KeyFrame kfDwn = new KeyFrame(Duration.millis(200), transitionMax, transitionMin);
         timelineDown.getKeyFrames().add(kfDwn);
         timelineDown.play();
-        
+
         this.applyFilters();
     }
 
     private void requestCreateNode(double originX, double originY) {
-        JFXButton nodeButton = createNode(originX, originY);
+        JFXButton nodeButton = this.createNode(originX, originY);
 
         ServiceResponse response = App.getGraphService().createNode(originX, originY, "unknown", "unknown", "unknown", null, null,
                 null, null, null, null);
@@ -789,7 +795,7 @@ public class MainWindow {
         nodeButton.setUserData(node);
         nodeButton.textProperty().set("unknown");
 
-        nodeMap.put(node.getUniqueID(), nodeButton);
+        this.nodeMap.put(node.getUniqueID(), nodeButton);
     }
 
     private JFXButton createNode(double originX, double originY) {
@@ -802,15 +808,16 @@ public class MainWindow {
         this.canvas.getChildren().add(nodeButton);
         nodeButton.toFront();
 
-        setupDrag(nodeButton);
-        setupNodeContextMenu(nodeButton);
+        this.setupDrag(nodeButton);
+        this.setupNodeContextMenu(nodeButton);
 
         return nodeButton;
     }
 
-    private void requestCreateEdge(JFXButton sourceButton, JFXButton destinationButton, Relationship relation, LocalDate relationStartDate, LocalDate relationEndDate) {
+    private void requestCreateEdge(JFXButton sourceButton, JFXButton destinationButton, Relationship relation,
+            LocalDate relationStartDate, LocalDate relationEndDate) {
 
-        Group edgeLine = createEdge(sourceButton, destinationButton);
+        Group edgeLine = this.createEdge(sourceButton, destinationButton);
 
         PersonNode sourceNode = (PersonNode) sourceButton.getUserData();
         PersonNode destinationNode = (PersonNode) destinationButton.getUserData();
@@ -820,7 +827,7 @@ public class MainWindow {
         PersonEdge edge = (PersonEdge) response.getData();
         edgeLine.setUserData(response.getData());
 
-        lineMap.put(edge.getUniqueID(), edgeLine);
+        this.lineMap.put(edge.getUniqueID(), edgeLine);
     }
 
     private Group createEdge(JFXButton sourceButton, JFXButton destinationButton) {
@@ -849,11 +856,11 @@ public class MainWindow {
         var sqrdSum = xSqrd.add(ySqrd);
 
         DoubleBinding dist = new DoubleBinding() {
-        
+
             {
                 super.bind(sqrdSum);
             }
-        
+
             @Override
             protected double computeValue() {
                 return Math.sqrt(sqrdSum.get());
@@ -865,7 +872,7 @@ public class MainWindow {
 
         circle.centerXProperty().bind(line.endXProperty().add(unitX.multiply(-60)));
         circle.centerYProperty().bind(line.endYProperty().add(unitY.multiply(-60)));
-        
+
         Group arrow = new Group(line, circle);
 
         this.canvas.getChildren().addAll(arrow);

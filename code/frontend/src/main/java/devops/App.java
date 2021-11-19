@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  * @author Special Topics - DevOps
  * @version Fall 2021
  */
-public class App extends Application{
+public class App extends Application {
 
     private static UserService userService;
     private static GraphService graphService;
@@ -39,7 +39,7 @@ public class App extends Application{
         App.primaryStage = primaryStage;
         FXRouter.initialize(this, primaryStage, App.WINDOW_TITLE);
         FXRouter.register("login", App.LOGIN_RESOURCE);
-        FXRouter.register("main",App.MAIN_RESOURCE);
+        FXRouter.register("main", App.MAIN_RESOURCE);
         FXRouter.register("createAccount", CREATE_ACCOUNT_RESOURCE);
         FXRouter.setAnimationType("fade", 300.0);
         FXRouter.show("login");

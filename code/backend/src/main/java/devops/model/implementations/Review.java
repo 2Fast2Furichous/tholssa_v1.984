@@ -16,30 +16,32 @@ public class Review {
     private String content;
     private int score;
     private LocalDateTime entryDate;
-    
+
     /**
      * Three-paramater constructor.
      * 
-     * @precondition name != null && !name.isBlank() && content != null && !content.isBlank() && score >= 1 && score <= 5
-     * @postcondition getName() == name && getContent() == content && getScore() == score
-     * @param name the name.
+     * @precondition name != null && !name.isBlank() && content != null &&
+     *               !content.isBlank() && score >= 1 && score <= 5
+     * @postcondition getName() == name && getContent() == content && getScore() ==
+     *                score
+     * @param name    the name.
      * @param content the content.
-     * @param score the score.
+     * @param score   the score.
      */
     public Review(String name, String content, int score) {
-        if (name == null){
+        if (name == null) {
             throw new IllegalArgumentException("Name cannot be null.");
         }
-        if (name.isBlank()){
+        if (name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be blank.");
         }
-        if(content == null){
+        if (content == null) {
             throw new IllegalArgumentException("Content cannot be null.");
         }
-        if(content.isBlank()){
+        if (content.isBlank()) {
             throw new IllegalArgumentException("Content cannot be blank.");
         }
-        if (score < MINIMUM_SCORE || score > MAXIMUM_SCORE){
+        if (score < MINIMUM_SCORE || score > MAXIMUM_SCORE) {
             throw new IllegalArgumentException("Score must be between 1 and 5.");
         }
         this.name = name;
@@ -97,14 +99,15 @@ public class Review {
     }
 
     @Override
-    public boolean equals(Object item){
-        if (item == null){
+    public boolean equals(Object item) {
+        if (item == null) {
             return false;
         }
-        if (!(item instanceof Review)){
+        if (!(item instanceof Review)) {
             throw new IllegalArgumentException("Comparison must be applied to object of type Review.");
         }
         var review = (Review) item;
-        return this.name.equals(review.getName()) && this.content.equals(review.getContent()) && this.score == review.getScore();
+        return this.name.equals(review.getName()) && this.content.equals(review.getContent())
+                && this.score == review.getScore();
     }
 }

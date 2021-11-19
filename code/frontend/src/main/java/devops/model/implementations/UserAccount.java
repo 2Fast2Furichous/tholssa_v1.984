@@ -18,6 +18,7 @@ public class UserAccount implements Account {
 	private double lastX;
 	private double lastY;
 	private double lastScale;
+
 	/**
 	 * Instantiates a new UserAccount
 	 * 
@@ -54,11 +55,11 @@ public class UserAccount implements Account {
 			throw new IllegalArgumentException("Date of birth cannot be null.");
 		}
 
-		if (phoneNumber == null){
+		if (phoneNumber == null) {
 			throw new IllegalArgumentException("Phone Number cannot be null.");
 		}
 
-		if (phoneNumber.isBlank()){
+		if (phoneNumber.isBlank()) {
 			throw new IllegalArgumentException("Phone Number cannot be blank.");
 		}
 

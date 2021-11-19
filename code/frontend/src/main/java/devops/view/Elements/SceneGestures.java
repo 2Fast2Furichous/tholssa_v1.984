@@ -11,22 +11,22 @@ public class SceneGestures {
 
 	private DragContext sceneDragContext = new DragContext();
 
-	PannableCanvas canvas;
+	private PannableCanvas canvas;
 
 	public SceneGestures(PannableCanvas canvas) {
 		this.canvas = canvas;
 	}
 
 	public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
-		return onMousePressedEventHandler;
+		return this.onMousePressedEventHandler;
 	}
 
 	public EventHandler<MouseEvent> getOnMouseDraggedEventHandler() {
-		return onMouseDraggedEventHandler;
+		return this.onMouseDraggedEventHandler;
 	}
 
 	public EventHandler<ScrollEvent> getOnScrollEventHandler() {
-		return onScrollEventHandler;
+		return this.onScrollEventHandler;
 	}
 
 	private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
@@ -34,14 +34,16 @@ public class SceneGestures {
 		public void handle(MouseEvent event) {
 
 			// right mouse button => panning
-			if (!event.isSecondaryButtonDown())
+			if (!event.isSecondaryButtonDown()) {
 				return;
+			}
+				
 
-			sceneDragContext.mouseAnchorX = event.getSceneX();
-			sceneDragContext.mouseAnchorY = event.getSceneY();
+			SceneGestures.this.sceneDragContext.mouseAnchorX = event.getSceneX();
+			SceneGestures.this.sceneDragContext.mouseAnchorY = event.getSceneY();
 
-			sceneDragContext.translateAnchorX = canvas.getTranslateX();
-			sceneDragContext.translateAnchorY = canvas.getTranslateY();
+			SceneGestures.this.sceneDragContext.translateAnchorX = SceneGestures.this.canvas.getTranslateX();
+			SceneGestures.this.sceneDragContext.translateAnchorY = SceneGestures.this.canvas.getTranslateY();
 		}
 
 	};
@@ -50,11 +52,14 @@ public class SceneGestures {
 		public void handle(MouseEvent event) {
 
 			// right mouse button => panning
-			if (!event.isSecondaryButtonDown())
+			if (!event.isSecondaryButtonDown()) {
 				return;
+			}
 
-			canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
-			canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
+			SceneGestures.this.canvas.setTranslateX(
+					SceneGestures.this.sceneDragContext.translateAnchorX + event.getSceneX() - SceneGestures.this.sceneDragContext.mouseAnchorX);
+			SceneGestures.this.canvas.setTranslateY(
+					SceneGestures.this.sceneDragContext.translateAnchorY + event.getSceneY() - SceneGestures.this.sceneDragContext.mouseAnchorY);
 
 			event.consume();
 		}
@@ -70,39 +75,45 @@ public class SceneGestures {
 
 			double delta = 1.2;
 
-			double scale = canvas.getScale(); // currently we only use Y, same value is used for X
+			double scale = SceneGestures.this.canvas.getScale();
 			double oldScale = scale;
 
-			if (event.getDeltaY() < 0)
+			if (event.getDeltaY() < 0) {
 				scale /= delta;
-			else
+			} else {
 				scale *= delta;
+			}
+				
 
 			scale = clamp(scale, MIN_SCALE, MAX_SCALE);
 
-			double f = (scale / oldScale) - 1;
+			double focus = (scale / oldScale) - 1;
 
 			double dx = (event.getSceneX()
-					- (canvas.getBoundsInParent().getWidth() / 2 + canvas.getBoundsInParent().getMinX()));
+					- (SceneGestures.this.canvas.getBoundsInParent().getWidth() / 2 + SceneGestures.this.canvas.getBoundsInParent().getMinX()));
 			double dy = (event.getSceneY()
-					- (canvas.getBoundsInParent().getHeight() / 2 + canvas.getBoundsInParent().getMinY()));
+					- (SceneGestures.this.canvas.getBoundsInParent().getHeight() / 2 + SceneGestures.this.canvas.getBoundsInParent().getMinY()));
 
-			canvas.setScale(scale);
+			SceneGestures.this.canvas.setScale(scale);
 
 			// note: pivot value must be untransformed, i. e. without scaling
-			canvas.setPivot(f * dx, f * dy);
+			SceneGestures.this.canvas.setPivot(focus * dx, focus * dy);
 			event.consume();
 		}
 
 	};
 
-	public static double clamp(double value, double min, double max) {
+	private static double clamp(double value, double min, double max) {
 
-		if (Double.compare(value, min) < 0)
+		if (Double.compare(value, min) < 0) {
 			return min;
+		}
+		
 
-		if (Double.compare(value, max) > 0)
+		if (Double.compare(value, max) > 0) {
 			return max;
+		}
+			
 
 		return value;
 	}

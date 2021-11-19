@@ -14,6 +14,8 @@ import devops.storage.interfaces.Unique;
  */
 public class StorageHash<E extends Unique> implements Storage<E> {
 
+	private static final String UNIQUE_ID_MUST_NOT_BE_NULL_OR_BLANK = "Unique ID must not be null or blank";
+	private static final String VALUE_CANNOT_BE_NULL = "Value cannot be null";
 	private final HashMap<String, E> map;
 
 	/**
@@ -30,7 +32,7 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 	@Override
 	public E add(E value) {
 		if (value == null) {
-			throw new IllegalArgumentException("Value cannot be null");
+			throw new IllegalArgumentException(VALUE_CANNOT_BE_NULL);
 		}
 
 		return this.map.put(value.getUniqueID(), value);
@@ -39,7 +41,7 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 	@Override
 	public E get(String uniqueID) {
 		if (uniqueID == null || uniqueID.isBlank()) {
-			throw new IllegalArgumentException("Unique ID must not be null or blank");
+			throw new IllegalArgumentException(UNIQUE_ID_MUST_NOT_BE_NULL_OR_BLANK);
 		}
 
 		return this.map.get(uniqueID);
@@ -48,7 +50,7 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 	@Override
 	public E remove(String uniqueID) {
 		if (uniqueID == null || uniqueID.isBlank()) {
-			throw new IllegalArgumentException("Unique ID must not be null or blank");
+			throw new IllegalArgumentException(UNIQUE_ID_MUST_NOT_BE_NULL_OR_BLANK);
 		}
 
 		return this.map.remove(uniqueID);
@@ -62,7 +64,7 @@ public class StorageHash<E extends Unique> implements Storage<E> {
 	@Override
 	public E update(E value) {
 		if (value == null) {
-			throw new IllegalArgumentException("Value cannot be null");
+			throw new IllegalArgumentException(VALUE_CANNOT_BE_NULL);
 		}
 		if (!this.map.containsKey(value.getUniqueID())) {
 			throw new IllegalArgumentException("Value does not exist in storage");

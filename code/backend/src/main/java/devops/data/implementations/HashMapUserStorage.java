@@ -6,21 +6,22 @@ import devops.data.interfaces.UserStorage;
 import devops.model.implementations.User;
 
 /**
- * Stores accounts into a database with the access being the credentials for the user.
+ * Stores accounts into a database with the access being the credentials for the
+ * user.
  * 
  * @author Alexander Ayers
  * @version Fall 2021
  */
-public class HashMapUserStorage implements UserStorage{
+public class HashMapUserStorage implements UserStorage {
     private HashMap<String, User> accounts;
 
     /**
-     * Constructor that stores the user accounts 
+     * Constructor that stores the user accounts
      * 
      * @precondition none
      * @postcondition getAccounts() != null
      */
-    public HashMapUserStorage(){
+    public HashMapUserStorage() {
         this.accounts = new HashMap<String, User>();
     }
 
@@ -31,12 +32,12 @@ public class HashMapUserStorage implements UserStorage{
      * @postcondition none
      * @return the accounts stored in the system.
      */
-    public HashMap<String, User> getAccounts(){
+    public HashMap<String, User> getAccounts() {
         return this.accounts;
     }
 
     @Override
-    public boolean add(User newUser){
+    public boolean add(User newUser) {
         if (this.accounts.containsKey(newUser.getUniqueId())) {
             return false;
         } else {

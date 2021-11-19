@@ -19,7 +19,7 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * @return whether the edge was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean addEdge(String edge);
+	boolean addEdge(String edge);
 
 	/**
 	 * Remove the given edge
@@ -31,8 +31,7 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * @return whether the edge was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean removeEdge(String edge);
-
+	boolean removeEdge(String edge);
 
 	/**
 	 * Returns the value of the node
@@ -42,8 +41,8 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the value of the node
 	 */
-	public E getValue();
-	
+	E getValue();
+
 	/**
 	 * Set the value of the node
 	 * 
@@ -52,9 +51,9 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @param value
 	 */
-	public void setValue(E value);
+	void setValue(E value);
 
-	public String getUniqueID();
+	String getUniqueID();
 
 	/**
 	 * Gets the collection of connected edges
@@ -64,5 +63,5 @@ public interface GraphNode<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the collection of connected edges
 	 */
-	public Collection<String> getEdges();
+	Collection<String> getEdges();
 }

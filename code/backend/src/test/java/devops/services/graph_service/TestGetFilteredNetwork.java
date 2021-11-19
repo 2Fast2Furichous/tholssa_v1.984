@@ -61,8 +61,6 @@ public class TestGetFilteredNetwork {
 		String nodeGuid2 = this.service.createNode(person2);
 
 		PersonNode node1 = this.service.getNode(nodeGuid1);
-		PersonNode node2 = this.service.getNode(nodeGuid2);
-
 		String edgeGuid = this.service.connectNodes(nodeGuid1, nodeGuid2, null, null, null);
 		GraphEdge<Person> edge = this.service.getEdge(edgeGuid);
 

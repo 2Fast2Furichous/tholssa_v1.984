@@ -28,30 +28,26 @@ public class Person implements Comparable<Person> {
 	 * Creates a new person with the given details
 	 * 
 	 * @preconditions none
-	 * @postconditions 	getDescription() == description &&
-	 * 					getOccupation() == occupation &&
-* 						getDateOfDeath() == dateOfDeath &&
-	 *                 	getDateOfBirth() == dateOfBirth &&
-	 * 					getAddress() == address &&
-	 *                 	getPhoneNumber() == phoneNumber &&
-	 * 					getLastName() == lastName
-	 *                 	getFirstName() == firstName &&
-	 * 					getNickname() == nickname && 
-	 * 					getReviews() != null
+	 * @postconditions getDescription() == description && getOccupation() ==
+	 *                 occupation && getDateOfDeath() == dateOfDeath &&
+	 *                 getDateOfBirth() == dateOfBirth && getAddress() == address &&
+	 *                 getPhoneNumber() == phoneNumber && getLastName() == lastName
+	 *                 getFirstName() == firstName && getNickname() == nickname &&
+	 *                 getReviews() != null
 	 * 
-	 * @param nickname		the specified nickname
-	 * @param firstName		the specified first name
-	 * @param lastName		the specified last name
-	 * @param address		the specified address
-	 * @param phoneNumber	the specified phone number
-	 * @param dateOfBirth	the specified date of birth
-	 * @param dateOfDeath	the specified date of death
-	 * @param occupation	the specified occupation
-	 * @param description	the specified description
+	 * @param nickname    the specified nickname
+	 * @param firstName   the specified first name
+	 * @param lastName    the specified last name
+	 * @param address     the specified address
+	 * @param phoneNumber the specified phone number
+	 * @param dateOfBirth the specified date of birth
+	 * @param dateOfDeath the specified date of death
+	 * @param occupation  the specified occupation
+	 * @param description the specified description
 	 */
-	public Person(
-			double positionX, 
-			double positionY, String nickname,String firstName,String lastName,String address,String phoneNumber,LocalDate dateOfBirth,LocalDate dateOfDeath,String occupation, String description)  {
+	public Person(double positionX, double positionY, String nickname, String firstName, String lastName,
+			String address, String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation,
+			String description) {
 		this.nickname = nickname;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -65,8 +61,9 @@ public class Person implements Comparable<Person> {
 		this.positionY = positionY;
 		this.reviews = new ArrayList<Review>();
 	}
-	
+
 	/**
+	 * Gets the position Y
 	 * @return the positionY
 	 */
 	public double getPositionY() {
@@ -74,12 +71,12 @@ public class Person implements Comparable<Person> {
 	}
 
 	/**
+	 * Gets the position X
 	 * @return the positionX
 	 */
 	public double getPositionX() {
 		return this.positionX;
 	}
-
 
 	/**
 	 * 
@@ -92,7 +89,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	/**
@@ -106,7 +103,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getOccupation() {
-		return occupation;
+		return this.occupation;
 	}
 
 	/**
@@ -120,7 +117,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public LocalDate getDateOfDeath() {
-		return dateOfDeath;
+		return this.dateOfDeath;
 	}
 
 	/**
@@ -134,7 +131,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
+		return this.dateOfBirth;
 	}
 
 	/**
@@ -148,7 +145,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getAddress() {
-		return address;
+		return this.address;
 	}
 
 	/**
@@ -162,7 +159,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getPhoneNumber() {
-		return phoneNumber;
+		return this.phoneNumber;
 	}
 
 	/**
@@ -176,7 +173,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getLastName() {
-		return lastName;
+		return this.lastName;
 	}
 
 	/**
@@ -190,9 +187,8 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getFirstName() {
-		return firstName;
+		return this.firstName;
 	}
-
 
 	/**
 	 * 
@@ -205,7 +201,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getNickname() {
-		return nickname;
+		return this.nickname;
 	}
 
 	/**
@@ -216,7 +212,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 * @return the collection of reviews
 	 */
-	public List<Review> getReviews(){
+	public List<Review> getReviews() {
 		return this.reviews;
 	}
 
@@ -228,8 +224,8 @@ public class Person implements Comparable<Person> {
 	 * 
 	 * @param review the added review
 	 */
-	public void addReview(Review review){
-		if (review == null){
+	public void addReview(Review review) {
+		if (review == null) {
 			throw new IllegalArgumentException("The added review cannot be null");
 		}
 
@@ -237,7 +233,7 @@ public class Person implements Comparable<Person> {
 	}
 
 	@Override
-	public int compareTo(Person o) {
-		return this.getLastName().compareTo(o.getLastName());
+	public int compareTo(Person otherPerson) {
+		return this.getLastName().compareTo(otherPerson.getLastName());
 	}
 }

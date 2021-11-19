@@ -16,11 +16,11 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @preconditions edge != null
 	 * @postconditions getEdges().size() == @prev(getEdges()).size() + 1
 	 * 
-	 * @param edge
+	 * @param edge the edge to be added
 	 * @return whether the edge was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean addEdge(GraphEdge<E> edge);
+	boolean addEdge(GraphEdge<E> edge);
 
 	/**
 	 * Adds the given node
@@ -28,11 +28,11 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @preconditions node != null
 	 * @postconditions getNodes().size() == @prev(getNodes()).size() + 1
 	 * 
-	 * @param node
+	 * @param node the node to be added
 	 * @return whether the node was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean addNode(GraphNode<E> node);
+	boolean addNode(GraphNode<E> node);
 
 	/**
 	 * Returns the collection of edges
@@ -43,7 +43,7 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @return the collection of edges
 	 * @throws IllegalArgumentException
 	 */
-	public Collection<GraphEdge<E>> getEdges();
+	Collection<GraphEdge<E>> getEdges();
 
 	/**
 	 * Returns the collection of edges
@@ -54,6 +54,6 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @return the collection of edges
 	 * @throws IllegalArgumentException
 	 */
-	public Collection<GraphNode<E>> getNodes();
+	Collection<GraphNode<E>> getNodes();
 
 }
