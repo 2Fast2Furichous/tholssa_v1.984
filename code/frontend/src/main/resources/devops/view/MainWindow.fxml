@@ -119,31 +119,6 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="Location">
-            <content>
-              <AnchorPane style="-fx-background-color: black;">
-                     <children>
-                        <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columnConstraints>
-                              <ColumnConstraints />
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="20.0" prefWidth="20.0" />
-                              <ColumnConstraints hgrow="ALWAYS" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label style="-fx-text-fill: #16ae58;" text="X:" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                              <JFXTextField fx:id="locationX" promptText="X-Location" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" />
-                              <JFXTextField fx:id="locationY" promptText="Y-Location" style="-fx-background-color: black; -fx-prompt-text-fill: #16ae58; -fx-text-inner-color: white;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label style="-fx-text-fill: #16ae58;" text="Y:" textFill="#16ae58" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                           </children>
-                        </GridPane>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </TitledPane>
             <TitledPane animated="false" style="-fx-background-color: black;" text="Reviews">
                <content>
                   <GridPane style="-fx-background-color: black;">

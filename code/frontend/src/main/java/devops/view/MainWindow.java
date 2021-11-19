@@ -200,10 +200,6 @@ public class MainWindow {
         this.lineMap = new HashMap<String, Group>();
     }
 
-    private void addSubmitNodeInputValidation() {
-        this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty()
-                .or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
-    }
 
     @FXML
     void handleAddReview(ActionEvent event) {
@@ -344,7 +340,7 @@ public class MainWindow {
     void initialize() {
         this.setupGraph();
         this.populateGraph("", new ArrayList<NodeFilter>(), MAXIMUM_DEPTH);
-        this.addSubmitNodeInputValidation();
+        
         
         this.infoColumn.maxWidthProperty().set(0);
         this.infoColumn.minWidthProperty().set(0);
@@ -657,8 +653,7 @@ public class MainWindow {
             this.relationEndDate.setValue(null);
         }
 
-        this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
-        this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
+        
 
         
         Timeline timelineDown = new Timeline();
