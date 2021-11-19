@@ -35,7 +35,7 @@ public final class FXRouter {
 	private static AbstractMap<String, RouteScene> routes = new HashMap<>();
 	private static RouteScene currentRoute;
 
-	private static class RouteScene {
+	private static final class RouteScene {
 		private String scenePath;
 		private String windowTitle;
 		private double sceneWidth;
@@ -88,8 +88,8 @@ public final class FXRouter {
 	/**
 	 * FXRouter binder with Application Stage and main package
 	 * 
-	 * @param ref:       Main Class reference
-	 * @param win:       Application Stage
+	 * @param ref Main Class reference
+	 * @param win Application Stage
 	 */
 	public static void initialize(Object ref, Stage win) {
 		checkInstances(ref, win);
@@ -98,9 +98,9 @@ public final class FXRouter {
 	/**
 	 * FXRouter binder with Application Stage, main package, and window title
 	 * 
-	 * @param ref:       Main Class reference
-	 * @param win:       Application Stage
-	 * @param winTitle:  Application Stage title
+	 * @param ref      Main Class reference
+	 * @param win      Application Stage
+	 * @param winTitle Application Stage title
 	 */
 	public static void initialize(Object ref, Stage win, String winTitle) {
 		checkInstances(ref, win);
@@ -110,10 +110,10 @@ public final class FXRouter {
 	/**
 	 * FXRouter binder with Application Stage, main package, and window dimensions
 	 * 
-	 * @param ref:       Main Class reference
-	 * @param win:       Application Stage
-	 * @param winWidth:  Application Stage width
-	 * @param winHeight: Application Stage height
+	 * @param ref       Main Class reference
+	 * @param win       Application Stage
+	 * @param winWidth  Application Stage width
+	 * @param winHeight Application Stage height
 	 */
 	public static void initialize(Object ref, Stage win, double winWidth, double winHeight) {
 		checkInstances(ref, win);
@@ -122,14 +122,14 @@ public final class FXRouter {
 	}
 
 	/**
-	 * FXRouter binder with Application Stage, main package, window title, and window
-	 * dimensions
+	 * FXRouter binder with Application Stage, main package, window title, and
+	 * window dimensions
 	 * 
-	 * @param ref:       Main Class reference
-	 * @param win:       Application Stage
-	 * @param winTitle:  Application Stage title
-	 * @param winWidth:  Application Stage width
-	 * @param winHeight: Application Stage height
+	 * @param ref       Main Class reference
+	 * @param win       Application Stage
+	 * @param winTitle  Application Stage title
+	 * @param winWidth  Application Stage width
+	 * @param winHeight Application Stage height
 	 */
 	public static void initialize(Object ref, Stage win, String winTitle, double winWidth, double winHeight) {
 		checkInstances(ref, win);
@@ -156,8 +156,8 @@ public final class FXRouter {
 	/**
 	 * Define a FXRouter route
 	 * 
-	 * @param routeLabel:  Route label identifier
-	 * @param scenePath:   .FXML scene file
+	 * @param routeLabel Route label identifier
+	 * @param scenePath  .FXML scene file
 	 */
 	public static void register(String routeLabel, String scenePath) {
 		RouteScene routeScene = new RouteScene(scenePath);
@@ -167,9 +167,9 @@ public final class FXRouter {
 	/**
 	 * Define a FXRouter route
 	 * 
-	 * @param routeLabel: Route label identifier
-	 * @param scenePath:  .FXML scene file
-	 * @param winTitle:   Application Stage title
+	 * @param routeLabel Route label identifier
+	 * @param scenePath  .FXML scene file
+	 * @param winTitle   Application Stage title
 	 */
 	public static void register(String routeLabel, String scenePath, String winTitle) {
 		RouteScene routeScene = new RouteScene(scenePath, winTitle);
@@ -179,10 +179,10 @@ public final class FXRouter {
 	/**
 	 * Define a FXRouter route
 	 * 
-	 * @param routeLabel:  Route label identifier
-	 * @param scenePath:   .FXML scene file
-	 * @param sceneWidth:  Scene Width
-	 * @param sceneHeight: Scene Height
+	 * @param routeLabel  Route label identifier
+	 * @param scenePath   .FXML scene file
+	 * @param sceneWidth  Scene Width
+	 * @param sceneHeight Scene Height
 	 */
 	public static void register(String routeLabel, String scenePath, double sceneWidth, double sceneHeight) {
 		RouteScene routeScene = new RouteScene(scenePath, sceneWidth, sceneHeight);
@@ -192,11 +192,11 @@ public final class FXRouter {
 	/**
 	 * Define a FXRouter route
 	 * 
-	 * @param routeLabel:  Route label identifier
-	 * @param scenePath:   .FXML scene file
-	 * @param winTitle:    Scene (Stage) title
-	 * @param sceneWidth:  Scene Width
-	 * @param sceneHeight: Scene Height
+	 * @param routeLabel  Route label identifier
+	 * @param scenePath   .FXML scene file
+	 * @param winTitle    Scene (Stage) title
+	 * @param sceneWidth  Scene Width
+	 * @param sceneHeight Scene Height
 	 */
 	public static void register(String routeLabel, String scenePath, String winTitle, double sceneWidth,
 			double sceneHeight) {
@@ -207,8 +207,9 @@ public final class FXRouter {
 	/**
 	 * Switch between FXRouter route and show corresponding scenes
 	 * 
-	 * @param routeLabel: Route label identifier
-	 * @throws Exception: throw FXMLLoader exception if file is not loaded correctly
+	 * @param routeLabel Route label identifier
+	 * @throws IOException throw FXMLLoader exception if file is not loaded
+	 *                     correctly
 	 */
 	public static void show(String routeLabel) throws IOException {
 		// get corresponding route
@@ -219,9 +220,10 @@ public final class FXRouter {
 	/**
 	 * Switch between FXRouter route and show corresponding scenes
 	 * 
-	 * @param routeLabel: Route label identifier
-	 * @param data:       Data passed to route
-	 * @throws Exception: throw FXMLLoader exception if file is not loaded correctly
+	 * @param routeLabel Route label identifier
+	 * @param data       Data passed to route
+	 * @throws IOException throw FXMLLoader exception if file is not loaded
+	 *                     correctly
 	 */
 	public static void show(String routeLabel, Object data) throws IOException {
 		// get corresponding route
@@ -246,7 +248,7 @@ public final class FXRouter {
 	/**
 	 * set FXRouter switching animation
 	 * 
-	 * @param anType: Animation type
+	 * @param anType Animation type
 	 */
 	public static void setAnimationType(String anType) {
 		animationType = anType;
@@ -255,8 +257,8 @@ public final class FXRouter {
 	/**
 	 * set FXRouter switching animation and duration
 	 * 
-	 * @param anType:     Animation type
-	 * @param anDuration: Animation duration
+	 * @param anType     Animation type
+	 * @param anDuration Animation duration
 	 */
 	public static void setAnimationType(String anType, double anDuration) {
 		animationType = anType;

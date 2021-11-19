@@ -12,5 +12,5 @@ public interface Key {
 	 * 
 	 * @return the key's uniqueID
 	 */
-	public String getUniqueID();
+	String getUniqueID();
 }

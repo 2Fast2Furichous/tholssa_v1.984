@@ -20,11 +20,13 @@ public class Review {
     /**
      * Three-paramater constructor.
      * 
-     * @precondition name != null && !name.isBlank() && content != null && !content.isBlank() && score >= 1 && score <= 5
-     * @postcondition getName() == name && getContent() == content && getScore() == score
-     * @param name the name.
+     * @precondition name != null && !name.isBlank() && content != null &&
+     *               !content.isBlank() && score >= 1 && score <= 5
+     * @postcondition getName() == name && getContent() == content && getScore() ==
+     *                score
+     * @param name    the name.
      * @param content the content.
-     * @param score the score.
+     * @param score   the score.
      */
     public Review(String name, String content, int score) {
         this.name = name;
@@ -82,14 +84,15 @@ public class Review {
     }
 
     @Override
-    public boolean equals(Object item){
-        if (item == null){
+    public boolean equals(Object item) {
+        if (item == null) {
             return false;
         }
-        if (!(item instanceof Review)){
+        if (!(item instanceof Review)) {
             throw new IllegalArgumentException("Comparison must be applied to object of type Review.");
         }
         var review = (Review) item;
-        return this.name.equals(review.getName()) && this.content.equals(review.getContent()) && this.score == review.getScore();
+        return this.name.equals(review.getName()) && this.content.equals(review.getContent())
+                && this.score == review.getScore();
     }
 }

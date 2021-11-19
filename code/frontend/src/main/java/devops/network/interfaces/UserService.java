@@ -22,16 +22,17 @@ public interface UserService {
 	 * @param newCredentials the credentials associated with the new account.
 	 * @return The create process's response, containing the UserAccount, or otherwise a error.
 	 */
-	public ServiceResponse createAccount(Account newAccount, Credential newCredentials);
+	ServiceResponse createAccount(Account newAccount, Credential newCredentials);
 
 	/**
 	 * 
 	 * Sends a request for the account associated with the entered credentials.
 	 * 
 	 * @param loginCredentials The login credentials
-	 * @return The login process's response, containing the UserAccount or otherwise a error.
+	 * @return The login process's response, containing the UserAccount or otherwise
+	 *         a error.
 	 */
-	public ServiceResponse login(Credential loginCredentials);
+	ServiceResponse login(Credential loginCredentials);
 
-	public ServiceResponse updateLastPosition(double lastX, double lastY, double lastScale);
+	ServiceResponse updateLastPosition(double lastX, double lastY, double lastScale);
 }

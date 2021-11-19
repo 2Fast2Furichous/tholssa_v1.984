@@ -29,11 +29,12 @@ import devops.network.utils.ServerCommunicator;
 
 public class JeroGraphService implements GraphService {
 	private Gson gson;
+
 	/**
-	 * Constructor thata creates a Jero Graph service that serializes
-	 * and deserializes 
+	 * Constructor thata creates a Jero Graph service that serializes and
+	 * deserializes
 	 */
-	public JeroGraphService(){
+	public JeroGraphService() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.serializeNulls();
 
@@ -89,13 +90,13 @@ public class JeroGraphService implements GraphService {
 	}
 
 	@Override
-	public ServiceResponse createNode(
-			double positionX, 
-			double positionY, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description) {
+	public ServiceResponse createNode(double positionX, double positionY, String nickname, String firstName,
+			String lastName, String address, String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath,
+			String occupation, String description) {
 
-		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath, occupation, description);
-		
+		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber,
+				dateOfBirth, dateOfDeath, occupation, description);
+
 		JsonObject personRequest = new JsonObject();
 
 		personRequest.addProperty("type", "Create_Node");
@@ -121,7 +122,8 @@ public class JeroGraphService implements GraphService {
 
 		JsonObject edgeRequest = new JsonObject();
 
-		PersonEdge edge = new PersonEdge(null, sourceGuid, destinationGuid, relation, dateOfConnection, dateOfConnectionEnd);
+		PersonEdge edge = new PersonEdge(null, sourceGuid, destinationGuid, relation, dateOfConnection,
+				dateOfConnectionEnd);
 		edgeRequest.addProperty("type", "Connect_Nodes");
 		edgeRequest.add("content", this.gson.toJsonTree(edge));
 
@@ -139,16 +141,15 @@ public class JeroGraphService implements GraphService {
 	}
 
 	@Override
-	public ServiceResponse updateNode(
-			double positionX, 
-			double positionY, String guid, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description, List<Review> reviews) {
+	public ServiceResponse updateNode(double positionX, double positionY, String guid, String nickname,
+			String firstName, String lastName, String address, String phoneNumber, LocalDate dateOfBirth,
+			LocalDate dateOfDeath, String occupation, String description, List<Review> reviews) {
 
-		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber, dateOfBirth, dateOfDeath,
-				occupation, description, reviews);
+		Person person = new Person(positionX, positionY, nickname, firstName, lastName, address, phoneNumber,
+				dateOfBirth, dateOfDeath, occupation, description, reviews);
 
 		PersonNode updatedNode = new PersonNode(guid, person);
-				
+
 		JsonObject personRequest = new JsonObject();
 		personRequest.addProperty("type", "Update_Node");
 		personRequest.add("content", this.gson.toJsonTree(updatedNode));
@@ -171,8 +172,7 @@ public class JeroGraphService implements GraphService {
 			LocalDate dateOfConnectionEnd) {
 		JsonObject edgeRequest = new JsonObject();
 
-		PersonEdge edge = new PersonEdge(guid, null, null, relation, dateOfConnection,
-				dateOfConnectionEnd);
+		PersonEdge edge = new PersonEdge(guid, null, null, relation, dateOfConnection, dateOfConnectionEnd);
 		edgeRequest.addProperty("type", "Update_Edge");
 		edgeRequest.add("content", this.gson.toJsonTree(edge));
 

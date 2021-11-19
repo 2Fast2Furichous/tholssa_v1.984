@@ -10,7 +10,7 @@ import devops.model.implementations.Review;
 import devops.model.implementations.ServiceResponse;
 
 public interface GraphService {
-	
+
 	/**
 	 * Creates a new node with the given person
 	 * 
@@ -21,10 +21,9 @@ public interface GraphService {
 	 * @return the generated unique ID of the created node
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse createNode(
-			double positionX, 
-			double positionY, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description);
+	ServiceResponse createNode(double positionX, double positionY, String nickname, String firstName, String lastName,
+			String address, String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation,
+			String description);
 
 	/**
 	 * Creates a new edge between the given nodes
@@ -42,7 +41,7 @@ public interface GraphService {
 	 * @return the generated unique ID of the created edge
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse connectNodes(String sourceGuid, String destinationGuid, Relationship relation,
+	ServiceResponse connectNodes(String sourceGuid, String destinationGuid, Relationship relation,
 			LocalDate dateOfConnection, LocalDate dateOfConnectionEnd);
 
 	/**
@@ -57,11 +56,9 @@ public interface GraphService {
 	 * @return the updated node
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse updateNode(
-			double positionX, 
-			double positionY, String guid, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description, 
-			List<Review> reviews);
+	ServiceResponse updateNode(double positionX, double positionY, String guid, String nickname, String firstName,
+			String lastName, String address, String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath,
+			String occupation, String description, List<Review> reviews);
 
 	/**
 	 * Updates the specified node with the new person
@@ -79,7 +76,7 @@ public interface GraphService {
 	 * @return the updated edge
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse updateEdge(String guid, Relationship relation, LocalDate dateOfConnection,
+	ServiceResponse updateEdge(String guid, Relationship relation, LocalDate dateOfConnection,
 			LocalDate dateOfConnectionEnd);
 
 	/**
@@ -93,7 +90,7 @@ public interface GraphService {
 	 * @return the removed node
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse removeNode(String guid);
+	ServiceResponse removeNode(String guid);
 
 	/**
 	 * Removes the specified edge and disconnects the source node.
@@ -107,7 +104,7 @@ public interface GraphService {
 	 * @return the removed edge
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse removeEdge(String guid);
+	ServiceResponse removeEdge(String guid);
 
 	/**
 	 * Returns the graph network from the root node and edge filters.
@@ -120,6 +117,6 @@ public interface GraphService {
 	 * @return graph network given the filters and rootNode
 	 * @throws IllegalArgumentException
 	 */
-	public ServiceResponse getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters, int maxDepth);
+	ServiceResponse getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters, int maxDepth);
 
 }

@@ -81,7 +81,7 @@ public class GraphService {
 		String uniqueID = UUID.randomUUID().toString();
 
 		PersonNode newNode = new PersonNode(uniqueID, person);
-		nodeStorage.add(newNode);
+		this.nodeStorage.add(newNode);
 		return uniqueID;
 	}
 
@@ -103,13 +103,13 @@ public class GraphService {
 	 */
 	public String connectNodes(String sourceGuid, String destinationGuid, Relationship relation,
 			LocalDate dateOfConnection, LocalDate dateOfConnectionEnd) {
-		
+
 		GraphNode<Person> source = this.nodeStorage.get(sourceGuid);
-		
+
 		var existingEdge = source.getEdges().stream().filter((edgeUniqueID) -> {
-            PersonEdge currentEdge = this.edgeStorage.get(edgeUniqueID);
-            return currentEdge.getDestination().equals(destinationGuid);
-        }).findFirst();
+			PersonEdge currentEdge = this.edgeStorage.get(edgeUniqueID);
+			return currentEdge.getDestination().equals(destinationGuid);
+		}).findFirst();
 
 		if (existingEdge.isPresent()) {
 			return existingEdge.get();
@@ -118,8 +118,7 @@ public class GraphService {
 		GraphNode<Person> destination = this.nodeStorage.get(destinationGuid);
 		String uniqueID = UUID.randomUUID().toString();
 
-		PersonEdge newEdge = new PersonEdge(uniqueID, 
-				sourceGuid, destinationGuid, relation, dateOfConnection,
+		PersonEdge newEdge = new PersonEdge(uniqueID, sourceGuid, destinationGuid, relation, dateOfConnection,
 				dateOfConnectionEnd);
 
 		source.addEdge(uniqueID);
@@ -176,7 +175,7 @@ public class GraphService {
 		person.getReviews().sort((var review1, var review2) -> {
 			return review2.getEntryDate().compareTo(review1.getEntryDate());
 		});
-		
+
 		return this.nodeStorage.update(updatedNode);
 	}
 
@@ -257,14 +256,14 @@ public class GraphService {
 	 * @postconditions none
 	 * 
 	 * @param rootNodeGuid the guid of the root node to base the filtering off of.
-	 * @param filters the list of filters to apply to the filtering algorithm.
+	 * @param filters      the list of filters to apply to the filtering algorithm.
 	 * @return graph network given the filters and rootNode
 	 * @throws IllegalArgumentException
 	 */
 	public PersonNetwork getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters, int maxDepth) {
 		PersonNetwork filteredNetwork;
 
-		if (rootNodeGuid == null || rootNodeGuid.isBlank() || filters.isEmpty() ) {
+		if (rootNodeGuid == null || rootNodeGuid.isBlank() || filters.isEmpty()) {
 			filteredNetwork = new PersonNetwork(this.nodeStorage.getAll(), this.edgeStorage.getAll());
 		} else {
 			PersonNode rootNode = this.nodeStorage.get(rootNodeGuid);
@@ -282,19 +281,17 @@ public class GraphService {
 	 * @postcondition @return.getValue().getReviews().size() == @prev + 1
 	 * 
 	 * @param review the specified review
-	 * @param guid the uniqueID of the person being reviewed.
+	 * @param guid   the uniqueID of the person being reviewed.
 	 * 
 	 * @return the node of the person who was reviewed.
 	 */
-	public PersonNode addReview(Review review, String guid){
+	public PersonNode addReview(Review review, String guid) {
 		var node = this.nodeStorage.get(guid);
 		var person = node.getValue();
 		person.addReview(review);
 
 		return node;
 	}
-
-
 
 	private PersonNetwork floodFill(PersonNode rootNode, Predicate<GraphEdge<Person>> nodePredicate, int maxDepth) {
 		PersonNetwork newNetwork = new PersonNetwork();
@@ -314,7 +311,7 @@ public class GraphService {
 			for (String neighborEdgeID : currentNode.getEdges()) {
 				PersonEdge neighborEdge = this.edgeStorage.get(neighborEdgeID);
 				PersonNode neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
-				
+
 				if (!visited.contains(neighborEdge) && nodePredicate.test(neighborEdge)) {
 					newNetwork.addEdge(neighborEdge);
 					newNetwork.addNode(neighborNode);
@@ -332,13 +329,13 @@ public class GraphService {
 
 		private Predicate<GraphEdge<Person>> compositePredicate;
 
-		public NodeFilterPredicate(Collection<NodeFilter> filters) {
+		NodeFilterPredicate(Collection<NodeFilter> filters) {
 			this.compositePredicate = filters.stream().map(NodeFilter::getPredicate).reduce(x -> false, Predicate::or);
 		}
 
 		@Override
-		public boolean test(GraphEdge<Person> t) {
-			return compositePredicate.test(t);
+		public boolean test(GraphEdge<Person> edge) {
+			return this.compositePredicate.test(edge);
 		}
 	}
 }

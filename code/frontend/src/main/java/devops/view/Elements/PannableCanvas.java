@@ -9,23 +9,23 @@ import javafx.scene.paint.Color;
 
 public class PannableCanvas extends Pane {
 
-	DoubleProperty myScale = new SimpleDoubleProperty(1.0);
+	private DoubleProperty scale = new SimpleDoubleProperty(1.0);
 
 	public PannableCanvas() {
 		setPrefSize(1000, 1000);
-		scaleXProperty().bind(myScale);
-		scaleYProperty().bind(myScale);
+		scaleXProperty().bind(this.scale);
+		scaleYProperty().bind(this.scale);
 
 	}
 
 
 	public void addGrid() {
 
-		double w = getBoundsInLocal().getWidth();
-		double h = getBoundsInLocal().getHeight();
+		double width = getBoundsInLocal().getWidth();
+		double height = getBoundsInLocal().getHeight();
 
 
-		Canvas grid = new Canvas(w, h);
+		Canvas grid = new Canvas(width, height);
 
 		grid.setMouseTransparent(true);
 
@@ -36,10 +36,10 @@ public class PannableCanvas extends Pane {
 
 
 		double offset = 100;
-		for (double i = offset; i < w; i += offset) {
+		for (double i = offset; i < width; i += offset) {
 
-			gc.strokeLine(i, 0, i, h);
-			gc.strokeLine(0, i, w, i);
+			gc.strokeLine(i, 0, i, height);
+			gc.strokeLine(0, i, width, i);
 		}
 
 		getChildren().add(grid);
@@ -48,23 +48,23 @@ public class PannableCanvas extends Pane {
 	}
 
 	public double getScale() {
-		return myScale.get();
+		return this.scale.get();
 	}
 
 	/**
 	 * Set x/y scale
 	 * 
-	 * @param myScale
+	 * @param scale canvas zoom scale
 	 */
 	public void setScale(double scale) {
-		myScale.set(scale);
+		this.scale.set(scale);
 	}
 
 	/**
 	 * Set x/y pivot points
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x x position
+	 * @param y y position
 	 */
 	public void setPivot(double x, double y) {
 		setTranslateX(getTranslateX() - x);

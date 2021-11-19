@@ -72,7 +72,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * 
 	 */
 	public Relationship getRelation() {
-		return relation;
+		return this.relation;
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * 
 	 */
 	public LocalDate getDateOfConnection() {
-		return dateOfConnection;
+		return this.dateOfConnection;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 */
 
 	public LocalDate getDateOfConnectionEnd() {
-		return dateOfConnectionEnd;
+		return this.dateOfConnectionEnd;
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * @precondition none
 	 * @postcondition none
 	 * 
-	 * @return the relation between nodes
+	 * @param relation the relation between nodes
 	 * 
 	 */
 	public void setRelation(Relationship relation) {
@@ -125,7 +125,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * @precondition none
 	 * @postcondition getDateOfConnection() == dateOfConnection
 	 * 
-	 * @param dateOfConnection
+	 * @param dateOfConnection the date of connection
 	 * 
 	 */
 	public void setDateOfConnection(LocalDate dateOfConnection) {
@@ -139,7 +139,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * @precondition none
 	 * @postcondition getDateOfConnectionEnd() == dateOfConnectionEnd
 	 * 
-	 * @param dateOfConnectionEnd
+	 * @param dateOfConnectionEnd the date of connection end
 	 * 
 	 */
 	public void setDateOfConnectionEnd(LocalDate dateOfConnectionEnd) {

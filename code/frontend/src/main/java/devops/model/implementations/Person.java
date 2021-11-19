@@ -31,9 +31,9 @@ public class Person implements Comparable<Person> {
 	 * @postconditions getDescription() == description && getOccupation() ==
 	 *                 occupation && getDateOfDeath() == dateOfDeath &&
 	 *                 getDateOfBirth() == dateOfBirth && getAddress() == address &&
-	 *                 getPhoneNumber() == phoneNumber && getLastName() == lastName &&
-	 *                 getFirstName() == firstName && getNickname() == nickname &&
-	 * 				getReviews() != null
+	 *                 getPhoneNumber() == phoneNumber && getLastName() == lastName
+	 *                 && getFirstName() == firstName && getNickname() == nickname
+	 *                 && getReviews() != null
 	 * 
 	 * @param nickname
 	 * @param firstName
@@ -45,10 +45,9 @@ public class Person implements Comparable<Person> {
 	 * @param occupation
 	 * @param description
 	 */
-	public Person(
-			double positionX, 
-			double positionY, String nickname, String firstName, String lastName, String address,
-			String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation, String description) {
+	public Person(double positionX, double positionY, String nickname, String firstName, String lastName,
+			String address, String phoneNumber, LocalDate dateOfBirth, LocalDate dateOfDeath, String occupation,
+			String description) {
 		this.nickname = nickname;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -103,6 +102,7 @@ public class Person implements Comparable<Person> {
 
 	/**
 	 * Gets the Y position
+	 * 
 	 * @return the positionY
 	 */
 	public double getPositionY() {
@@ -111,6 +111,7 @@ public class Person implements Comparable<Person> {
 
 	/**
 	 * Gets the X position
+	 * 
 	 * @return the positionX
 	 */
 	public double getPositionX() {
@@ -128,7 +129,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	/**
@@ -142,7 +143,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getOccupation() {
-		return occupation;
+		return this.occupation;
 	}
 
 	/**
@@ -156,7 +157,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public LocalDate getDateOfDeath() {
-		return dateOfDeath;
+		return this.dateOfDeath;
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
+		return this.dateOfBirth;
 	}
 
 	/**
@@ -184,7 +185,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getAddress() {
-		return address;
+		return this.address;
 	}
 
 	/**
@@ -198,7 +199,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getPhoneNumber() {
-		return phoneNumber;
+		return this.phoneNumber;
 	}
 
 	/**
@@ -212,7 +213,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getLastName() {
-		return lastName;
+		return this.lastName;
 	}
 
 	/**
@@ -226,7 +227,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getFirstName() {
-		return firstName;
+		return this.firstName;
 	}
 
 	/**
@@ -240,7 +241,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 */
 	public String getNickname() {
-		return nickname;
+		return this.nickname;
 	}
 
 	/**
@@ -251,7 +252,7 @@ public class Person implements Comparable<Person> {
 	 * 
 	 * @return the collection of reviews
 	 */
-	public List<Review> getReviews(){
+	public List<Review> getReviews() {
 		return this.reviews;
 	}
 
@@ -263,8 +264,8 @@ public class Person implements Comparable<Person> {
 	 * 
 	 * @param review the added review
 	 */
-	public void addReview(Review review){
-		if (review == null){
+	public void addReview(Review review) {
+		if (review == null) {
 			throw new IllegalArgumentException("The added review cannot be null");
 		}
 
@@ -272,20 +273,20 @@ public class Person implements Comparable<Person> {
 	}
 
 	/**
-     * Gets the full name of the person with their nickname
-	 * Displays as firstName lastname | nickname
-     * 
-     * @preconditions none
-     * @postcondition none
-     * 
-     * @return the full name of the person with their nickname
-     */
-	public String getFullNameWithNickname(){
-		return this.firstName + " " + this.lastName + " | "+ this.nickname;
+	 * Gets the full name of the person with their nickname Displays as firstName
+	 * lastname | nickname
+	 * 
+	 * @preconditions none
+	 * @postcondition none
+	 * 
+	 * @return the full name of the person with their nickname
+	 */
+	public String getFullNameWithNickname() {
+		return this.firstName + " " + this.lastName + " | " + this.nickname;
 	}
 
 	@Override
-	public int compareTo(Person o) {
-		return this.getLastName().compareTo(o.getLastName());
+	public int compareTo(Person otherPerson) {
+		return this.getLastName().compareTo(otherPerson.getLastName());
 	}
 }

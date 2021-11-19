@@ -40,10 +40,8 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * @param dateOfConnection
 	 * @param dateOfConnectionEnd
 	 */
-	public PersonEdge(String uniqueID, 
-			String source, 
-			String destination, Relationship relation, LocalDate dateOfConnection, 
-			LocalDate dateOfConnectionEnd) {
+	public PersonEdge(String uniqueID, String source, String destination, Relationship relation,
+			LocalDate dateOfConnection, LocalDate dateOfConnectionEnd) {
 		this.uniqueID = uniqueID;
 		this.source = source;
 		this.destination = destination;
@@ -51,7 +49,6 @@ public class PersonEdge implements GraphEdge<Person> {
 		this.dateOfConnection = dateOfConnection;
 		this.dateOfConnectionEnd = dateOfConnectionEnd;
 	}
-	
 
 	/**
 	 * 
@@ -64,7 +61,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * 
 	 */
 	public Relationship getRelation() {
-		return relation;
+		return this.relation;
 	}
 
 	/**
@@ -78,7 +75,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * 
 	 */
 	public LocalDate getDateOfConnection() {
-		return dateOfConnection;
+		return this.dateOfConnection;
 	}
 
 	/**
@@ -93,7 +90,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 */
 
 	public LocalDate getDateOfConnectionEnd() {
-		return dateOfConnectionEnd;
+		return this.dateOfConnectionEnd;
 	}
 
 	/**
@@ -103,7 +100,7 @@ public class PersonEdge implements GraphEdge<Person> {
 	 * @precondition none
 	 * @postcondition none
 	 * 
-	 * @return the relation between nodes
+	 * @param relation the relation between nodes
 	 * 
 	 */
 	public void setRelation(Relationship relation) {
@@ -152,5 +149,5 @@ public class PersonEdge implements GraphEdge<Person> {
 	public String getUniqueID() {
 		return this.uniqueID;
 	}
-	
+
 }

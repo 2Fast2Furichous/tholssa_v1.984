@@ -21,7 +21,7 @@ public interface Storage<E extends Unique> {
 	 * @return the object with the given uniqueID
 	 * @throws IllegalArgumentException
 	 */
-	public E get(String uniqueID);
+	E get(String uniqueID);
 
 	/**
 	 * Adds the object
@@ -32,7 +32,7 @@ public interface Storage<E extends Unique> {
 	 * @return the object
 	 * @throws IllegalArgumentException
 	 */
-	public E add(E value);
+	E add(E value);
 
 	/**
 	 * Removes the object with the given uniqueID
@@ -43,7 +43,7 @@ public interface Storage<E extends Unique> {
 	 * @return the object
 	 * @throws IllegalArgumentException
 	 */
-	public E remove(String uniqueID);
+	E remove(String uniqueID);
 
 	/**
 	 * Gets collection of all the objects in storage
@@ -53,7 +53,7 @@ public interface Storage<E extends Unique> {
 	 * 
 	 * @return collection of all the objects in storage
 	 */
-	public Collection<E> getAll();
+	Collection<E> getAll();
 
 	/**
 	 * Updates the object with the given uniqueID
@@ -64,5 +64,5 @@ public interface Storage<E extends Unique> {
 	 * @return the object
 	 * @throws IllegalArgumentException
 	 */
-	public E update(E value);
+	E update(E value);
 }

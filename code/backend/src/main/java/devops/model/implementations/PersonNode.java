@@ -12,6 +12,8 @@ import devops.model.interfaces.GraphNode;
  */
 public class PersonNode implements GraphNode<Person> {
 
+
+	private static final String EDGE_MUST_NOT_BE_NULL_OR_BLANK = "Edge must not be null or blank";
 	private final String uniqueID;
 	private Person person;
 	private final Collection<String> edges;
@@ -41,7 +43,7 @@ public class PersonNode implements GraphNode<Person> {
 	@Override
 	public boolean addEdge(String edge) {
 		if (edge == null || edge.isBlank()) {
-			throw new IllegalArgumentException("Edge must not be null or blank");
+			throw new IllegalArgumentException(EDGE_MUST_NOT_BE_NULL_OR_BLANK);
 		}
 		return this.edges.add(edge);
 	}
@@ -49,7 +51,7 @@ public class PersonNode implements GraphNode<Person> {
 	@Override
 	public boolean removeEdge(String edge) {
 		if (edge == null || edge.isBlank()) {
-			throw new IllegalArgumentException("Edge must not be null or blank");
+			throw new IllegalArgumentException(EDGE_MUST_NOT_BE_NULL_OR_BLANK);
 		}
 		return this.edges.remove(edge);
 	}

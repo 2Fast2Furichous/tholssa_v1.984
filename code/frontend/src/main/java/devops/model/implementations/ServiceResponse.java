@@ -8,6 +8,10 @@ package devops.model.implementations;
  */
 public class ServiceResponse {
 
+	/**
+	 *
+	 */
+	private static final String DATA_CANNOT_BE_NULL = "data cannot be null";
 	private String message;
 	private Object data;
 
@@ -30,7 +34,7 @@ public class ServiceResponse {
 			throw new IllegalArgumentException("message cannot be blank");
 		}
 		if (data == null) {
-			throw new IllegalArgumentException("data cannot be null");
+			throw new IllegalArgumentException(DATA_CANNOT_BE_NULL);
 		}
 		this.message = message;
 		this.data = data;
@@ -44,11 +48,11 @@ public class ServiceResponse {
 	 * 
 	 * @postconditions getMessage() == "No message" AND getData() == data
 	 * 
-	 * @param data    the service response's data
+	 * @param data the service response's data
 	 */
 	public ServiceResponse(Object data) {
 		if (data == null) {
-			throw new IllegalArgumentException("data cannot be null");
+			throw new IllegalArgumentException(DATA_CANNOT_BE_NULL);
 		}
 		this.message = "No message";
 		this.data = data;
