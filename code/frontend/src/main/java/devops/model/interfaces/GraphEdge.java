@@ -16,7 +16,7 @@ public interface GraphEdge<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the source node
 	 */
-	public String getSource();
+	String getSource();
 
 	/**
 	 * Returns the destination node
@@ -26,8 +26,8 @@ public interface GraphEdge<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the destination node
 	 */
-	public String getDestination();
-	
+	String getDestination();
+
 	/**
 	 * Returns the UniqueId
 	 * 
@@ -36,5 +36,5 @@ public interface GraphEdge<E extends Comparable<E>> extends Unique {
 	 * 
 	 * @return the unique id
 	 */
-	public String getUniqueID();
+	String getUniqueID();
 }

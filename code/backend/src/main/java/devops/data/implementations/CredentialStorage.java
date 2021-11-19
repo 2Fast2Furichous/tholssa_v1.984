@@ -14,13 +14,12 @@ public class CredentialStorage {
     private HashMap<Credentials, String> accessKeys;
 
     /**
-     * Constructor for all of the access keys 
-     * to login into the main system
+     * Constructor for all of the access keys to login into the main system
      * 
      * @precondition none
      * @postcondition getAccounts() != null
      */
-    public CredentialStorage(){
+    public CredentialStorage() {
         this.accessKeys = new HashMap<Credentials, String>();
     }
 
@@ -31,12 +30,13 @@ public class CredentialStorage {
      * @postcondition none
      * @return the access keys stored in the system. stored in the system.
      */
-    public HashMap<Credentials, String> getAccessKeys(){
+    public HashMap<Credentials, String> getAccessKeys() {
         return this.accessKeys;
     }
 
     /**
-     * Adds a specified unique ID to the access keys and binds it to the specified credentials.
+     * Adds a specified unique ID to the access keys and binds it to the specified
+     * credentials.
      * 
      * @precondition none
      * @postcondition none
@@ -44,24 +44,23 @@ public class CredentialStorage {
      * @param uniqueId
      * @return if the access key was successfully added or not.
      */
-    public boolean add(Credentials key, String uniqueId){
-        if(this.accessKeys.containsKey(key) || this.accessKeys.containsValue(uniqueId)){
+    public boolean add(Credentials key, String uniqueId) {
+        if (this.accessKeys.containsKey(key) || this.accessKeys.containsValue(uniqueId)) {
             return false;
         }
         this.accessKeys.put(key, uniqueId);
         return true;
-        }
+    }
 
-/**
-  * Gets the unique ID associated with the key provided.
-  * 
-  * @precondition none
-  * @postcondition none
-  * @param key the specified key
-  * @return the unique ID from the key provided. Null if the value is not found.
-  */
-public String get(Credentials key) {
-    return this.accessKeys.get(key);
+    /**
+     * Gets the unique ID associated with the key provided.
+     * 
+     * @precondition none
+     * @postcondition none
+     * @param key the specified key
+     * @return the unique ID from the key provided. Null if the value is not found.
+     */
+    public String get(Credentials key) {
+        return this.accessKeys.get(key);
+    }
 }
-}
-

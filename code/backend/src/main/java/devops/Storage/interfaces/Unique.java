@@ -15,5 +15,5 @@ public interface Unique {
 	 * 
 	 * @return the object's uniqueID
 	 */
-	public String getUniqueID();
+	String getUniqueID();
 }

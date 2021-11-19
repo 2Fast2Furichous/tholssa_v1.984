@@ -2,6 +2,7 @@ package devops.services;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
 import devops.model.implementations.Relationship;
+import devops.model.implementations.Review;
 import devops.model.interfaces.GraphEdge;
 import devops.model.interfaces.GraphNode;
 import devops.storage.implementations.StorageHash;
@@ -21,7 +23,7 @@ import devops.storage.interfaces.Storage;
 /**
  * Service for interfacing with storage and edtiing graph nodes and edges
  *
- * @author Furichous Jones IV
+ * @author Furichous Jones IV and Alexander Ayers
  * @version Fall 2021
  */
 public class GraphService {
@@ -79,7 +81,7 @@ public class GraphService {
 		String uniqueID = UUID.randomUUID().toString();
 
 		PersonNode newNode = new PersonNode(uniqueID, person);
-		nodeStorage.add(newNode);
+		this.nodeStorage.add(newNode);
 		return uniqueID;
 	}
 
@@ -101,13 +103,13 @@ public class GraphService {
 	 */
 	public String connectNodes(String sourceGuid, String destinationGuid, Relationship relation,
 			LocalDate dateOfConnection, LocalDate dateOfConnectionEnd) {
-		
+
 		GraphNode<Person> source = this.nodeStorage.get(sourceGuid);
-		
+
 		var existingEdge = source.getEdges().stream().filter((edgeUniqueID) -> {
-            PersonEdge currentEdge = this.edgeStorage.get(edgeUniqueID);
-            return currentEdge.getDestination().equals(destinationGuid);
-        }).findFirst();
+			PersonEdge currentEdge = this.edgeStorage.get(edgeUniqueID);
+			return currentEdge.getDestination().equals(destinationGuid);
+		}).findFirst();
 
 		if (existingEdge.isPresent()) {
 			return existingEdge.get();
@@ -116,8 +118,7 @@ public class GraphService {
 		GraphNode<Person> destination = this.nodeStorage.get(destinationGuid);
 		String uniqueID = UUID.randomUUID().toString();
 
-		PersonEdge newEdge = new PersonEdge(uniqueID, 
-				sourceGuid, destinationGuid, relation, dateOfConnection,
+		PersonEdge newEdge = new PersonEdge(uniqueID, sourceGuid, destinationGuid, relation, dateOfConnection,
 				dateOfConnectionEnd);
 
 		source.addEdge(uniqueID);
@@ -170,6 +171,11 @@ public class GraphService {
 	public PersonNode updateNode(String guid, Person person) {
 		PersonNode updatedNode = this.nodeStorage.get(guid);
 		updatedNode.setValue(person);
+
+		person.getReviews().sort((var review1, var review2) -> {
+			return review2.getEntryDate().compareTo(review1.getEntryDate());
+		});
+
 		return this.nodeStorage.update(updatedNode);
 	}
 
@@ -249,44 +255,69 @@ public class GraphService {
 	 * @preconditions none
 	 * @postconditions none
 	 * 
-	 * @param rootNodeGuid
-	 * @param filters
+	 * @param rootNodeGuid the guid of the root node to base the filtering off of.
+	 * @param filters      the list of filters to apply to the filtering algorithm.
 	 * @return graph network given the filters and rootNode
 	 * @throws IllegalArgumentException
 	 */
-	public PersonNetwork getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters) {
+	public PersonNetwork getFilteredNetwork(String rootNodeGuid, Collection<NodeFilter> filters, int maxDepth) {
 		PersonNetwork filteredNetwork;
 
-		if (rootNodeGuid == null || rootNodeGuid.isBlank() || filters.isEmpty() ) {
+		if (rootNodeGuid == null || rootNodeGuid.isBlank() || filters.isEmpty()) {
 			filteredNetwork = new PersonNetwork(this.nodeStorage.getAll(), this.edgeStorage.getAll());
 		} else {
 			PersonNode rootNode = this.nodeStorage.get(rootNodeGuid);
 			Predicate<GraphEdge<Person>> nodePredicate = new NodeFilterPredicate(filters);
-			filteredNetwork = this.floodFill(rootNode, nodePredicate);
+			filteredNetwork = this.floodFill(rootNode, nodePredicate, maxDepth);
 		}
 
 		return filteredNetwork;
 	}
 
-	private PersonNetwork floodFill(PersonNode rootNode, Predicate<GraphEdge<Person>> nodePredicate) {
-		PersonNetwork newNetwork = new PersonNetwork();
-		LinkedList<GraphNode<Person>> queue = new LinkedList<GraphNode<Person>>();
-		HashSet<GraphNode<Person>> visited = new HashSet<GraphNode<Person>>();
-		newNetwork.addNode(rootNode);
+	/**
+	 * Adds a review to the person with the specified uniqueID.
+	 * 
+	 * @precondition none
+	 * @postcondition @return.getValue().getReviews().size() == @prev + 1
+	 * 
+	 * @param review the specified review
+	 * @param guid   the uniqueID of the person being reviewed.
+	 * 
+	 * @return the node of the person who was reviewed.
+	 */
+	public PersonNode addReview(Review review, String guid) {
+		var node = this.nodeStorage.get(guid);
+		var person = node.getValue();
+		person.addReview(review);
 
+		return node;
+	}
+
+	private PersonNetwork floodFill(PersonNode rootNode, Predicate<GraphEdge<Person>> nodePredicate, int maxDepth) {
+		PersonNetwork newNetwork = new PersonNetwork();
+		LinkedList<PersonNode> queue = new LinkedList<PersonNode>();
+		HashSet<PersonEdge> visited = new HashSet<PersonEdge>();
+		HashMap<PersonNode, Integer> depth = new HashMap<PersonNode, Integer>();
+		newNetwork.addNode(rootNode);
 		queue.add(rootNode);
-		visited.add(rootNode);
+		depth.put(rootNode, 0);
 
 		while (!queue.isEmpty()) {
-			GraphNode<Person> currentNode = queue.poll();
+			PersonNode currentNode = queue.poll();
+			var currentDepth = depth.get(currentNode);
+			if (currentDepth >= maxDepth) {
+				continue;
+			}
 			for (String neighborEdgeID : currentNode.getEdges()) {
 				PersonEdge neighborEdge = this.edgeStorage.get(neighborEdgeID);
 				PersonNode neighborNode = this.nodeStorage.get(neighborEdge.getDestination());
-				if (!visited.contains(neighborNode) && nodePredicate.test(neighborEdge)) {
+
+				if (!visited.contains(neighborEdge) && nodePredicate.test(neighborEdge)) {
 					newNetwork.addEdge(neighborEdge);
 					newNetwork.addNode(neighborNode);
 					queue.add(neighborNode);
-					visited.add(neighborNode);
+					visited.add(neighborEdge);
+					depth.put(neighborNode, currentDepth + 1);
 				}
 			}
 		}
@@ -298,13 +329,13 @@ public class GraphService {
 
 		private Predicate<GraphEdge<Person>> compositePredicate;
 
-		public NodeFilterPredicate(Collection<NodeFilter> filters) {
-			this.compositePredicate = filters.stream().map(NodeFilter::getPredicate).reduce(x -> true, Predicate::and);
+		NodeFilterPredicate(Collection<NodeFilter> filters) {
+			this.compositePredicate = filters.stream().map(NodeFilter::getPredicate).reduce(x -> false, Predicate::or);
 		}
 
 		@Override
-		public boolean test(GraphEdge<Person> t) {
-			return compositePredicate.test(t);
+		public boolean test(GraphEdge<Person> edge) {
+			return this.compositePredicate.test(edge);
 		}
 	}
 }

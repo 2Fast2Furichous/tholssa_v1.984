@@ -31,7 +31,7 @@ import javafx.scene.layout.GridPane;
  */
 public class CreateAccountWindow {
 
-    private final String PHONE_NUMBER_FORMAT = "^(\\+\\d{1,2}\\s?)?1?\\-?\\.?\\s?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
+    private static final String PHONE_NUMBER_FORMAT = "^(\\+\\d{1,2}\\s?)?1?\\-?\\.?\\s?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$";
 
 
     @FXML
@@ -62,7 +62,7 @@ public class CreateAccountWindow {
     private JFXButton createAccountButton;
 
     @FXML
-    public void initialize() {
+    void initialize() {
         this.setupListeners();
     }
 

@@ -39,11 +39,10 @@ public class TestConstructor {
 
 	@Test
 	void testNullNodes() {
-		Collection<PersonNode> nodes = new ArrayList<PersonNode>();
 		Collection<PersonEdge> edges = new ArrayList<PersonEdge>();
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			PersonNetwork testNetwork = new PersonNetwork(null, edges);
+			new PersonNetwork(null, edges);
 		});
 
 	}
@@ -51,10 +50,9 @@ public class TestConstructor {
 	@Test
 	void testNullEdges() {
 		Collection<PersonNode> nodes = new ArrayList<PersonNode>();
-		Collection<PersonEdge> edges = new ArrayList<PersonEdge>();
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			PersonNetwork testNetwork = new PersonNetwork(nodes, null);
+			new PersonNetwork(nodes, null);
 		});
 	}
 }

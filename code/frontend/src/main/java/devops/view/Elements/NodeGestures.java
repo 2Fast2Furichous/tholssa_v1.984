@@ -12,19 +12,18 @@ public class NodeGestures {
 
 	private DragContext nodeDragContext = new DragContext();
 
-	PannableCanvas canvas;
+	private PannableCanvas canvas;
 
 	public NodeGestures(PannableCanvas canvas) {
 		this.canvas = canvas;
-
 	}
 
 	public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
-		return onMousePressedEventHandler;
+		return this.onMousePressedEventHandler;
 	}
 
 	public EventHandler<MouseEvent> getOnMouseDraggedEventHandler() {
-		return onMouseDraggedEventHandler;
+		return this.onMouseDraggedEventHandler;
 	}
 
 	private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
@@ -32,16 +31,17 @@ public class NodeGestures {
 		public void handle(MouseEvent event) {
 
 			// left mouse button => dragging
-			if (!event.isPrimaryButtonDown())
+			if (!event.isPrimaryButtonDown()) {
 				return;
-
-			nodeDragContext.mouseAnchorX = event.getSceneX();
-			nodeDragContext.mouseAnchorY = event.getSceneY();
+			}
+			
+			NodeGestures.this.nodeDragContext.mouseAnchorX = event.getSceneX();
+			NodeGestures.this.nodeDragContext.mouseAnchorY = event.getSceneY();
 
 			Node node = (Node) event.getSource();
 
-			nodeDragContext.translateAnchorX = node.getTranslateX();
-			nodeDragContext.translateAnchorY = node.getTranslateY();
+			NodeGestures.this.nodeDragContext.translateAnchorX = node.getTranslateX();
+			NodeGestures.this.nodeDragContext.translateAnchorY = node.getTranslateY();
 
 		}
 
@@ -51,17 +51,18 @@ public class NodeGestures {
 		public void handle(MouseEvent event) {
 
 			// left mouse button => dragging
-			if (!event.isPrimaryButtonDown())
+			if (!event.isPrimaryButtonDown()) {
 				return;
+			}
 
-			double scale = canvas.getScale();
+			double scale = NodeGestures.this.canvas.getScale();
 
 			Node node = (Node) event.getSource();
 
-			node.setTranslateX(
-					nodeDragContext.translateAnchorX + ((event.getSceneX() - nodeDragContext.mouseAnchorX) / scale));
-			node.setTranslateY(
-					nodeDragContext.translateAnchorY + ((event.getSceneY() - nodeDragContext.mouseAnchorY) / scale));
+			node.setTranslateX(NodeGestures.this.nodeDragContext.translateAnchorX
+					+ ((event.getSceneX() - NodeGestures.this.nodeDragContext.mouseAnchorX) / scale));
+			node.setTranslateY(NodeGestures.this.nodeDragContext.translateAnchorY
+					+ ((event.getSceneY() - NodeGestures.this.nodeDragContext.mouseAnchorY) / scale));
 
 			event.consume();
 

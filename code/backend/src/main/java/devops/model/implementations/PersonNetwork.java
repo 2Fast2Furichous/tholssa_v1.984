@@ -12,8 +12,8 @@ import java.util.Collection;
  */
 public class PersonNetwork {
 
-	Collection<PersonEdge> edges;
-	Collection<PersonNode> nodes;
+	private Collection<PersonEdge> edges;
+	private Collection<PersonNode> nodes;
 
 	/**
 	 * Constructor for creating the edges and nodes for a network

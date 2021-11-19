@@ -22,7 +22,7 @@ public class UserService {
      * @precondition none
      * @postcondition getUsers() != null
      */
-    public UserService(){
+    public UserService() {
         this.users = new HashMapUserStorage();
     }
 
@@ -46,7 +46,7 @@ public class UserService {
      * @param newUser the new user to the system
      * @return the user that was added.
      */
-    public User createAccount(User newUser){
+    public User createAccount(User newUser) {
         if (newUser == null) {
             throw new IllegalArgumentException(ErrorMessages.THE_USER_CANNOT_BE_NULL);
         }
@@ -55,7 +55,8 @@ public class UserService {
     }
 
     /**
-     * Creates a new user from specified detals and then adds them to the collection.
+     * Creates a new user from specified detals and then adds them to the
+     * collection.
      * 
      * @precondition none
      * @postcondition getUsers().size() == @prev + 1
@@ -66,7 +67,8 @@ public class UserService {
      * @param uniqueId
      * @return the user that was added.
      */
-    public User createAccount(String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber, String uniqueId){
+    public User createAccount(String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber,
+            String uniqueId) {
         User newUser = new User(firstName, lastName, dateOfBirth, phoneNumber, uniqueId);
         return this.createAccount(newUser);
     }
@@ -79,7 +81,22 @@ public class UserService {
      * @param uniqueId the id that pertains to be desired user information.
      * @return the desired user that connects to the unique id.
      */
-    public User login(String uniqueId){
+    public User login(String uniqueId) {
         return this.users.get(uniqueId);
+    }
+
+    /**
+     * Updates the users last root node
+     * 
+     * @precondition none
+     * @postcondition none
+     * @param uniqueId       the id that pertains to be desired user information.
+     * @param lastRootNodeID the last root node's unique ID
+     */
+    public void updateLastPosition(String uniqueId, double lastX, double lastY, double lastScale) {
+        var user = this.users.get(uniqueId);
+        user.setLastX(lastX);
+        user.setLastY(lastY);
+        user.setLastScale(lastScale);
     }
 }

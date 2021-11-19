@@ -20,7 +20,7 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @return whether the edge was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean addEdge(GraphEdge<E> edge);
+	boolean addEdge(GraphEdge<E> edge);
 
 	/**
 	 * Adds the given node
@@ -32,7 +32,7 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @return whether the node was added
 	 * @throws IllegalArgumentException
 	 */
-	public boolean addNode(GraphNode<E> node);
+	boolean addNode(GraphNode<E> node);
 
 	/**
 	 * Returns the collection of edges
@@ -43,7 +43,7 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @return the collection of edges
 	 * @throws IllegalArgumentException
 	 */
-	public Collection<GraphEdge<E>> getEdges();
+	Collection<GraphEdge<E>> getEdges();
 
 	/**
 	 * Returns the collection of edges
@@ -54,6 +54,6 @@ public interface GraphNetwork<E extends Comparable<E>> {
 	 * @return the collection of edges
 	 * @throws IllegalArgumentException
 	 */
-	public Collection<GraphNode<E>> getNodes();
+	Collection<GraphNode<E>> getNodes();
 
 }
