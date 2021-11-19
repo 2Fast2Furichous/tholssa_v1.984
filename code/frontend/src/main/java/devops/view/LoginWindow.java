@@ -45,6 +45,7 @@ public class LoginWindow {
 		this.login.disableProperty().bind(this.username.textProperty().isEmpty().or(this.password.textProperty().isEmpty()));
 	}
 
+	@FXML
 	void handleLogin(ActionEvent event) {
 		UserService service = App.getUserService();
 		String usernameText = this.username.getText();

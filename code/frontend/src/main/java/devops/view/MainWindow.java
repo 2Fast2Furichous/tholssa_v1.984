@@ -200,10 +200,6 @@ public class MainWindow {
         this.lineMap = new HashMap<String, Group>();
     }
 
-    private void addSubmitNodeInputValidation() {
-        this.submitNode.disableProperty().bind(this.nickname.textProperty().isEmpty()
-                .or(this.locationX.textProperty().isEmpty().or(this.locationY.textProperty().isEmpty())));
-    }
 
     @FXML
     void handleAddReview(ActionEvent event) {
@@ -341,10 +337,13 @@ public class MainWindow {
 
     @FXML
     void initialize() {
+        var account = (UserAccount) FXRouter.getData();
+
+        
         this.setupGraph();
         this.populateGraph("", new ArrayList<NodeFilter>(), MAXIMUM_DEPTH);
-        this.addSubmitNodeInputValidation();
-
+        
+        
         this.infoColumn.maxWidthProperty().set(0);
         this.infoColumn.minWidthProperty().set(0);
 
@@ -383,7 +382,7 @@ public class MainWindow {
 
         this.zoomLevelTextField.setStyle("-fx-text-fill: green; -fx-font-size: 10px;");
 
-        var account = (UserAccount) FXRouter.getData();
+        
         double lastX = account.getLastX();
         double lastY = account.getLastY();
         double lastScale = account.getLastScale();
@@ -660,8 +659,7 @@ public class MainWindow {
             this.relationEndDate.setValue(null);
         }
 
-        this.locationX.setText(String.valueOf(currentPerson.getPositionX()));
-        this.locationY.setText(String.valueOf(currentPerson.getPositionY()));
+        
 
         Timeline timelineDown = new Timeline();
         KeyValue kvDwn1 = new KeyValue(this.infoColumn.maxWidthProperty(),
