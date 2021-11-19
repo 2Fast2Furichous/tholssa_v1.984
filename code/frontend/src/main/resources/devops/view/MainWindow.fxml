@@ -238,7 +238,7 @@
             <Insets right="20.0" />
          </GridPane.margin>
       </JFXButton>
-      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Show" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
+      <JFXButton fx:id="showButton" onAction="#handleShow" style="-fx-background-color: #16ae58;" text="Reset" GridPane.columnSpan="3" GridPane.halignment="RIGHT">
          <GridPane.margin>
             <Insets right="90.0" />
          </GridPane.margin>
