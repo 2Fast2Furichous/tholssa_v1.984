@@ -1,5 +1,6 @@
 package devops.view;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -7,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -141,6 +146,9 @@ public class MainWindow {
 
     @FXML
     private JFXButton applyFiltersButton;
+
+    @FXML
+    private JFXButton controlsButton;
 
     @FXML
     private AnchorPane tholssaGraph;
@@ -604,6 +612,23 @@ public class MainWindow {
         for (var tholssaNode : this.canvas.getChildren()) {
             tholssaNode.setStyle(DEFAULT_NODE_STYLE);
         }
+    }
+
+    @FXML
+    void showControls(ActionEvent event) {
+        JPanel panel = new JPanel();
+        panel.setSize(new Dimension(250, 100));
+        panel.setLayout(null);
+        UIManager UI = new UIManager();
+        UI.put("OptionPane.background", Color.GREEN);
+        UI.put("Panel.background", Color.GREEN);
+        String textControls = "Double click to create a new node \n Click node to add or change information eg) Reviews, Relationships, Personal info \n";
+        textControls += "In order to set relationships you will need to right click the node and set it to the root node \n";
+        textControls += "To search for nodes you can type in part of their personnal information and press search then it will that same information \n";
+        textControls += "After searching you can select from the dropdown the person you are looking for from that list and it will take you to that person \n";
+        textControls += "You can click the Reset button to show all of the nodes on the screen again after searching \n";
+        textControls += "When you select a new node and set it as the root node you can start to apply filters to show what type of relationships that root node has ";
+        JOptionPane.showMessageDialog(null, textControls, "Controls", 1);
     }
 
     private void updateNodeStyle(JFXButton node) {
