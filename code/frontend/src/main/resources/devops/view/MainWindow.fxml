@@ -35,6 +35,7 @@
          <children>
             <JFXTextField fx:id="zoomLevelTextField" editable="false" layoutX="7.0" layoutY="591.0" opacity="0.0" />
             <JFXTextField fx:id="zoomLevelTextField" editable="false" layoutX="7.0" layoutY="1.0" prefHeight="26.0" prefWidth="103.0" />
+            <JFXButton fx:id="controlsButton" layoutX="110.0" layoutY="8.0" onAction="#showControls" opacity="0.14" style="-fx-background-color: #16ae58;" text="Controls" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="11.0" layoutY="11.0" GridPane.columnSpan="3">
