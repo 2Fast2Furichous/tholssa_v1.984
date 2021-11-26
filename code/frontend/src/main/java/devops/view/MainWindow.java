@@ -619,9 +619,12 @@ public class MainWindow {
         JPanel panel = new JPanel();
         panel.setSize(new Dimension(250, 100));
         panel.setLayout(null);
-        UIManager UI = new UIManager();
-        UI.put("OptionPane.background", Color.GREEN);
-        UI.put("Panel.background", Color.GREEN);
+        panel.setBackground(java.awt.Color.black);
+        panel.setForeground(java.awt.Color.green);
+        UIManager ui = new UIManager();
+        ui.put("OptionPane.background", java.awt.Color.black);
+        ui.put("Panel.background", java.awt.Color.black);
+        ui.put("OptionPane.messageForeground", java.awt.Color.lightGray);
         String textControls = "Double click to create a new node \n Click node to add or change information eg) Reviews, Relationships, Personal info \n";
         textControls += "In order to set relationships you will need to right click the node and set it to the root node \n";
         textControls += "To search for nodes you can type in part of their personnal information and press search then it will that same information \n";
