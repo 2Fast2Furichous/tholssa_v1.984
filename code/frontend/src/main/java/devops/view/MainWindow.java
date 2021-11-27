@@ -461,11 +461,23 @@ public class MainWindow {
                 MainWindow.this.updateZoomLevel();
             }
         });
-        this.tholssaGraph.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        this.tholssaGraph.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                System.out.println(event.getCode());
+                System.out.println(KeyCode.ENTER);
                 if (KeyCode.ENTER == event.getCode()) {
-                    handleSearch(null);
+                    MainWindow.this.handleSearch(null);
+                }
+            }
+        });
+        this.searchTextField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                System.out.println(event.getCode());
+                System.out.println(KeyCode.ENTER);
+                if (KeyCode.ENTER == event.getCode()) {
+                    MainWindow.this.handleSearch(null);
                 }
             }
         });
