@@ -47,6 +47,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -457,6 +459,26 @@ public class MainWindow {
             @Override
             public void handle(ScrollEvent event) {
                 MainWindow.this.updateZoomLevel();
+            }
+        });
+        this.tholssaGraph.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                System.out.println(event.getCode());
+                System.out.println(KeyCode.ENTER);
+                if (KeyCode.ENTER == event.getCode()) {
+                    MainWindow.this.handleSearch(null);
+                }
+            }
+        });
+        this.searchTextField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                System.out.println(event.getCode());
+                System.out.println(KeyCode.ENTER);
+                if (KeyCode.ENTER == event.getCode()) {
+                    MainWindow.this.handleSearch(null);
+                }
             }
         });
     }
