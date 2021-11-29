@@ -31,6 +31,8 @@ import devops.model.implementations.Person;
 import devops.model.implementations.PersonEdge;
 import devops.model.implementations.PersonNetwork;
 import devops.model.implementations.PersonNode;
+import devops.model.implementations.Relationship;
+import devops.model.implementations.Review;
 import devops.model.implementations.User;
 import devops.services.GraphService;
 import devops.services.UserService;
@@ -119,6 +121,75 @@ public class Gateway extends Thread {
 
 		this.credStorage.add(testCredentials, uniqueId);
 		this.userService.createAccount("User", "Testing", LocalDate.now(), "1234567890", uniqueId);
+
+		var node1Guid = this.graphService.createNode(new Person(50, 50, "nickname1", "firstname1", "lastname1",
+				"address1", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation1", "description1"));
+
+		this.graphService.addReview(new Review("user1", "Ooga booga", 5), node1Guid);
+		this.graphService.addReview(new Review("user2", "Ooga booga boo", 3), node1Guid);
+
+		var node2Guid = this.graphService.createNode(new Person(80, 200, "nickname2", "firstname2", "lastname2",
+				"address2", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation2", "description2"));
+
+		var node3Guid = this.graphService.createNode(new Person(150, -150, "nickname3", "firstname3", "lastname3",
+				"address3", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation3", "description3"));
+
+		this.graphService.addReview(new Review("user5", "Ooga booga gee", 5), node3Guid);
+		this.graphService.addReview(new Review("user3", "Ooga booga boozy", 3), node3Guid);
+
+		var node4Guid = this.graphService.createNode(new Person(-300, 200, "nickname4", "firstname4", "lastname4",
+				"address4", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation4", "description4"));
+
+		var node5Guid = this.graphService.createNode(new Person(-180, 280, "nickname5", "firstname5", "lastname5",
+				"address5", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation5", "description5"));
+
+		var node6Guid = this.graphService.createNode(new Person(280, -180, "nickname6", "firstname6", "lastname6",
+				"address6", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation6", "description6"));
+
+		this.graphService.addReview(new Review("user2", "Ooga booga bee", 1), node6Guid);
+		this.graphService.addReview(new Review("user7", "Ooga booga boogie", 4), node6Guid);
+
+		var node7Guid = this.graphService.createNode(new Person(0, 0, "nickname7", "firstname7", "lastname7",
+				"address7", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation7", "description7"));
+
+		var node8Guid = this.graphService.createNode(new Person(0, 0, "nickname8", "firstname8", "lastname8",
+				"address8", "1234567890", LocalDate.of(1996, 11, 13), null, "occupation8", "description8"));
+
+		this.graphService.addReview(new Review("user1", "Ooga booga bee", 1), node8Guid);
+
+		var edge1Guid = this.graphService.connectNodes(node7Guid, node8Guid, Relationship.Parent, 
+				LocalDate.now().minusDays(200), null);
+		var edge2Guid = this.graphService.connectNodes(node8Guid, node7Guid, Relationship.Child, 
+				LocalDate.now().minusDays(200), null);
+
+		var edge3Guid = this.graphService.connectNodes(node7Guid, node3Guid, Relationship.Parent, 
+				LocalDate.now().minusDays(800), null);
+		var edge4Guid = this.graphService.connectNodes(node3Guid, node7Guid, Relationship.Child, 
+				LocalDate.now().minusDays(800), null);
+
+		var edge5Guid = this.graphService.connectNodes(node8Guid, node5Guid, Relationship.Parent, 
+				LocalDate.now().minusDays(1000), null);
+		var edge6Guid = this.graphService.connectNodes(node5Guid, node8Guid, Relationship.Child, 
+				LocalDate.now().minusDays(1000), null);
+
+		var edge7Guid = this.graphService.connectNodes(node3Guid, node6Guid, Relationship.Business, 
+				LocalDate.now().minusDays(5000), null);
+		var edge8Guid = this.graphService.connectNodes(node6Guid, node3Guid, Relationship.Business, 
+				LocalDate.now().minusDays(5000), null);
+
+		var edge9Guid = this.graphService.connectNodes(node1Guid, node2Guid, Relationship.Friend, 
+				LocalDate.now().minusDays(2000), null);
+		var edge10Guid = this.graphService.connectNodes(node2Guid, node1Guid, Relationship.Business, 
+				LocalDate.now().minusDays(2000), null);
+
+		var edge11Guid = this.graphService.connectNodes(node2Guid, node4Guid, Relationship.Parent, 
+				LocalDate.now().minusDays(300), null);
+		var edge12Guid = this.graphService.connectNodes(node4Guid, node2Guid, Relationship.Child, 
+				LocalDate.now().minusDays(300), null);
+
+		//var edge13Guid = this.graphService.connectNodes(node4Guid, node6Guid, Relationship.Parent, null, null);
+		//var edge14Guid = this.graphService.connectNodes(node6Guid, node4Guid, Relationship.Child, null, null);
+
 	}
 
 	/**
