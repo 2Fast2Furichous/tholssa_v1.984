@@ -15,7 +15,7 @@ then
 		rm -r maven/
 	fi
 	
-	curl -o maven.zip https://dlcdn.apache.org/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.zip
+	curl -o maven.zip https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip
 	unzip maven.zip
 	rm maven.zip
 	mv apache-maven-* maven
